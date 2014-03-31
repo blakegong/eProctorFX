@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="800.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="eproctor_v1.StudentFormController">
+  <children>
+    <VBox alignment="CENTER" layoutX="15.0" layoutY="71.0" opacity="1.0" prefHeight="415.0" prefWidth="202.0">
+      <children>
+        <Button id="button" mnemonicParsing="false" onMouseClicked="#openExamForm" text="Exam" textFill="WHITE">
+          <font>
+            <Font size="16.0" fx:id="x3" />
+          </font>
+        </Button>
+        <Button id="button" font="$x3" mnemonicParsing="false" onMouseClicked="#openBookForm" text="Book Future Exams" textFill="WHITE">
+          <VBox.margin>
+            <Insets top="30.0" fx:id="x1" />
+          </VBox.margin>
+        </Button>
+        <Button id="button" font="$x3" mnemonicParsing="false" onMouseClicked="#openReviewForm" text="Review Taken Exams" textFill="WHITE" VBox.margin="$x1" />
+        <Button id="button" font="$x3" mnemonicParsing="false" onMouseClicked="#openSettingForm" text="Settings" textFill="WHITE" VBox.margin="$x1" />
+        <Button id="logout" font="$x3" mnemonicParsing="false" onMouseClicked="#logout" text="Logout" textFill="WHITE" VBox.margin="$x1" />
+      </children>
+    </VBox>
+    <HBox layoutX="216.0" layoutY="72.0" prefHeight="414.0000999999975" prefWidth="570.0">
+      <children>
+        <VBox prefHeight="-1.0" prefWidth="-1.0">
+          <children>
+            <Label font="$x3" text="Information" textFill="WHITE" />
+            <TextArea fx:id="textAreaInformation" prefHeight="387.0" prefWidth="-1.0" wrapText="true" />
+          </children>
+          <padding>
+            <Insets left="20.0" right="20.0" fx:id="x2" />
+          </padding>
+        </VBox>
+        <VBox padding="$x2" prefHeight="-1.0" prefWidth="-1.0">
+          <children>
+            <Label font="$x3" text="Recent Messages" textFill="WHITE" />
+            <TextArea fx:id="textAreaRecentMessages" prefHeight="387.0" prefWidth="-1.0" wrapText="true" />
+          </children>
+        </VBox>
+      </children>
+    </HBox>
+  </children>
+  <stylesheets>
+    <URL value="@StudentForm.css" />
+  </stylesheets>
+</AnchorPane>

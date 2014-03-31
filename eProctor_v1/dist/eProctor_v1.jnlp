@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="eProctor_v1.jnlp">
+  <information>
+    <title>eProctor_v1</title>
+    <vendor>Yue</vendor>
+    <description>null</description>
+    <offline-allowed/>
+  </information>
+  <resources>
+    <jfx:javafx-runtime version="2.2+" href="http://javadl.sun.com/webapps/download/GetFile/javafx-latest/windows-i586/javafx2.jnlp"/>
+  </resources>
+  <resources>
+    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="eProctor_v1.jar" size="1126185" download="eager" />
+    <jar href="lib/jfxmessagebox-1.1.0.jar" size="37618" download="eager" />
+    <jar href="lib/mongo-java-driver-2.11.4.jar" size="451519" download="eager" />
+  </resources>
+<security>
+  <all-permissions/>
+</security>
+  <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="eProctor_v1" >
+    <param name="requiredFXVersion" value="2.2+"/>
+  </applet-desc>
+  <jfx:javafx-desc  width="800" height="600" main-class="eproctor_v1.EProctor_v1"  name="eProctor_v1" />
+  <update check="always"/>
+</jnlp>
