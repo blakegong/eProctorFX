@@ -1,6 +1,7 @@
 package eproctor_v1;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -11,6 +12,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import org.bson.types.ObjectId;
 
 public class BookFormController implements Initializable {
 
@@ -21,7 +23,7 @@ public class BookFormController implements Initializable {
 
     @FXML
     private ListView<String> listCourses;
-    
+
     @FXML
     private ListView<String> listSessions;
 
@@ -58,6 +60,15 @@ public class BookFormController implements Initializable {
     }
 
     @FXML
+    private void btnDeleteClicked() {
+        if (table.selectionModelProperty().get().getSelectedItem() == null) {
+            return;
+        }
+        ServerInterface.deleteBooking(table.selectionModelProperty().get().getSelectedItem());
+        refreshUI();
+    }
+
+    @FXML
     private void listCoursesClicked() {
         int index = listCourses.selectionModelProperty().get().getSelectedIndex();
         if (index < 0) {
@@ -69,8 +80,14 @@ public class BookFormController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        updateTable(ServerInterface.getTableCurrentBookings(false));
+        refreshUI();
+    }
+    
+    public void refreshUI() {
+        updateTable(ServerInterface.getTableRecords(false));
+        clearDetails();
         updateListCourses(ServerInterface.getListCourses());
+        clearListSessions();
     }
 
     public void updateDetails(ServerInterface.RecordTableRow data) {
@@ -118,6 +135,21 @@ public class BookFormController implements Initializable {
 
     public void setStage(Stage stage) {
         selfStage = stage;
+    }
+
+    public void clearDetails() {
+        lblId.setText(null);
+        lblCourseCode.setText(null);
+        lblCourse.setText(null);
+        lblSession.setText(null);
+        lblProctor.setText(null);
+        lblLocation.setText(null);
+        lblStartTime.setText(null);
+        lblEndTime.setText(null);
+    }
+
+    private void clearListSessions() {
+        listSessions.getItems().clear();
     }
 
 }

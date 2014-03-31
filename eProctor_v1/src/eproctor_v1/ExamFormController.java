@@ -21,9 +21,15 @@ import javafx.stage.Stage;
  */
 public class ExamFormController implements Initializable {
 
+    private Stage selfStage;
+    
     @FXML
     private WebView browser;
-    private Stage selfStage;
+    
+    @FXML
+    private void action() {
+        
+    }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {

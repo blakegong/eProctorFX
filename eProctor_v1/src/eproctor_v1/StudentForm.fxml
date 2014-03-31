@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="800.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="eproctor_v1.StudentFormController">
+<AnchorPane id="AnchorPane" onMouseEntered="#onMouseEntered" prefHeight="500.0" prefWidth="800.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="eproctor_v1.StudentFormController">
   <children>
     <VBox alignment="CENTER" layoutX="15.0" layoutY="71.0" opacity="1.0" prefHeight="415.0" prefWidth="202.0">
       <children>
@@ -23,7 +23,7 @@
             <Insets top="30.0" fx:id="x1" />
           </VBox.margin>
         </Button>
-        <Button id="button" font="$x3" mnemonicParsing="false" onMouseClicked="#openReviewForm" text="Review Taken Exams" textFill="WHITE" VBox.margin="$x1" />
+        <Button id="button" font="$x3" mnemonicParsing="false" onMouseClicked="#openReviewForm" text="Review Exam Results" textFill="WHITE" VBox.margin="$x1" />
         <Button id="button" font="$x3" mnemonicParsing="false" onMouseClicked="#openSettingForm" text="Settings" textFill="WHITE" VBox.margin="$x1" />
         <Button id="logout" font="$x3" mnemonicParsing="false" onMouseClicked="#logout" text="Logout" textFill="WHITE" VBox.margin="$x1" />
       </children>

@@ -40,7 +40,7 @@
                 <Label fx:id="lblLocation" text="" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                 <Label fx:id="lblStartTime" text="" GridPane.columnIndex="3" GridPane.rowIndex="2" />
                 <Label fx:id="lblEndTime" text="" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-                <Button mnemonicParsing="false" text="Delete" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                <Button mnemonicParsing="false" onMouseClicked="#btnDeleteClicked" text="Delete" GridPane.columnIndex="3" GridPane.rowIndex="4" />
               </children>
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="80.0" minWidth="10.0" prefWidth="80.0" />

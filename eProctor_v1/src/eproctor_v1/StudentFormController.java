@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package eproctor_v1;
 
 import java.net.URL;
@@ -17,11 +11,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 
-/**
- * FXML Controller class
- *
- * @author Yue
- */
 public class StudentFormController implements Initializable {
     
     private Stage selfStage;
@@ -94,9 +83,18 @@ public class StudentFormController implements Initializable {
         stage.show();
     }
     
+    @FXML
+    public void onMouseEntered() {
+        refreshUI();
+    }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        refreshUI();
+    }
+    
+    public void refreshUI() {
         new Thread(() -> {
             Platform.runLater(() -> {
                 String temp = ServerInterface.getTextAreaInformation();
@@ -110,6 +108,8 @@ public class StudentFormController implements Initializable {
                 textAreaRecentMessages.setText(temp);
             });
         }).start();
+//        textAreaInformation.setText(ServerInterface.getTextAreaInformation());
+//        textAreaRecentMessages.setText(ServerInterface.getTextAreaRecentMessages());
     }
     
     public void setStage(Stage stage) {

@@ -58,7 +58,7 @@ public class ReviewFormController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        updateTable(ServerInterface.getTableCurrentBookings(true));
+        updateTable(ServerInterface.getTableRecords(true));
     }
     
     public void updateDetails(ServerInterface.RecordTableRow data) {

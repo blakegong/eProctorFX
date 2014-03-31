@@ -114,6 +114,10 @@ public class ServerInterface {
         }
     }
     
+    public static void updateLocalData() {
+        updateLocalRecordData();
+        updateLocalCourseData();
+    }
     public static String getTextAreaInformation() {
         String newInfo = new String();
         newInfo += "Hello " + username + "\n\n";
@@ -129,7 +133,7 @@ public class ServerInterface {
         return "Not done yet";
     }
 
-    public static ObservableList<RecordTableRow> getTableCurrentBookings(boolean takenStatus) {
+    public static ObservableList<RecordTableRow> getTableRecords(boolean takenStatus) {
         List<RecordTableRow> list = new ArrayList();
         for (RecordRow row : recordData) {
             if (row.takenStatus != takenStatus)
@@ -146,6 +150,18 @@ public class ServerInterface {
             list.add(new RecordTableRow(row.id, row.course.code, row.course.name, strSession, row.proctor_code, row.session.location, strStartTime, strEndTime, row.grade, row.remark));
         }
         return FXCollections.observableList(list);
+    }
+    
+    public static void deleteBooking(RecordTableRow data) {
+        QueryBuilder qb = new QueryBuilder();
+        qb.put("_id").is(new ObjectId(data.getId()));
+        record.remove(qb.get());
+
+        DBObject findQuery = new BasicDBObject("student_code", userCode);
+        DBObject updateQuery = new BasicDBObject("$addToSet", new BasicDBObject(
+                "enrolledNotTested", data.getCourseCode()));
+        student.update(findQuery, updateQuery);
+        updateLocalData();
     }
     
     public static ObservableList<String> getListCourses() {
