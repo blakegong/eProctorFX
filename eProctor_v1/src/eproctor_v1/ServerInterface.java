@@ -76,11 +76,9 @@ public class ServerInterface {
         DBCursor recordCursor = record.find(recordQb.get());
         while (recordCursor.hasNext()) {
             DBObject recordObj = recordCursor.next();
-            System.out.println(recordObj);
             QueryBuilder courseQb = new QueryBuilder();
             courseQb.put("code").is(recordObj.get("course_code"));
             DBObject courseObj = course.findOne(courseQb.get());
-            System.out.println(courseObj);
             CourseRow courseRow = new CourseRow(((ObjectId) courseObj.get("_id")).toString(), (String) courseObj.get("code"), (String) courseObj.get("name"), null);
             
             QueryBuilder sessionQb = new QueryBuilder();
@@ -89,9 +87,6 @@ public class ServerInterface {
             SessionRow sessionRow = new SessionRow(((ObjectId) sessionObj.get("_id")).toString(), (String) sessionObj.get("code"), (Date) sessionObj.get("start"), (Date) sessionObj.get("end"), (String) sessionObj.get("location"));
 
             recordData.add(new RecordRow(((ObjectId) recordObj.get("_id")).toString(), courseRow, sessionRow, (String) recordObj.get("student_code"), (String) recordObj.get("proctor_code"), (boolean) recordObj.get("takenStatus"), (String) recordObj.get("grade"), (String) recordObj.get("remark")));
-        }
-        for (RecordRow t : recordData) {
-            System.out.println(t);
         }
     }
 
@@ -117,42 +112,15 @@ public class ServerInterface {
             CourseRow courseRow = new CourseRow(((ObjectId) objCourse.get("_id")).toString(), (String) objCourse.get("code"), (String) objCourse.get("name"), sessionData);
             courseData.add(courseRow);
         }
-        for (CourseRow t : courseData) {
-            System.out.println(t);
-        }
     }
     
     public static String getTextAreaInformation() {
-        String newInfo = "";
-        DBObject user = student.findOne(new BasicDBObject("student_id", userCode));
-        System.out.println("user_id: " + userCode);
-        System.out.println(user);
-        newInfo += "Hello " + user.get("username") + "\n";
-
-        DBCursor recordCur = record.find(new BasicDBObject("student_id", userCode));
-
-        DBObject DBRecord;
-        DBObject DBCourse;
-        String temp = "";
-        int noExam = 0;
-        while (recordCur.hasNext()) {
-            DBRecord = recordCur.next();
-            System.out.println("record: " + DBRecord);
-            DBCourse = course.findOne(new BasicDBObject("sessions", DBRecord.get("session_id")));
-            System.out.println("course: " + DBCourse);
-            Date start = (Date) session.findOne(new BasicDBObject("_id", DBRecord.get("session_id"))).get("start");
-            System.out.println("start: " + start);
-            System.out.println("new Date: " + new Date());
-            if (start.before(new Date())) {
-                continue;
-            }
-            noExam++;
-            System.out.println("noExam: " + noExam);
-            temp += DBCourse.get("code") + " " + DBCourse.get("name") + ": " + start + "\n";
+        String newInfo = new String();
+        newInfo += "Hello " + username + "\n\n";
+        newInfo += "You have " +recordData.size() + " exams left:\n\n";
+        for (RecordRow recordRow : recordData) {
+            newInfo += recordRow.course.code + " " + recordRow.course.name + ":\n" + recordRow.session.start + "\n\n";
         }
-
-        newInfo += "You have " + noExam + " exams left.\n\n" + temp;
-
         return newInfo;
     }
 

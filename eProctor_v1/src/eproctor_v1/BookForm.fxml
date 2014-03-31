@@ -14,17 +14,13 @@
       <content>
         <VBox id="VBox" alignment="CENTER" spacing="5.0">
           <children>
-            <HBox alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" prefHeight="-1.0" prefWidth="-1.0">
-              <children>
-                <TableView id="tableCurrentBookings" fx:id="table" maxWidth="1.7976931348623157E308" onMouseClicked="#tableClicked" prefHeight="200.0" prefWidth="750.0">
-                  <columns>
-                    <TableColumn editable="false" maxWidth="5000.0" minWidth="10.0" prefWidth="75.0" text="Record ID" fx:id="idCol" />
-                    <TableColumn editable="false" prefWidth="75.0" text="Course" fx:id="courseCol" />
-                    <TableColumn prefWidth="75.0" text="Session" fx:id="sessionCok" />
-                  </columns>
-                </TableView>
-              </children>
-            </HBox>
+            <TableView id="tableCurrentBookings" fx:id="table" maxWidth="1.7976931348623157E308" onMouseClicked="#tableClicked" prefHeight="200.0" prefWidth="750.0">
+              <columns>
+                <TableColumn editable="false" maxWidth="5000.0" minWidth="10.0" prefWidth="75.0" text="Record ID" fx:id="idCol" />
+                <TableColumn editable="false" prefWidth="75.0" text="Course" fx:id="courseCol" />
+                <TableColumn prefWidth="75.0" text="Session" fx:id="sessionCok" />
+              </columns>
+            </TableView>
             <Separator prefWidth="200.0" />
             <GridPane>
               <children>

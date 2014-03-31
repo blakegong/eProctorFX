@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -16,10 +17,61 @@ public class ReviewFormController implements Initializable {
     @FXML
     private TableView<ServerInterface.RecordTableRow> table;
     
+    @FXML
+    private Label lblId;
+
+    @FXML
+    private Label lblCourseCode;
+
+    @FXML
+    private Label lblCourse;
+
+    @FXML
+    private Label lblSession;
+
+    @FXML
+    private Label lblProctor;
+
+    @FXML
+    private Label lblLocation;
+
+    @FXML
+    private Label lblStartTime;
+
+    @FXML
+    private Label lblEndTime;
+    
+    @FXML
+    private Label lblGrade;
+    
+    @FXML
+    private Label lblRemark;
+    
+    @FXML
+    private void tableClicked() {
+        if (table.selectionModelProperty().get().getSelectedItem() == null) {
+            return;
+        }
+        updateDetails(table.selectionModelProperty().get().getSelectedItem());
+    }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         updateTable(ServerInterface.getTableCurrentBookings(true));
+    }
+    
+    public void updateDetails(ServerInterface.RecordTableRow data) {
+        lblId.setText(data.getId());
+        lblCourseCode.setText(data.getCourseCode());
+        lblCourse.setText(data.getCourse());
+        lblSession.setText(data.getSession());
+        lblProctor.setText(data.getProctor());
+        lblLocation.setText(data.getLocation());
+        lblStartTime.setText(data.getStartTime());
+        lblEndTime.setText(data.getEndTime());
+        lblGrade.setText(data.getGrade());
+        lblRemark.setText(data.getRemark());
     }
     
     public void updateTable(ObservableList<ServerInterface.RecordTableRow> data) {
@@ -29,19 +81,19 @@ public class ReviewFormController implements Initializable {
         idCol.setCellValueFactory(
                 new PropertyValueFactory<>("id"));
         TableColumn courseCol = new TableColumn("Course");
-        courseCol.setMinWidth(300);
+        courseCol.setMinWidth(200);
         courseCol.setCellValueFactory(
                 new PropertyValueFactory<>("course"));
         TableColumn sessionCol = new TableColumn("Session");
-        sessionCol.setMinWidth(230);
+        sessionCol.setMinWidth(200);
         sessionCol.setCellValueFactory(
                 new PropertyValueFactory<>("session"));
         TableColumn gradeCol = new TableColumn("Grade");
-        gradeCol.setMinWidth(20);
+        gradeCol.setMinWidth(70);
         gradeCol.setCellValueFactory(
                 new PropertyValueFactory<>("grade"));
         TableColumn remarkCol = new TableColumn("Remark");
-        remarkCol.setMinWidth(230);
+        remarkCol.setMinWidth(100);
         remarkCol.setCellValueFactory(
                 new PropertyValueFactory<>("remark"));
         
