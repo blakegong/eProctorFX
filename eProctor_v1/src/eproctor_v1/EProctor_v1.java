@@ -13,8 +13,8 @@ public class EProctor_v1 extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         showLogin(stage);
-        ServerInterface.connectValidationServer();
-        ServerInterface.connectMongoHQServer();
+        ServerInterface.connectEProctorServer();
+        ServerInterface.connectSchoolServer();
     }
 
     public static void main(String[] args) {
@@ -33,17 +33,5 @@ public class EProctor_v1 extends Application {
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.show();
     }
-    
-    private void showIn(Stage stage) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("InvigilateForm.fxml"));
-        Parent root = (Parent)loader.load();
-        InvigilateFormController controller = (InvigilateFormController)loader.getController();
-        controller.setStage(stage);
-        Scene scene = new Scene(root);
-        scene.setFill(null);
-        stage.setTitle("eProctor");
-        stage.setScene(scene);
-        stage.initStyle(StageStyle.TRANSPARENT);
-        stage.show();
-    }
+
 }

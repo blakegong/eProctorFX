@@ -22,39 +22,44 @@ public class ServerInterface {
     public static String domain, username, password, userCode;
     private static List<RecordRow> recordData;
     private static List<CourseRow> courseData;
+    private static List<CourseRow> notBookedCoursesData;
 
     public ServerInterface() {
-        
+
     }
 
-    public static void connectMongoHQServer() throws UnknownHostException {
+    public static void connectEProctorServer() throws UnknownHostException {
         System.out.println("MongoHQServer connecting");
-        MongoClientURI uri = new MongoClientURI("mongodb://admin:admin@emma.mongohq.com:10051/real_like_doc");
+        MongoClientURI uri = new MongoClientURI("mongodb://admin:admin@oceanic.mongohq.com:10014/eProctor");
         MongoClient mongoClient = new MongoClient(uri);
-        DB db = mongoClient.getDB("real_like_doc");
+        DB db = mongoClient.getDB("eProctor");
         record = db.getCollection("Record");
-        course = db.getCollection("Course");
-        session = db.getCollection("Session");
-        student = db.getCollection("Student");
-        proctor = db.getCollection("Proctor");
         message = db.getCollection("Message");
         System.out.println("MongoHQServer connected");
     }
 
-    public static void connectValidationServer() throws UnknownHostException {
+    public static void connectSchoolServer() throws UnknownHostException {
         System.out.println("ValidationServer connecting");
-        MongoClientURI uri = new MongoClientURI("mongodb://admin:admin@emma.mongohq.com:10063/NTU_Server");
+        MongoClientURI uri = new MongoClientURI("mongodb://admin:admin@oceanic.mongohq.com:10015/NTU_Server");
         MongoClient mongoClient = new MongoClient(uri);
         DB db = mongoClient.getDB("NTU_Server");
         user = db.getCollection("User");
+        course = db.getCollection("Course");
+        session = db.getCollection("Session");
+        student = db.getCollection("Student");
+        proctor = db.getCollection("Proctor");
         System.out.println("ValidationServer connected");
     }
 
     public static boolean isUser(String domain, String username, String password) {
         QueryBuilder qb = new QueryBuilder();
-        qb.put("username").is(username).put("password").is(password).put("domain").is(domain);
-        DBObject obj = null;
-        obj = user.findOne(qb.get());
+        qb.put("username").is(username).put("password").is(password);
+        DBObject obj;
+        if (domain.equals("Student")) {
+            obj = student.findOne(qb.get());
+        } else {
+            obj = proctor.findOne(qb.get());
+        }
         if (obj == null) {
             System.out.println("login failed");
             return false;
@@ -67,7 +72,7 @@ public class ServerInterface {
             return true;
         }
     }
-    
+
     public static void updateLocalRecordData() {
         recordData = new ArrayList();
         QueryBuilder recordQb = new QueryBuilder();
@@ -80,7 +85,7 @@ public class ServerInterface {
             courseQb.put("code").is(recordObj.get("course_code"));
             DBObject courseObj = course.findOne(courseQb.get());
             CourseRow courseRow = new CourseRow(((ObjectId) courseObj.get("_id")).toString(), (String) courseObj.get("code"), (String) courseObj.get("name"), null);
-            
+
             QueryBuilder sessionQb = new QueryBuilder();
             sessionQb.put("code").is(recordObj.get("session_code"));
             DBObject sessionObj = session.findOne(sessionQb.get());
@@ -93,9 +98,9 @@ public class ServerInterface {
     public static void updateLocalCourseData() {
         courseData = new ArrayList();
         QueryBuilder qbStudent = new QueryBuilder();
-        qbStudent.put("student_code").is(userCode);
+        qbStudent.put("user_code").is(userCode);
         DBObject objStudent = student.findOne(qbStudent.get());
-        BasicDBList listCourses = (BasicDBList) objStudent.get("enrolledNotTested");
+        BasicDBList listCourses = (BasicDBList) objStudent.get("enrolledCourses");
         for (Object course_code : listCourses) {
             List<SessionRow> sessionData = new ArrayList();
             QueryBuilder qbCourse = new QueryBuilder();
@@ -113,15 +118,16 @@ public class ServerInterface {
             courseData.add(courseRow);
         }
     }
-    
+
     public static void updateLocalData() {
         updateLocalRecordData();
         updateLocalCourseData();
     }
+
     public static String getTextAreaInformation() {
         String newInfo = new String();
         newInfo += "Hello " + username + "\n\n";
-        newInfo += "You have " +recordData.size() + " exams left:\n\n";
+        newInfo += "You have " + recordData.size() + " exams left:\n\n";
         for (RecordRow recordRow : recordData) {
             newInfo += recordRow.course.code + " " + recordRow.course.name + ":\n" + recordRow.session.start + "\n\n";
         }
@@ -136,8 +142,9 @@ public class ServerInterface {
     public static ObservableList<RecordTableRow> getTableRecords(boolean takenStatus) {
         List<RecordTableRow> list = new ArrayList();
         for (RecordRow row : recordData) {
-            if (row.takenStatus != takenStatus)
+            if (row.takenStatus != takenStatus) {
                 continue;
+            }
             String strSession, strStartTime, strEndTime;
             SimpleDateFormat startFormat = new SimpleDateFormat(
                     "dd.MM.yyyy E kk:mm");
@@ -146,35 +153,52 @@ public class ServerInterface {
                     + endFormat.format(row.session.end);
             strStartTime = startFormat.format(row.session.start);
             strEndTime = startFormat.format(row.session.end);
-        
+
             list.add(new RecordTableRow(row.id, row.course.code, row.course.name, strSession, row.proctor_code, row.session.location, strStartTime, strEndTime, row.grade, row.remark));
         }
         return FXCollections.observableList(list);
     }
-    
+
+    public static void addBooking(int courseIndex, int sessionIndex) {
+        BasicDBObjectBuilder document = new BasicDBObjectBuilder();
+        document.add("course_code", notBookedCoursesData.get(courseIndex).code)
+                .add("session_code", notBookedCoursesData.get(courseIndex).sessions.get(sessionIndex).code)
+                .add("student_code", userCode).add("proctor_code", "")
+                .add("takenStatus", false).add("grade", "").add("remark", "");
+        record.insert(document.get());
+        updateLocalData();
+    }
+
     public static void deleteBooking(RecordTableRow data) {
         QueryBuilder qb = new QueryBuilder();
         qb.put("_id").is(new ObjectId(data.getId()));
         record.remove(qb.get());
-
-        DBObject findQuery = new BasicDBObject("student_code", userCode);
-        DBObject updateQuery = new BasicDBObject("$addToSet", new BasicDBObject(
-                "enrolledNotTested", data.getCourseCode()));
-        student.update(findQuery, updateQuery);
         updateLocalData();
     }
-    
+
     public static ObservableList<String> getListCourses() {
+        notBookedCoursesData = new ArrayList();
         List<String> list = new ArrayList();
+        boolean isBooked = false;
         for (CourseRow courseRow : courseData) {
-            list.add(courseRow.code + " " + courseRow.name);
+            isBooked = false;
+            for (RecordRow recordRow : recordData) {
+                if (recordRow.course.code.equals(courseRow.code)) {
+                    isBooked = true;
+                    break;
+                }
+            }
+            if (!isBooked) {
+                notBookedCoursesData.add(courseRow);
+                list.add(courseRow.code + " " + courseRow.name);
+            }
         }
         return FXCollections.observableList(list);
     }
-    
+
     public static ObservableList<String> getListSessions(int index) {
         List<String> list = new ArrayList();
-        for (SessionRow sessionRow : courseData.get(index).sessions) {
+        for (SessionRow sessionRow : notBookedCoursesData.get(index).sessions) {
             SimpleDateFormat startFormat = new SimpleDateFormat(
                     "dd.MM.yyyy E kk:mm");
             SimpleDateFormat endFormat = new SimpleDateFormat("'-'kk:mm");
@@ -206,8 +230,9 @@ public class ServerInterface {
         }
 
     }
-    
+
     public static class CourseRow {
+
         private final String id;
         private final String code;
         private final String name;
@@ -220,8 +245,9 @@ public class ServerInterface {
             this.sessions = sessions;
         }
     }
-    
+
     public static class SessionRow {
+
         private final String id;
         private final String code;
         private final Date start;

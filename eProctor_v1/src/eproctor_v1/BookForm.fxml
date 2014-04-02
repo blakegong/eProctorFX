@@ -10,11 +10,53 @@
 
 <Accordion prefHeight="445.0" prefWidth="824.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="eproctor_v1.BookFormController">
   <expandedPane>
+    <TitledPane fx:id="x1" animated="false" text="New Booking">
+      <content>
+        <HBox maxWidth="1.7976931348623157E308" prefHeight="142.0" prefWidth="700.0">
+          <children>
+            <VBox prefHeight="200.0" prefWidth="-1.0">
+              <children>
+                <Label text="Available Courses" />
+                <ListView fx:id="listCourses" maxWidth="1.7976931348623157E308" prefHeight="-1.0" prefWidth="3000.0" />
+              </children>
+              <HBox.margin>
+                <Insets right="50.0" />
+              </HBox.margin>
+            </VBox>
+            <VBox prefHeight="200.0" prefWidth="-1.0">
+              <children>
+                <Label text="Available Sessions" />
+                <ListView fx:id="listSessions" maxWidth="1.7976931348623157E308" prefHeight="-1.0" prefWidth="3000.0" />
+              </children>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+              <children>
+                <Button minWidth="50.0" mnemonicParsing="false" onMouseClicked="#btnBookClicked" text="Book">
+                  <VBox.margin>
+                    <Insets bottom="30.0" fx:id="x2" />
+                  </VBox.margin>
+                </Button>
+                <Button minWidth="50.0" mnemonicParsing="false" text="Reset" VBox.margin="$x2" />
+                <Button minWidth="70.0" mnemonicParsing="false" text="Refresh" />
+              </children>
+              <HBox.margin>
+                <Insets left="30.0" right="30.0" />
+              </HBox.margin>
+            </VBox>
+          </children>
+          <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" fx:id="x3" />
+          </padding>
+        </HBox>
+      </content>
+    </TitledPane>
+  </expandedPane>
+  <panes>
     <TitledPane fx:id="x4" animated="false" text="Current Bookings">
       <content>
-        <VBox id="VBox" alignment="CENTER" spacing="5.0">
+        <VBox id="VBox" alignment="CENTER" padding="$x3" spacing="5.0">
           <children>
-            <TableView id="tableCurrentBookings" fx:id="table" maxWidth="1.7976931348623157E308" onMouseClicked="#tableClicked" prefHeight="200.0" prefWidth="750.0">
+            <TableView id="tableCurrentBookings" fx:id="table" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="750.0">
               <columns>
                 <TableColumn editable="false" maxWidth="5000.0" minWidth="10.0" prefWidth="75.0" text="Record ID" fx:id="idCol" />
                 <TableColumn editable="false" prefWidth="75.0" text="Course" fx:id="courseCol" />
@@ -57,51 +99,9 @@
               </rowConstraints>
             </GridPane>
           </children>
-          <padding>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" fx:id="x3" />
-          </padding>
         </VBox>
       </content>
     </TitledPane>
-  </expandedPane>
-  <panes>
-    <fx:reference source="x4" />
-    <TitledPane fx:id="x1" animated="false" text="New Booking">
-      <content>
-        <HBox maxWidth="1.7976931348623157E308" padding="$x3" prefHeight="142.0" prefWidth="700.0">
-          <children>
-            <VBox prefHeight="200.0" prefWidth="-1.0">
-              <children>
-                <Label text="Available Courses" />
-                <ListView fx:id="listCourses" maxWidth="1.7976931348623157E308" onMouseClicked="#listCoursesClicked" prefHeight="-1.0" prefWidth="3000.0" />
-              </children>
-              <HBox.margin>
-                <Insets right="50.0" />
-              </HBox.margin>
-            </VBox>
-            <VBox prefHeight="200.0" prefWidth="-1.0">
-              <children>
-                <Label text="Available Sessions" />
-                <ListView fx:id="listSessions" maxWidth="1.7976931348623157E308" prefHeight="-1.0" prefWidth="3000.0" />
-              </children>
-            </VBox>
-            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-              <children>
-                <Button minWidth="50.0" mnemonicParsing="false" text="Book">
-                  <VBox.margin>
-                    <Insets bottom="30.0" fx:id="x2" />
-                  </VBox.margin>
-                </Button>
-                <Button minWidth="50.0" mnemonicParsing="false" text="Reset" VBox.margin="$x2" />
-                <Button minWidth="70.0" mnemonicParsing="false" text="Refresh" />
-              </children>
-              <HBox.margin>
-                <Insets left="30.0" right="30.0" />
-              </HBox.margin>
-            </VBox>
-          </children>
-        </HBox>
-      </content>
-    </TitledPane>
+    <fx:reference source="x1" />
   </panes>
 </Accordion>

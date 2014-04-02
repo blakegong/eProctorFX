@@ -2,6 +2,8 @@ package eproctor_v1;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -47,17 +49,12 @@ public class ReviewFormController implements Initializable {
     @FXML
     private Label lblRemark;
     
-    @FXML
-    private void tableClicked() {
-        if (table.selectionModelProperty().get().getSelectedItem() == null) {
-            return;
-        }
-        updateDetails(table.selectionModelProperty().get().getSelectedItem());
-    }
-    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        table.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
+            updateDetails(table.selectionModelProperty().get().getSelectedItem());
+        });
         updateTable(ServerInterface.getTableRecords(true));
     }
     

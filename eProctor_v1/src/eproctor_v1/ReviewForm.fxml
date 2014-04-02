@@ -10,7 +10,7 @@
 
 <VBox prefHeight="445.0" prefWidth="-1.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="eproctor_v1.ReviewFormController">
   <children>
-    <TableView fx:id="table" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" onMouseClicked="#tableClicked" prefHeight="400.0" prefWidth="-1.0">
+    <TableView fx:id="table" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="-1.0">
       <columns>
         <TableColumn prefWidth="75.0" text="Record ID" />
         <TableColumn prefWidth="75.0" text="Course" />

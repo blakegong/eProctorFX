@@ -36,7 +36,7 @@ public class ExamFormController implements Initializable {
         // TODO
 //        browser = new WebView();
         WebEngine webEngine = browser.getEngine();
-        webEngine.load("http://www.google.com");
+        webEngine.load("https://www.google.com.sg/#q=nanshen+memeda");
     }    
     
     public void setStage(Stage stage) {

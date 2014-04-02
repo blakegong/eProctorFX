@@ -1,11 +1,17 @@
 package eproctor_v1;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
@@ -52,42 +58,58 @@ public class BookFormController implements Initializable {
     private Label lblEndTime;
 
     @FXML
-    private void tableClicked() {
-        if (table.selectionModelProperty().get().getSelectedItem() == null) {
-            return;
-        }
-        updateDetails(table.selectionModelProperty().get().getSelectedItem());
-    }
-
-    @FXML
-    private void btnDeleteClicked() {
+    private void btnDeleteClicked() throws IOException {
         if (table.selectionModelProperty().get().getSelectedItem() == null) {
             return;
         }
         ServerInterface.deleteBooking(table.selectionModelProperty().get().getSelectedItem());
-        refreshUI();
+        restartUI();
+//        refreshUI();
     }
-
+    
     @FXML
-    private void listCoursesClicked() {
-        int index = listCourses.selectionModelProperty().get().getSelectedIndex();
-        if (index < 0) {
-            return;
+    private void btnBookClicked() throws IOException {
+        if (listSessions.getSelectionModel().getSelectedItems() != null) {
+            ServerInterface.addBooking(listCourses.getSelectionModel().getSelectedIndex(), listSessions.getSelectionModel().getSelectedIndex());
         }
-        updateListSessions(ServerInterface.getListSessions(index));
+        restartUI();
+//        refreshUI();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        table.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
+            updateDetails(table.selectionModelProperty().get().getSelectedItem());
+        });
+        listCourses.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
+                int index = listCourses.selectionModelProperty().get().getSelectedIndex();
+                updateListSessions(ServerInterface.getListSessions(index));
+        });
         refreshUI();
     }
     
+    public void restartUI() throws IOException {
+        selfStage.close();
+        
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("BookForm.fxml"));
+        Parent root = (Parent)loader.load();
+        BookFormController controller = (BookFormController)loader.getController();
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        controller.setStage(stage);
+        stage.setScene(scene);
+        stage.setTitle("ePoctor Student Client");
+        stage.setScene(scene);
+        stage.show();
+    }
+    
     public void refreshUI() {
+        clearTable();
         updateTable(ServerInterface.getTableRecords(false));
         clearDetails();
+        clearLists();
         updateListCourses(ServerInterface.getListCourses());
-        clearListSessions();
+        
     }
 
     public void updateDetails(ServerInterface.RecordTableRow data) {
@@ -148,8 +170,20 @@ public class BookFormController implements Initializable {
         lblEndTime.setText(null);
     }
 
-    private void clearListSessions() {
-        listSessions.getItems().clear();
+    private void clearTable() {
+        table.getItems().removeAll();
+        table.setItems(table.getItems());
+//        table.getItems().clear();
+    }
+    private void clearLists() {
+        listCourses.getItems().removeAll();
+        listCourses.setItems(listCourses.getItems());
+        listSessions.getItems().removeAll();
+        listSessions.setItems(listSessions.getItems());
+//        listCourses.setItems(null);
+//        listSessions.setItems(null);
+//        listCourses.getItems().clear();
+//        listSessions.getItems().clear();
     }
 
 }
