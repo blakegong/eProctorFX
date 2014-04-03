@@ -2,8 +2,6 @@ package eproctor_v1;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -55,7 +53,7 @@ public class ReviewFormController implements Initializable {
         table.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
             updateDetails(table.selectionModelProperty().get().getSelectedItem());
         });
-        updateTable(ServerInterface.getTableRecords(true));
+        updateTable();
     }
     
     public void updateDetails(ServerInterface.RecordTableRow data) {
@@ -71,31 +69,18 @@ public class ReviewFormController implements Initializable {
         lblRemark.setText(data.getRemark());
     }
     
-    public void updateTable(ObservableList<ServerInterface.RecordTableRow> data) {
-        table.getColumns().clear();
-        TableColumn idCol = new TableColumn("Record ID");
-        idCol.setMinWidth(200);
-        idCol.setCellValueFactory(
+    public void updateTable() {
+        ServerInterface.getTableRecords(table.getItems(), true);
+        table.getColumns().get(0).setCellValueFactory(
                 new PropertyValueFactory<>("id"));
-        TableColumn courseCol = new TableColumn("Course");
-        courseCol.setMinWidth(200);
-        courseCol.setCellValueFactory(
+        table.getColumns().get(1).setCellValueFactory(
                 new PropertyValueFactory<>("course"));
-        TableColumn sessionCol = new TableColumn("Session");
-        sessionCol.setMinWidth(200);
-        sessionCol.setCellValueFactory(
+        table.getColumns().get(2).setCellValueFactory(
                 new PropertyValueFactory<>("session"));
-        TableColumn gradeCol = new TableColumn("Grade");
-        gradeCol.setMinWidth(70);
-        gradeCol.setCellValueFactory(
+        table.getColumns().get(3).setCellValueFactory(
                 new PropertyValueFactory<>("grade"));
-        TableColumn remarkCol = new TableColumn("Remark");
-        remarkCol.setMinWidth(100);
-        remarkCol.setCellValueFactory(
+        table.getColumns().get(4).setCellValueFactory(
                 new PropertyValueFactory<>("remark"));
-        
-        table.setItems(data);
-        table.getColumns().addAll(idCol, courseCol, sessionCol, gradeCol, remarkCol);
     }
     
     public void setStage(Stage stage) {

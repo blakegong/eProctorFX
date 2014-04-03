@@ -55,8 +55,8 @@ public class LoginFormController implements Initializable {
             ServerInterface.updateLocalCourseData();
         } else {
             MessageBox.show(selfStage,
-                "Login Error",
-                "Login Fails",
+                "The username / password you entered is incorrect.\nPlease try again.",
+                "Please re-enter your username / password",
                 MessageBox.ICON_INFORMATION);
         }
     }
@@ -98,6 +98,7 @@ public class LoginFormController implements Initializable {
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         controller.setStage(stage);
+        stage.setResizable(false);
         stage.setScene(scene);
         stage.setTitle("ePoctor Student Client");
         stage.setScene(scene);

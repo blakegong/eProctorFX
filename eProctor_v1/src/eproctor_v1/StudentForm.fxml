@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" onMouseEntered="#onMouseEntered" prefHeight="500.0" prefWidth="800.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="eproctor_v1.StudentFormController">
+<AnchorPane id="AnchorPane" onMouseEntered="#onMouseEntered" prefHeight="480.0" prefWidth="780.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="eproctor_v1.StudentFormController">
   <children>
     <VBox alignment="CENTER" layoutX="15.0" layoutY="71.0" opacity="1.0" prefHeight="415.0" prefWidth="202.0">
       <children>

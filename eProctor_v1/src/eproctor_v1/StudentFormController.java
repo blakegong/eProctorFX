@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class StudentFormController implements Initializable {
@@ -43,8 +44,10 @@ public class StudentFormController implements Initializable {
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         controller.setStage(stage);
-        stage.setScene(scene);
-        stage.setTitle("ePoctor Student Client");
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(selfStage);
+        stage.setResizable(false);
+        stage.setTitle("Booking Management");
         stage.setScene(scene);
         stage.show();
     }
@@ -57,8 +60,10 @@ public class StudentFormController implements Initializable {
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         controller.setStage(stage);
-        stage.setScene(scene);
-        stage.setTitle("ePoctor Student Client");
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(selfStage);
+        stage.setResizable(false);
+        stage.setTitle("Review Exam Results");
         stage.setScene(scene);
         stage.show();
     }

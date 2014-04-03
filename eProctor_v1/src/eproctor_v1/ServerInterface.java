@@ -20,6 +20,7 @@ public class ServerInterface {
 
     private static DBCollection user, record, course, session, student, proctor, message;
     public static String domain, username, password, userCode;
+//    private static String examCourseCode, examSessionCode, examProctor, examStudent;
     private static List<RecordRow> recordData;
     private static List<CourseRow> courseData;
     private static List<CourseRow> notBookedCoursesData;
@@ -138,9 +139,9 @@ public class ServerInterface {
         //return Messager.pollMsg(Main.user_id, "Student");
         return "Not done yet";
     }
-
-    public static ObservableList<RecordTableRow> getTableRecords(boolean takenStatus) {
-        List<RecordTableRow> list = new ArrayList();
+    public static void getTableRecords(ObservableList list, boolean takenStatus) {
+//    public static ObservableList<RecordTableRow> getTableRecords(boolean takenStatus) {
+//        List<RecordTableRow> list = new ArrayList();
         for (RecordRow row : recordData) {
             if (row.takenStatus != takenStatus) {
                 continue;
@@ -156,7 +157,7 @@ public class ServerInterface {
 
             list.add(new RecordTableRow(row.id, row.course.code, row.course.name, strSession, row.proctor_code, row.session.location, strStartTime, strEndTime, row.grade, row.remark));
         }
-        return FXCollections.observableList(list);
+//        return FXCollections.observableList(list);
     }
 
     public static void addBooking(int courseIndex, int sessionIndex) {
@@ -176,9 +177,8 @@ public class ServerInterface {
         updateLocalData();
     }
 
-    public static ObservableList<String> getListCourses() {
+    public static void getListCourses(ObservableList<String> list) {
         notBookedCoursesData = new ArrayList();
-        List<String> list = new ArrayList();
         boolean isBooked = false;
         for (CourseRow courseRow : courseData) {
             isBooked = false;
@@ -193,19 +193,93 @@ public class ServerInterface {
                 list.add(courseRow.code + " " + courseRow.name);
             }
         }
-        return FXCollections.observableList(list);
     }
 
-    public static ObservableList<String> getListSessions(int index) {
-        List<String> list = new ArrayList();
+    public static void getListSessions(ObservableList<String> list, int index) {
+        while (!list.isEmpty())
+            list.remove(0);
         for (SessionRow sessionRow : notBookedCoursesData.get(index).sessions) {
             SimpleDateFormat startFormat = new SimpleDateFormat(
                     "dd.MM.yyyy E kk:mm");
             SimpleDateFormat endFormat = new SimpleDateFormat("'-'kk:mm");
             list.add(startFormat.format(sessionRow.start) + endFormat.format(sessionRow.end));
         }
-        return FXCollections.observableList(list);
     }
+
+//    public static boolean sendMessage(String receiverCode, String courseCode, String sessionCode, String text, Date date, String type) {
+//        WriteResult wr;
+//        wr = message.insert(new BasicDBObject().append("sender_code", userCode)
+//                .append("receiver_code", receiverCode)
+//                .append("course_code", courseCode)
+//                .append("session_code", sessionCode)
+//                .append("text", text)
+//                .append("time", date)
+//                .append("type", type)
+//                .append("isRead", false));
+//        if (wr.getError() != null) {
+//            System.out.println(wr.getError());
+//            return false;
+//        }
+//        return true;
+//    }
+//
+//    public static String pullMessage(String senderCode) {
+//        String text = "";
+//        QueryBuilder findQuery = new QueryBuilder().put("sender_code").is(userCode).or(new BasicDBObject("receiver_code", userCode)).and(new BasicDBObject("isRead", false).append("course_code", courseCode).append("session_code", sessionCode));
+//        DBCursor cursor = message.find(findQuery.get()).sort(new BasicDBObject("time", 1));
+//        while(cursor.hasNext()) {
+//            DBObject cursorRow = cursor.next();
+//            
+//        }
+//        ArrayList<DBObject> msgs = new ArrayList<DBObject>();
+//        DBObject temp = null;
+//        if (domain.equals("Proctor")) {
+//            temp = Main.mongoHQ.proctor.findOne(new BasicDBObject().append("_id", myId), new BasicDBObject().append("isRead", 1));
+//        } else {
+//            temp = Main.mongoHQ.student.findOne(new BasicDBObject().append("_id", myId), new BasicDBObject().append("isRead", 1));
+//        }
+//
+//        if (temp != null && (boolean) temp.get("isRead") == false) {
+//            {
+//                DBCursor cursor = Main.mongoHQ.message.find(new BasicDBObject().append("receiverId", myId).append("isRead", false));
+//                while (cursor.hasNext()) {
+//                    msgs.add(cursor.next());
+//                }
+//            }
+//        }
+//
+//        String str = "";
+//
+//        for (DBObject o : msgs) {
+//            String name = "";
+//            DBObject mingzi = Main.mongoHQ.proctor.findOne(new BasicDBObject("_id", (ObjectId) o.get("senderId")));
+//            System.out.println("sender id: " + o.get("senderId"));
+//            if (mingzi == null) {
+//                mingzi = Main.mongoHQ.student.findOne(new BasicDBObject("_id", (ObjectId) o.get("senderId")));
+//            }
+//            if (mingzi == null) {
+//                System.out.println("Messager here: ???@$%U*^&%%^%$!!@!#!#$");
+//                continue;
+//            }
+//            System.out.println("Messager here: mingzi: " + mingzi);
+//            name = (String) mingzi.get("name");
+//            str = str
+//                    + "\nsender name: " + name
+//                    + "\ntype: " + o.get("type")
+//                    /*+(String)Main.mongoHQ.student.findOne(new BasicDBObject().append("_id",o.get("senderId")),new BasicDBObject().append("name", 1)).get("name")*/
+//                    + "\ncontent: " + o.get("message")
+//                    + "\n";
+//
+//        }
+//
+//		////////////////////////////////////
+//        //this is to set the isRead true
+////		Main.mongoHQ.proctor.update(new BasicDBObject().append("_id",myId), new BasicDBObject("$set", new BasicDBObject().append("isRead",true)), false, false);
+////		Main.mongoHQ.student.update(new BasicDBObject().append("_id",myId), new BasicDBObject("$set", new BasicDBObject().append("isRead",true)), false, false);
+//        ////////////////////////////////////////////
+//        System.out.println("messager here: " + str);
+//        return str;
+//    }
 
     public static class RecordRow {
 
@@ -329,5 +403,20 @@ public class ServerInterface {
             return remark.get();
         }
 
+    }
+    
+    public static class ExamInfo {
+        private final ArrayList<String> proctorCode;
+        private final ArrayList<String> studentCode;
+        private final CourseRow course;
+        private final SessionRow session;
+
+        public ExamInfo(ArrayList<String> proctorCode, ArrayList<String> studentCode, CourseRow course, SessionRow session) {
+            this.proctorCode = proctorCode;
+            this.studentCode = studentCode;
+            this.course = course;
+            this.session = session;
+        }
+        
     }
 }

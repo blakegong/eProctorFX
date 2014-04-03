@@ -2,11 +2,7 @@ package eproctor_v1;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -14,11 +10,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import org.bson.types.ObjectId;
+import jfx.messagebox.MessageBox;
 
 public class BookFormController implements Initializable {
 
@@ -63,8 +58,11 @@ public class BookFormController implements Initializable {
             return;
         }
         ServerInterface.deleteBooking(table.selectionModelProperty().get().getSelectedItem());
+        MessageBox.show(selfStage,
+                "The booking was successfully deleted.",
+                "",
+                MessageBox.ICON_INFORMATION);
         restartUI();
-//        refreshUI();
     }
     
     @FXML
@@ -72,8 +70,11 @@ public class BookFormController implements Initializable {
         if (listSessions.getSelectionModel().getSelectedItems() != null) {
             ServerInterface.addBooking(listCourses.getSelectionModel().getSelectedIndex(), listSessions.getSelectionModel().getSelectedIndex());
         }
+        MessageBox.show(selfStage,
+                "The booking was successfully added.",
+                "",
+                MessageBox.ICON_INFORMATION);
         restartUI();
-//        refreshUI();
     }
 
     @Override
@@ -82,10 +83,10 @@ public class BookFormController implements Initializable {
             updateDetails(table.selectionModelProperty().get().getSelectedItem());
         });
         listCourses.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
-                int index = listCourses.selectionModelProperty().get().getSelectedIndex();
-                updateListSessions(ServerInterface.getListSessions(index));
+            updateListSessions();
         });
-        refreshUI();
+        updateTable();
+        updateListCourses();
     }
     
     public void restartUI() throws IOException {
@@ -102,15 +103,6 @@ public class BookFormController implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
-    
-    public void refreshUI() {
-        clearTable();
-        updateTable(ServerInterface.getTableRecords(false));
-        clearDetails();
-        clearLists();
-        updateListCourses(ServerInterface.getListCourses());
-        
-    }
 
     public void updateDetails(ServerInterface.RecordTableRow data) {
         lblId.setText(data.getId());
@@ -123,67 +115,22 @@ public class BookFormController implements Initializable {
         lblEndTime.setText(data.getEndTime());
     }
 
-    public void updateTable(ObservableList<ServerInterface.RecordTableRow> data) {
-        table.getColumns().clear();
-        TableColumn idCol = new TableColumn("Record ID");
-        idCol.setMinWidth(200);
-        idCol.setCellValueFactory(
-                new PropertyValueFactory<>("id"));
-        TableColumn courseCol = new TableColumn("Course");
-        courseCol.setMinWidth(300);
-        courseCol.setCellValueFactory(
-                new PropertyValueFactory<>("course"));
-        TableColumn sessionCol = new TableColumn("Session");
-        sessionCol.setMinWidth(230);
-        sessionCol.setCellValueFactory(
-                new PropertyValueFactory<>("session"));
-        table.setItems(data);
-        table.getColumns().addAll(idCol, courseCol, sessionCol);
+    public void updateTable() {
+        ServerInterface.getTableRecords(table.getItems(), false);
+        table.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("id"));
+        table.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("course"));
+        table.getColumns().get(2).setCellValueFactory(new PropertyValueFactory<>("session"));
     }
 
-    public void updateListCourses(ObservableList<String> items) {
-        if (items.size() == 0) {
-            return;
-        }
-        listCourses.setItems(items);
+    public void updateListCourses() {
+        ServerInterface.getListCourses(listCourses.getItems());
     }
 
-    private void updateListSessions(ObservableList<String> items) {
-        if (items.size() == 0) {
-            return;
-        }
-        listSessions.setItems(items);
+    private void updateListSessions() {
+        ServerInterface.getListSessions(listSessions.getItems(), listCourses.selectionModelProperty().get().getSelectedIndex());
     }
 
     public void setStage(Stage stage) {
         selfStage = stage;
     }
-
-    public void clearDetails() {
-        lblId.setText(null);
-        lblCourseCode.setText(null);
-        lblCourse.setText(null);
-        lblSession.setText(null);
-        lblProctor.setText(null);
-        lblLocation.setText(null);
-        lblStartTime.setText(null);
-        lblEndTime.setText(null);
-    }
-
-    private void clearTable() {
-        table.getItems().removeAll();
-        table.setItems(table.getItems());
-//        table.getItems().clear();
-    }
-    private void clearLists() {
-        listCourses.getItems().removeAll();
-        listCourses.setItems(listCourses.getItems());
-        listSessions.getItems().removeAll();
-        listSessions.setItems(listSessions.getItems());
-//        listCourses.setItems(null);
-//        listSessions.setItems(null);
-//        listCourses.getItems().clear();
-//        listSessions.getItems().clear();
-    }
-
 }
