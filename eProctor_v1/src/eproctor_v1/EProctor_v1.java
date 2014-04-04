@@ -33,5 +33,6 @@ public class EProctor_v1 extends Application {
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.show();
     }
-
+    
+    
 }

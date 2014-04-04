@@ -17,10 +17,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import jfx.messagebox.MessageBox;
 
@@ -41,6 +43,12 @@ public class LoginFormController implements Initializable {
 
     @FXML
     ChoiceBox choiceType;
+    @FXML
+    private Button buttonLogin;
+    @FXML
+    private Font x1;
+    @FXML
+    private Button buttonExit;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -54,10 +62,8 @@ public class LoginFormController implements Initializable {
             ServerInterface.updateLocalRecordData();
             ServerInterface.updateLocalCourseData();
         } else {
-            MessageBox.show(selfStage,
-                "The username / password you entered is incorrect.\nPlease try again.",
-                "Please re-enter your username / password",
-                MessageBox.ICON_INFORMATION);
+            MessageBox.show(selfStage, "The username / password you entered is incorrect.\nPlease try again.", "Please re-enter your username / password", 
+                            MessageBox.ICON_ERROR);
         }
     }
 
