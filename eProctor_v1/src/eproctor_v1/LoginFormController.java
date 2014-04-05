@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package eproctor_v1;
 
 import java.io.IOException;
@@ -11,6 +6,9 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,18 +17,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import jfx.messagebox.MessageBox;
 
-/**
- * FXML Controller class
- *
- * @author Yue
- */
 public class LoginFormController implements Initializable {
 
     private Stage selfStage;
@@ -50,26 +45,44 @@ public class LoginFormController implements Initializable {
     @FXML
     private Button buttonExit;
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }
+    @FXML
+    ProgressBar bar;
 
     @FXML
     private void login(ActionEvent event) throws Exception {
         if (ServerInterface.isUser(choiceType.getValue().toString(), username.getText(), getMD5(password.getText(), true))) {
-            openStudentForm();
-            ServerInterface.updateLocalRecordData();
-            ServerInterface.updateLocalCourseData();
+            buttonLogin.setDisable(true);
+            Task<Void> progressTask = new Task<Void>() {
+                @Override
+                protected void succeeded() {
+                    super.succeeded();
+                    try {
+                        openStudentForm();
+                    } catch (IOException ex) {
+                        Logger.getLogger(LoginFormController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+
+                @Override
+                protected Void call() throws Exception {
+                    ServerInterface.updateLocalRecordData();
+                    ServerInterface.updateLocalCourseData();
+                    return null;
+                }
+            };
+            bar.progressProperty().bind(progressTask.progressProperty());
+            new Thread(progressTask).start();
         } else {
-            MessageBox.show(selfStage, "The username / password you entered is incorrect.\nPlease try again.", "Please re-enter your username / password", 
-                            MessageBox.ICON_ERROR);
+            MessageBox.show(selfStage,
+                    "The username / password you entered is incorrect.\nPlease try again.",
+                    "Please re-enter your username / password",
+                    MessageBox.ICON_INFORMATION);
+            buttonLogin.setDisable(false);
         }
     }
 
     @FXML
     private void exit(ActionEvent event) {
-        // selfStage.close();
         System.exit(0);
     }
 
@@ -91,26 +104,29 @@ public class LoginFormController implements Initializable {
         }
     }
 
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        // TODO
+    }
+
     public void setStage(Stage stage) {
         selfStage = stage;
     }
 
     private void openStudentForm() throws IOException {
         selfStage.close();
-        
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("StudentForm.fxml"));
-        Parent root = (Parent)loader.load();
-        StudentFormController controller = (StudentFormController)loader.getController();
-        Scene scene = new Scene(root);
         Stage stage = new Stage();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("StudentForm.fxml"));
+        Parent root = (Parent) loader.load();
+        StudentFormController controller = (StudentFormController) loader.getController();
         controller.setStage(stage);
+        Scene scene = new Scene(root);
+        stage.setTitle("eProctor Student Client");
         stage.setResizable(false);
-        stage.setScene(scene);
-        stage.setTitle("ePoctor Student Client");
         stage.setScene(scene);
         stage.show();
     }
-    
+
     public static String getMD5(String input, boolean getHex)
             throws NoSuchAlgorithmException {
         MessageDigest md;

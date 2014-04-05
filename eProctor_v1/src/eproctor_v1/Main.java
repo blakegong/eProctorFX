@@ -8,8 +8,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-public class EProctor_v1 extends Application {
-    
+public class Main extends Application {
+
     @Override
     public void start(Stage stage) throws Exception {
         showLogin(stage);
@@ -20,16 +20,17 @@ public class EProctor_v1 extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+
     private void showLogin(Stage stage) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginForm.fxml"));
-        Parent root = (Parent)loader.load();
-        LoginFormController controller = (LoginFormController)loader.getController();
+        Parent root = (Parent) loader.load();
+        LoginFormController controller = (LoginFormController) loader.getController();
         controller.setStage(stage);
         Scene scene = new Scene(root);
         scene.setFill(null);
         stage.setTitle("eProctor");
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.show();
     }
