@@ -15,7 +15,7 @@ public class ReviewFormController implements Initializable {
     private Stage selfStage;
 
     @FXML
-    private TableView<ServerInterface.RecordTableRow> table;
+    private TableView<DatabaseInterface.RecordTableRow> table;
     
     @FXML
     private Label lblId;
@@ -56,7 +56,7 @@ public class ReviewFormController implements Initializable {
         updateTable();
     }
     
-    public void updateDetails(ServerInterface.RecordTableRow data) {
+    public void updateDetails(DatabaseInterface.RecordTableRow data) {
         lblId.setText(data.getId());
         lblCourseCode.setText(data.getCourseCode());
         lblCourse.setText(data.getCourse());
@@ -70,7 +70,7 @@ public class ReviewFormController implements Initializable {
     }
     
     public void updateTable() {
-        ServerInterface.getTableRecords(table.getItems(), true);
+        DatabaseInterface.getTableRecords(table.getItems(), true);
         table.getColumns().get(0).setCellValueFactory(
                 new PropertyValueFactory<>("id"));
         table.getColumns().get(1).setCellValueFactory(

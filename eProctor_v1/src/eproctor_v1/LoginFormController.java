@@ -50,7 +50,7 @@ public class LoginFormController implements Initializable {
 
     @FXML
     private void login(ActionEvent event) throws Exception {
-        if (ServerInterface.isUser(choiceType.getValue().toString(), username.getText(), getMD5(password.getText(), true))) {
+        if (DatabaseInterface.isUser(choiceType.getValue().toString(), username.getText(), getMD5(password.getText(), true))) {
             buttonLogin.setDisable(true);
             Task<Void> progressTask = new Task<Void>() {
                 @Override
@@ -65,8 +65,11 @@ public class LoginFormController implements Initializable {
 
                 @Override
                 protected Void call() throws Exception {
-                    ServerInterface.updateLocalRecordData();
-                    ServerInterface.updateLocalCourseData();
+                    updateProgress(10, 100);
+                    DatabaseInterface.updateLocalRecordData();
+                    updateProgress(50, 100);
+                    DatabaseInterface.updateLocalCourseData();
+                    updateProgress(100, 100);
                     return null;
                 }
             };

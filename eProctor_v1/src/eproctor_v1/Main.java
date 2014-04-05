@@ -13,8 +13,8 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         showLogin(stage);
-        ServerInterface.connectEProctorServer();
-        ServerInterface.connectSchoolServer();
+        DatabaseInterface.connectEProctorServer();
+        DatabaseInterface.connectSchoolServer();
     }
 
     public static void main(String[] args) {

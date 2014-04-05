@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package eproctor_v1;
 
 import com.mongodb.*;
@@ -14,19 +9,23 @@ import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import org.bson.types.ObjectId;
 
-public class ServerInterface {
-
+public class DatabaseInterface {    
     private static DBCollection user, record, course, session, student, proctor, message;
     public static String domain, username, password, userCode;
 //    private static String examCourseCode, examSessionCode, examProctor, examStudent;
     private static List<RecordRow> recordData;
     private static List<CourseRow> courseData;
     private static List<CourseRow> notBookedCoursesData;
+    
+    public static ServiceFetchMsg serveiceFetchMsg;
+    public static ServiceSendMsg serveiceSendMsg;
 
     public static void getInfoData(StudentFormController controller, ArrayList<StudentFormController.InfoRow> infoData) {
         for (CourseRow courseRow : courseData) {
@@ -41,7 +40,7 @@ public class ServerInterface {
         }
     }
 
-    public ServerInterface() {
+    public DatabaseInterface() {
 
     }
 
@@ -82,9 +81,9 @@ public class ServerInterface {
             return false;
         } else {
             userCode = (String) obj.get("user_code");
-            ServerInterface.domain = domain;
-            ServerInterface.username = username;
-            ServerInterface.password = password;
+            DatabaseInterface.domain = domain;
+            DatabaseInterface.username = username;
+            DatabaseInterface.password = password;
             System.out.println(userCode);
             return true;
         }
@@ -108,7 +107,7 @@ public class ServerInterface {
             DBObject sessionObj = session.findOne(sessionQb.get());
             SessionRow sessionRow = new SessionRow(((ObjectId) sessionObj.get("_id")).toString(), (String) sessionObj.get("code"), (Date) sessionObj.get("start"), (Date) sessionObj.get("end"), (String) sessionObj.get("location"));
 
-            recordData.add(new RecordRow(((ObjectId) recordObj.get("_id")).toString(), courseRow, sessionRow, (String) recordObj.get("student_code"), (String) recordObj.get("proctor_code"), (boolean) recordObj.get("takenStatus"), (String) recordObj.get("grade"), (String) recordObj.get("remark")));
+            recordData.add(new RecordRow(((ObjectId) recordObj.get("_id")).toString(), courseRow, sessionRow, (String) recordObj.get("student_code"), "", true, (String) recordObj.get("grade"), (String) recordObj.get("remark")));
         }
     }
 
@@ -180,7 +179,7 @@ public class ServerInterface {
     public static void addBooking(int courseIndex, int sessionIndex) {
         BasicDBObjectBuilder document = new BasicDBObjectBuilder();
         document.add("course_code", notBookedCoursesData.get(courseIndex).code)
-                .add("session_code", notBookedCoursesData.get(courseIndex).sessions.get(sessionIndex).code)
+                .add("session_code", notBookedCoursesData.get(courseIndex).getSessions().get(sessionIndex).code)
                 .add("student_code", userCode).add("proctor_code", "")
                 .add("takenStatus", false).add("grade", "").add("remark", "");
         record.insert(document.get());
@@ -223,7 +222,7 @@ public class ServerInterface {
         while (!list.isEmpty()) {
             list.remove(0);
         }
-        for (SessionRow sessionRow : notBookedCoursesData.get(index).sessions) {
+        for (SessionRow sessionRow : notBookedCoursesData.get(index).getSessions()) {
             SimpleDateFormat startFormat = new SimpleDateFormat(
                     "dd.MM.yyyy E kk:mm");
             SimpleDateFormat endFormat = new SimpleDateFormat("'-'kk:mm");
@@ -231,30 +230,29 @@ public class ServerInterface {
         }
     }
 
-//    public static boolean sendMessage(String receiverCode, String courseCode, String sessionCode, String text, Date date, String type) {
-//        WriteResult wr;
-//        wr = message.insert(new BasicDBObject().append("sender_code", userCode)
-//                .append("receiver_code", receiverCode)
-//                .append("course_code", courseCode)
-//                .append("session_code", sessionCode)
-//                .append("text", text)
-//                .append("time", date)
-//                .append("type", type)
-//                .append("isRead", false));
-//        if (wr.getError() != null) {
-//            System.out.println(wr.getError());
-//            return false;
-//        }
-//        return true;
-//    }
-//
-//    public static String pullMessage(String senderCode) {
+    public static boolean sendMessage(String receiverCode, String courseCode, String sessionCode, String text, Date date, String type) {
+        WriteResult wr = message.insert(new BasicDBObject().append("sender_code", userCode)
+                .append("receiver_code", receiverCode)
+                .append("course_code", courseCode)
+                .append("session_code", sessionCode)
+                .append("text", text)
+                .append("time", date)
+                .append("type", type)
+                .append("isRead", false));
+        if (wr.getError() != null) {
+            System.out.println(wr.getError());
+            return false;
+        }
+        return true;
+    }
+
+//    public static String pullMessage(String senderCode, CourseRow courseRow, SessionRow sessionRow) {
 //        String text = "";
-//        QueryBuilder findQuery = new QueryBuilder().put("sender_code").is(userCode).or(new BasicDBObject("receiver_code", userCode)).and(new BasicDBObject("isRead", false).append("course_code", courseCode).append("session_code", sessionCode));
+//        QueryBuilder findQuery = new QueryBuilder().put("sender_code").is(userCode).or(new BasicDBObject("receiver_code", userCode)).and(new BasicDBObject("isRead", false).append("course_code", courseRow.code).append("session_code", sessionRow.code));
+//        
 //        DBCursor cursor = message.find(findQuery.get()).sort(new BasicDBObject("time", 1));
 //        while(cursor.hasNext()) {
 //            DBObject cursorRow = cursor.next();
-//            
 //        }
 //        ArrayList<DBObject> msgs = new ArrayList<DBObject>();
 //        DBObject temp = null;
@@ -305,6 +303,27 @@ public class ServerInterface {
 //        System.out.println("messager here: " + str);
 //        return str;
 //    }
+
+    public static String pullMessage2(String me, String course_code, String session_code) {
+        BasicDBObject query = new BasicDBObject("course_code", course_code)
+                                                .append("session_code", session_code)
+                                                .append("$or", new BasicDBObject("receiver_code", me).append("sender_code", me));
+        
+        DBCursor cur = message.find(query).sort(new BasicDBObject("time", 1));
+        
+        String msgAll = "";
+        while (cur.hasNext()) {
+            DBObject temp = cur.next();
+            String msgTemp = "";
+            
+            msgTemp = temp.toString();
+            
+            msgAll += msgTemp + "\n";
+        }
+        
+        return msgAll;
+    }
+
     public static class RecordRow {
 
         private final String id;
@@ -367,6 +386,14 @@ public class ServerInterface {
         public String getName() {
             return name;
         }
+
+        public String getId() {
+            return id;
+        }
+
+        public List<SessionRow> getSessions() {
+            return sessions;
+        }
     }
 
     public static class SessionRow {
@@ -383,6 +410,18 @@ public class ServerInterface {
             this.start = start;
             this.end = end;
             this.location = location;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public String getLocation() {
+            return location;
         }
 
         public Date getStart() {
@@ -475,7 +514,91 @@ public class ServerInterface {
             this.course = course;
             this.session = session;
         }
-
     }
 
+    public static class ServiceFetchMsg extends Service<Void>{
+        private String me;
+        private String course_code;
+        private String session_code;
+        
+        @Override
+        protected Task<Void> createTask() {
+            return new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    int test = 0;
+                    while (!this.isCancelled()) {
+//                        updateMessage(pullMessage2(me, course_code, session_code));
+                        updateMessage("" + test++);
+                        Thread.sleep(1000);
+                    }
+                    
+                    return null;
+                }
+            };
+        }
+
+        public void setMe(String me) {
+            this.me = me;
+        }
+
+        public void setCourse_code(String course_code) {
+            this.course_code = course_code;
+        }
+
+        public void setSession_code(String session_code) {
+            this.session_code = session_code;
+        }
+    }
+    
+    public static class ServiceSendMsg extends Service<Void>{
+        private String me;
+        private String course_code;
+        private String session_code;
+        private String proctor_code;
+        private String text;
+        private Date time;
+        private String type;
+        
+        @Override
+        protected Task<Void> createTask() {
+            return new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    for (int i = 0; i < 10; i++)
+                        Thread.sleep(100);
+//                    boolean result = sendMessage(me, course_code, session_code, proctor_code, text, time, type);                 
+                    return null;
+                }
+            };
+        }
+
+        public void setMe(String me) {
+            this.me = me;
+        }
+
+        public void setCourse_code(String course_code) {
+            this.course_code = course_code;
+        }
+
+        public void setSession_code(String session_code) {
+            this.session_code = session_code;
+        }
+
+        public void setProctor_code(String proctor_code) {
+            this.proctor_code = proctor_code;
+        }
+
+        public void setText(String text) {
+            this.text = text;
+        }
+
+        public void setTime(Date time) {
+            this.time = time;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+    }
 }

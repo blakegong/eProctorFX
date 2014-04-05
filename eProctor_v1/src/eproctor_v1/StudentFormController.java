@@ -45,7 +45,7 @@ public class StudentFormController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         infoData = new ArrayList();
-        ServerInterface.getInfoData(this, infoData);
+        DatabaseInterface.getInfoData(this, infoData);
         for (InfoRow infoRow : infoData) {
             vbox.getChildren().add(infoRow);
         }
@@ -68,12 +68,12 @@ public class StudentFormController implements Initializable {
         private Label lblInfo;
         private Button button;
         private ProgressIndicator indicator;
-        private ServerInterface.CourseRow courseRow;
-        private ServerInterface.RecordRow recordRow;
+        private DatabaseInterface.CourseRow courseRow;
+        private DatabaseInterface.RecordRow recordRow;
         private Date start;
         private Date end;
 
-        public InfoRow(ServerInterface.CourseRow courseRow, ServerInterface.RecordRow recordRow) {
+        public InfoRow(DatabaseInterface.CourseRow courseRow, DatabaseInterface.RecordRow recordRow) {
             this.setId("hbox");
             lblCourseCode = new Label(courseRow.getCode());
             lblCourseCode.setMinWidth(200);
@@ -111,9 +111,9 @@ public class StudentFormController implements Initializable {
                     setStateBookedReady();
                 }
             } else if (end.before(current)) {
-                setStateTesting();
-            } else {
                 setStateReview();
+            } else {
+                setStateTesting();
             }
 
         }
@@ -165,7 +165,7 @@ public class StudentFormController implements Initializable {
                     
                     @Override
                     protected Void call() throws Exception {
-                        ServerInterface.deleteBooking(recordRow);
+                        DatabaseInterface.deleteBooking(recordRow);
                         return null;
                     }
                 };
@@ -199,7 +199,7 @@ public class StudentFormController implements Initializable {
             button.setText("Exam");
             button.setOnAction((ActionEvent e) -> {
                 try {
-                    openExamForm();
+                    openExamForm(this.courseRow, this.recordRow.getSession());
                 } catch (Exception ex) {
                     Logger.getLogger(StudentFormController.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -242,17 +242,18 @@ public class StudentFormController implements Initializable {
         stage.show();
     }
 
-    private void openExamForm() throws Exception {
+    private void openExamForm(DatabaseInterface.CourseRow courseRow, DatabaseInterface.SessionRow sessionRow) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("ExamForm.fxml"));
         Parent root = (Parent) loader.load();
         ExamFormController controller = (ExamFormController) loader.getController();
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         controller.setStage(stage);
-        stage.setScene(scene);
         stage.setTitle("ePoctor Student Client");
         stage.setScene(scene);
         stage.show();
+        
+        controller.startServiceFetchMsg(courseRow, sessionRow);
     }
 
     private void openReviewForm() throws Exception {
