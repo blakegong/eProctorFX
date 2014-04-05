@@ -248,7 +248,7 @@ public class StudentFormController implements Initializable {
             button.setText("Exam");
             button.setOnAction((ActionEvent e) -> {
                 try {
-                    openExamForm();
+                    openExamForm(courseRow, recordRow.getSession());
                 } catch (Exception ex) {
                     Logger.getLogger(StudentFormController.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -271,7 +271,7 @@ public class StudentFormController implements Initializable {
         }
     }
 
-    private void openExamForm() throws Exception {
+    private void openExamForm(DatabaseInterface.CourseRow courseRow, DatabaseInterface.SessionRow sessionRow) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("ExamForm.fxml"));
         Parent root = (Parent) loader.load();
         ExamFormController controller = (ExamFormController) loader.getController();
@@ -282,6 +282,9 @@ public class StudentFormController implements Initializable {
         stage.setTitle("ePoctor Student Client");
         stage.setScene(scene);
         stage.show();
+        
+        controller.startServiceFetchMsg(courseRow, sessionRow);
+        controller.startServiceSendImage(DatabaseInterface.userCode, courseRow.getCode(), sessionRow.getCode(), "localhost", 6002, controller.videoImageView);
     }
 
     public void setStage(Stage stage) {

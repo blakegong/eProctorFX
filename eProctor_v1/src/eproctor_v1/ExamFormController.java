@@ -17,6 +17,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
@@ -47,6 +49,9 @@ public class ExamFormController implements Initializable {
     
     @FXML
     private Button msgSendButton;
+    
+    @FXML
+    protected ImageView videoImageView;
     
     @FXML
     private void sendMsg() {
@@ -111,5 +116,28 @@ public class ExamFormController implements Initializable {
         DatabaseInterface.serviceFetchMsg.setSession_code(sessionRow.getCode());
         DatabaseInterface.serviceFetchMsg.start();
         msgReceived.textProperty().bind(DatabaseInterface.serviceFetchMsg.messageProperty());
+    }
+    
+    public void startServiceSendImage(String user_code, String course_code, String session_code, String ip, int port, ImageView videoImageView) {
+        VideoServerInterface.serviceSendImage = new VideoServerInterface.ServiceSendImage();
+        VideoServerInterface.serviceSendImage.setMe(user_code);
+        VideoServerInterface.serviceSendImage.setCourse_code(course_code);
+        VideoServerInterface.serviceSendImage.setSession_code(session_code);
+        VideoServerInterface.serviceSendImage.setIp(ip);
+        VideoServerInterface.serviceSendImage.setPort(port);
+        VideoServerInterface.serviceSendImage.setVideoImageView(videoImageView);
+
+        VideoServerInterface.serviceSendImage.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+
+            @Override
+            public void handle(WorkerStateEvent t) {
+//                System.out.println("finished.");
+//                videoImageView.setImage(VideoServerInterface.serviceSendImage.getValue());
+//                videoImageView.setImage(i);
+                
+            }
+        });
+        
+        VideoServerInterface.serviceSendImage.start();
     }
 }

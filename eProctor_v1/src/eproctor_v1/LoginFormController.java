@@ -1,5 +1,11 @@
 package eproctor_v1;
 
+import com.googlecode.javacv.CanvasFrame;
+import com.googlecode.javacv.FrameGrabber;
+import com.googlecode.javacv.cpp.opencv_core;
+import static com.googlecode.javacv.cpp.opencv_core.cvFlip;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -24,6 +30,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javax.imageio.ImageIO;
 import jfx.messagebox.MessageBox;
 
 public class LoginFormController implements Initializable {
@@ -58,7 +65,7 @@ public class LoginFormController implements Initializable {
                     super.succeeded();
                     try {
                         openStudentForm();
-                    } catch (IOException ex) {
+                    } catch (Exception ex) {
                         Logger.getLogger(LoginFormController.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
@@ -116,7 +123,7 @@ public class LoginFormController implements Initializable {
         selfStage = stage;
     }
 
-    private void openStudentForm() throws IOException {
+    private void openStudentForm() throws Exception {
         selfStage.close();
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("StudentForm.fxml"));
