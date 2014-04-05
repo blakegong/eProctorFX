@@ -25,6 +25,9 @@ public class DatabaseInterface {
     private static List<RecordRow> recordDataStudent;
     private static List<RecordRowProctor> recordDataProctor;
     private static List<CourseRow> courseData;
+    
+    protected static ServiceSendMsg serviceSendMsg;
+    protected static ServiceFetchMsg serviceFetchMsg;
 
     public static void getInfoData(StudentFormController controller, ObservableList<Node> infoData) {
         for (CourseRow courseRow : courseData) {
@@ -169,7 +172,7 @@ public class DatabaseInterface {
     public static RecordRow addBooking(CourseRow courseRow, SessionRow sessionRow) {
         BasicDBObjectBuilder document = new BasicDBObjectBuilder();
         document.add("course_code", courseRow.code)
-                .add("session_code", sessionRow.code);
+                .add("session_code", sessionRow.getCode());
         if (domain.equals("Student"))
             document.add("student_code", userCode).add("grade", "").add("remark", "");
         else
@@ -177,7 +180,7 @@ public class DatabaseInterface {
         record.insert(document.get());
         updateLocalData();
         for (RecordRow recordRow: recordDataStudent) {
-            if (recordRow.course.code.equals(courseRow.code) && recordRow.session.code.equals(sessionRow.code) && recordRow.student_code.equals(userCode))
+            if (recordRow.course.code.equals(courseRow.code) && recordRow.session.getCode().equals(sessionRow.getCode()) && recordRow.student_code.equals(userCode))
                 return recordRow;
         }
         return null;
@@ -432,6 +435,18 @@ public class DatabaseInterface {
 
         public Date getEnd() {
             return end;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public String getLocation() {
+            return location;
         }
     }
 

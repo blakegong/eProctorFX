@@ -52,7 +52,7 @@ public class VideoServerInterface {
                             if (img != null) {
                                 cvFlip(img, img, 1);// l-r = 90_degrees_steps_anti_clockwise
         //                        videoBox.setIcon(new ImageIcon(img.getBufferedImage()));
-                                canvas.showImage(img);
+//                                canvas.showImage(img);
                                 send(imageBytes);
                             }
                         }

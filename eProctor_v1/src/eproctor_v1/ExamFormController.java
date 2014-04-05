@@ -51,14 +51,14 @@ public class ExamFormController implements Initializable {
     @FXML
     private void sendMsg() {
         msgSendButton.setDisable(true);
-        DatabaseInterface.serveiceSendMsg = new DatabaseInterface.ServiceSendMsg();
-        DatabaseInterface.serveiceSendMsg.setMe(DatabaseInterface.userCode);
-        DatabaseInterface.serveiceSendMsg.setCourse_code(courseRow.getCode());
-        DatabaseInterface.serveiceSendMsg.setSession_code(sessionRow.getCode());
-        DatabaseInterface.serveiceSendMsg.setText(msgToSend.getText());
-        DatabaseInterface.serveiceSendMsg.setTime(new Date());
-        DatabaseInterface.serveiceSendMsg.setType("MSG");
-        DatabaseInterface.serveiceSendMsg.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+        DatabaseInterface.serviceSendMsg = new DatabaseInterface.ServiceSendMsg();
+        DatabaseInterface.serviceSendMsg.setMe(DatabaseInterface.userCode);
+        DatabaseInterface.serviceSendMsg.setCourse_code(courseRow.getCode());
+        DatabaseInterface.serviceSendMsg.setSession_code(sessionRow.getCode());
+        DatabaseInterface.serviceSendMsg.setText(msgToSend.getText());
+        DatabaseInterface.serviceSendMsg.setTime(new Date());
+        DatabaseInterface.serviceSendMsg.setType("MSG");
+        DatabaseInterface.serviceSendMsg.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 
             @Override
             public void handle(WorkerStateEvent t) {
@@ -68,7 +68,7 @@ public class ExamFormController implements Initializable {
                 msgSendButton.setDisable(false);
             }
         });
-        DatabaseInterface.serveiceSendMsg.setOnFailed(new EventHandler<WorkerStateEvent>() {
+        DatabaseInterface.serviceSendMsg.setOnFailed(new EventHandler<WorkerStateEvent>() {
 
             @Override
             public void handle(WorkerStateEvent t) {
@@ -78,7 +78,7 @@ public class ExamFormController implements Initializable {
             }
         });
         msgProgressIndicator.setProgress(-1);
-        DatabaseInterface.serveiceSendMsg.start();
+        DatabaseInterface.serviceSendMsg.start();
     }
     
     @Override
@@ -105,11 +105,11 @@ public class ExamFormController implements Initializable {
         this.courseRow = courseRow;
         this.sessionRow = sessionRow;
         
-        DatabaseInterface.serveiceFetchMsg = new DatabaseInterface.ServiceFetchMsg();
-        DatabaseInterface.serveiceFetchMsg.setMe(DatabaseInterface.userCode);
-        DatabaseInterface.serveiceFetchMsg.setCourse_code(courseRow.getCode());
-        DatabaseInterface.serveiceFetchMsg.setSession_code(sessionRow.getCode());
-        DatabaseInterface.serveiceFetchMsg.start();
-        msgReceived.textProperty().bind(DatabaseInterface.serveiceFetchMsg.messageProperty());
+        DatabaseInterface.serviceFetchMsg = new DatabaseInterface.ServiceFetchMsg();
+        DatabaseInterface.serviceFetchMsg.setMe(DatabaseInterface.userCode);
+        DatabaseInterface.serviceFetchMsg.setCourse_code(courseRow.getCode());
+        DatabaseInterface.serviceFetchMsg.setSession_code(sessionRow.getCode());
+        DatabaseInterface.serviceFetchMsg.start();
+        msgReceived.textProperty().bind(DatabaseInterface.serviceFetchMsg.messageProperty());
     }
 }
