@@ -12,14 +12,20 @@ import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.binding.Bindings;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.HBox;
@@ -36,7 +42,7 @@ import jfx.messagebox.MessageBox;
 public class StudentFormController implements Initializable {
 
     private Stage selfStage;
-    private ArrayList<InfoRow> infoData;
+    private ObservableList<Node> infoData;
 
     @FXML
     VBox vbox;
@@ -44,21 +50,9 @@ public class StudentFormController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        infoData = new ArrayList();
+        infoData = FXCollections.observableArrayList();
+        Bindings.bindContentBidirectional(infoData, vbox.getChildren());
         DatabaseInterface.getInfoData(this, infoData);
-        for (InfoRow infoRow : infoData) {
-            vbox.getChildren().add(infoRow);
-        }
-    }
-
-    public void refreshUI() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("StudentForm.fxml"));
-        Parent root = (Parent)loader.load();
-        StudentFormController controller = (StudentFormController)loader.getController();
-        Scene scene = new Scene(root);
-        controller.setStage(selfStage);
-        selfStage.setScene(scene);
-        selfStage.show();
     }
 
     public class InfoRow extends HBox {
@@ -66,15 +60,17 @@ public class StudentFormController implements Initializable {
         private Label lblCourseCode;
         private Label lblCourseName;
         private Label lblInfo;
+        private ChoiceBox choiceBox;
         private Button button;
         private ProgressIndicator indicator;
         private DatabaseInterface.CourseRow courseRow;
         private DatabaseInterface.RecordRow recordRow;
         private Date start;
         private Date end;
+        private int state;
 
         public InfoRow(DatabaseInterface.CourseRow courseRow, DatabaseInterface.RecordRow recordRow) {
-            this.setId("hbox");
+            setId("hbox");
             lblCourseCode = new Label(courseRow.getCode());
             lblCourseCode.setMinWidth(200);
             lblCourseCode.setId("courseCode");
@@ -84,7 +80,9 @@ public class StudentFormController implements Initializable {
             lblInfo = new Label();
             lblInfo.setMinWidth(300);
             lblInfo.setId("info");
-            
+            choiceBox = new ChoiceBox();
+            choiceBox.setMinWidth(200);
+            choiceBox.setId("choiceBox");
             button = new Button();
             button.setMinWidth(150);
             button.setId("button");
@@ -96,7 +94,23 @@ public class StudentFormController implements Initializable {
             
             this.courseRow = courseRow;
             this.recordRow = recordRow;
+            setState();
+            Service<Void> timeService = new Service<Void>() {
+
+                private Date start;
+                private Date end;
+                
+                @Override
+                protected Task<Void> createTask() {
+                    return null;
+                }
+                
+            };
+        }
+
+        private void setState() {
             if (recordRow == null) {
+                state = 0;
                 setStateNotBooked();
                 return;
             }
@@ -106,51 +120,41 @@ public class StudentFormController implements Initializable {
             if (start.after(current)) {
                 //the entrance opens one hour before exam
                 if (start.getTime() - current.getTime() > 1000 * 60 * 60) {
+                    state = 1;
                     setStateBookedNotReady();
                 } else {
+                    state = 2;
                     setStateBookedReady();
                 }
             } else if (end.before(current)) {
+                state = 3;
                 setStateReview();
             } else {
+                state = 4;
                 setStateTesting();
             }
-
         }
-
+        
         private void setStateNotBooked() {
+            DatabaseInterface.getListSessions(choiceBox.getItems(), courseRow);
+            choiceBox.getSelectionModel().selectFirst();
             VBox tempVbox = new VBox();
-            tempVbox.getChildren().addAll(lblCourseName, lblInfo);
-            this.getChildren().remove(0, this.getChildren().size());
-            this.getChildren().addAll(lblCourseCode, tempVbox, button, indicator);
-            lblInfo.setText("Please book this course first.");
+            tempVbox.getChildren().addAll(lblCourseName, choiceBox);
+            getChildren().remove(0, getChildren().size());
+            getChildren().addAll(lblCourseCode, tempVbox, button, indicator);
+            lblInfo.setText("This means something wrong");
             button.setText("Book");
             button.setOnAction((ActionEvent e) -> {
-                try {
-                    openBookForm();
-                } catch (Exception ex) {
-                }
-            });
-        }
-
-        private void setStateBookedNotReady() {
-            VBox tempVbox = new VBox();
-            tempVbox.getChildren().addAll(lblCourseName, lblInfo);
-            this.getChildren().remove(0, this.getChildren().size());
-            this.getChildren().addAll(lblCourseCode, tempVbox, button, indicator);
-            lblInfo.setText("starts at: " + start.toString());
-            //set timer to change to bookedReady state
-            button.setText("Change Session");
-            button.setOnAction((ActionEvent e) -> {
-                int index = vbox.getChildren().indexOf(this);
-                Task<Void> deleteTask = new Task<Void>() {
+                if (choiceBox.getSelectionModel().getSelectedIndex() < 0)
+                    return;
+                Task<Void> bookTask = new Task<Void>() {
                     @Override
                     protected void succeeded() {
                         super.succeeded();
-                        InfoRow.this.indicator.setVisible(false);
-                        InfoRow.this.button.setDisable(false);
-                        InfoRow.this.setStateNotBooked();
-                        vbox.getChildren().set(index, InfoRow.this);
+                        indicator.setVisible(false);
+                        indicator.progressProperty().unbind();
+                        button.setDisable(false);
+                        setState();
                     }
 
                     @Override
@@ -165,7 +169,52 @@ public class StudentFormController implements Initializable {
                     
                     @Override
                     protected Void call() throws Exception {
-                        DatabaseInterface.deleteBooking(recordRow);
+                        int sessionIndex = choiceBox.getSelectionModel().getSelectedIndex();
+                        recordRow = DatabaseInterface.addBooking(courseRow, courseRow.getSessions().get(sessionIndex));
+                        System.out.println(recordRow);
+                        return null;
+                    }
+                };
+                indicator.progressProperty().bind(bookTask.progressProperty());
+                indicator.setVisible(true);
+                button.setDisable(true);
+                new Thread(bookTask).start();
+            });
+        }
+
+        private void setStateBookedNotReady() {
+            VBox tempVbox = new VBox();
+            tempVbox.getChildren().addAll(lblCourseName, lblInfo);
+            getChildren().remove(0, getChildren().size());
+            getChildren().addAll(lblCourseCode, tempVbox, button, indicator);
+            lblInfo.setText("starts at: " + start.toString());
+            //set timer to change to bookedReady state
+            button.setText("Change Session");
+            button.setOnAction((ActionEvent e) -> {
+                Task<Void> deleteTask = new Task<Void>() {
+                    @Override
+                    protected void succeeded() {
+                        super.succeeded();
+                        recordRow = null;
+                        indicator.setVisible(false);
+                        indicator.progressProperty().unbind();
+                        button.setDisable(false);
+                        setState();
+                    }
+
+                    @Override
+                    protected void failed() {
+                        super.failed();
+                        MessageBox.show(selfStage,
+                                "Your operation was not successful, please try again!",
+                                "Warning",
+                                MessageBox.ICON_INFORMATION);
+                        button.setDisable(false);
+                    }
+                    
+                    @Override
+                    protected Void call() throws Exception {
+                        DatabaseInterface.deleteBooking(recordRow.getId());
                         return null;
                     }
                 };
@@ -199,7 +248,7 @@ public class StudentFormController implements Initializable {
             button.setText("Exam");
             button.setOnAction((ActionEvent e) -> {
                 try {
-                    openExamForm(this.courseRow, this.recordRow.getSession());
+                    openExamForm();
                 } catch (Exception ex) {
                     Logger.getLogger(StudentFormController.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -218,55 +267,19 @@ public class StudentFormController implements Initializable {
             }
             button.setText("Review");
             button.setOnAction((ActionEvent e) -> {
-                try {
-                    openReviewForm();
-                } catch (Exception ex) {
-                    Logger.getLogger(StudentFormController.class.getName()).log(Level.SEVERE, null, ex);
-                }
             });
         }
     }
 
-    private void openBookForm() throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("BookForm.fxml"));
-        Parent root = (Parent) loader.load();
-        BookFormController controller = (BookFormController) loader.getController();
-        Scene scene = new Scene(root);
-        Stage stage = new Stage();
-        controller.setStage(stage);
-        stage.initModality(Modality.WINDOW_MODAL);
-        stage.initOwner(selfStage);
-        stage.setResizable(false);
-        stage.setTitle("Booking Management");
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    private void openExamForm(DatabaseInterface.CourseRow courseRow, DatabaseInterface.SessionRow sessionRow) throws Exception {
+    private void openExamForm() throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("ExamForm.fxml"));
         Parent root = (Parent) loader.load();
         ExamFormController controller = (ExamFormController) loader.getController();
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         controller.setStage(stage);
-        stage.setTitle("ePoctor Student Client");
         stage.setScene(scene);
-        stage.show();
-        
-        controller.startServiceFetchMsg(courseRow, sessionRow);
-    }
-
-    private void openReviewForm() throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("ReviewForm.fxml"));
-        Parent root = (Parent) loader.load();
-        ReviewFormController controller = (ReviewFormController) loader.getController();
-        Scene scene = new Scene(root);
-        Stage stage = new Stage();
-        controller.setStage(stage);
-        stage.initModality(Modality.WINDOW_MODAL);
-        stage.initOwner(selfStage);
-        stage.setResizable(false);
-        stage.setTitle("Review Exam Results");
+        stage.setTitle("ePoctor Student Client");
         stage.setScene(scene);
         stage.show();
     }
