@@ -6,13 +6,17 @@
 
 package eproctor_v1;
 
+import com.googlecode.javacv.FrameGrabber;
 import java.net.URL;
 import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextArea;
@@ -34,6 +38,7 @@ public class ExamFormController implements Initializable {
     private DatabaseInterface.CourseRow courseRow;
     
     private Stage selfStage;
+    private Scene selfScene;
     
     @FXML
     private WebView browser;
@@ -52,6 +57,9 @@ public class ExamFormController implements Initializable {
     
     @FXML
     protected ImageView videoImageView;
+    
+    @FXML
+    private Button exitButton;
     
     @FXML
     private void sendMsg() {
@@ -84,6 +92,17 @@ public class ExamFormController implements Initializable {
         });
         msgProgressIndicator.setProgress(-1);
         DatabaseInterface.serviceSendMsg.start();
+    }
+
+    @FXML
+    private void exitSession() {
+        try {
+            VideoServerInterface.serviceSendImage.getGrabber().stop();
+        } catch (FrameGrabber.Exception ex) {
+            Logger.getLogger(ExamFormController.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        }
+//        exitButton.getScene().getWindow();
     }
     
     @Override
@@ -120,6 +139,12 @@ public class ExamFormController implements Initializable {
     
     public void startServiceSendImage(String user_code, String course_code, String session_code, String ip, int port, ImageView videoImageView) {
         VideoServerInterface.serviceSendImage = new VideoServerInterface.ServiceSendImage();
+        try {
+            VideoServerInterface.serviceSendImage.setGrabber(FrameGrabber.createDefault(0));
+        } catch (FrameGrabber.Exception ex) {
+            Logger.getLogger(ExamFormController.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        }
         VideoServerInterface.serviceSendImage.setMe(user_code);
         VideoServerInterface.serviceSendImage.setCourse_code(course_code);
         VideoServerInterface.serviceSendImage.setSession_code(session_code);

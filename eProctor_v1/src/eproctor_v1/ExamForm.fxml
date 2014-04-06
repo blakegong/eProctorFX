@@ -42,11 +42,11 @@
             </Button>
           </children>
         </HBox>
-        <ToggleButton mnemonicParsing="false" prefHeight="36.0" prefWidth="129.0" text="ToggleButton">
+        <Button fx:id="exitButton" mnemonicParsing="false" onAction="#exitSession" prefHeight="26.0" prefWidth="200.0" text="End exm and exit">
           <VBox.margin>
-            <Insets top="120.0" />
+            <Insets top="130.0" />
           </VBox.margin>
-        </ToggleButton>
+        </Button>
       </children>
     </VBox>
   </children>

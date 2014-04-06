@@ -14,6 +14,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -55,40 +57,85 @@ public class LoginFormController implements Initializable {
     @FXML
     ProgressBar bar;
 
+//    @FXML
+//    private void login(ActionEvent event) throws Exception {
+//        if (DatabaseInterface.isUser(choiceType.getValue().toString(), username.getText(), getMD5(password.getText(), true))) {
+//            buttonLogin.setDisable(true);
+//            
+//            SimpleDoubleProperty progress0 = new SimpleDoubleProperty(0);
+//            SimpleDoubleProperty progress1 = new SimpleDoubleProperty(0);
+//            SimpleDoubleProperty progress2 = new SimpleDoubleProperty(0);            
+//            
+//            Task<Void> progressTask = new Task<Void>() {                
+//                @Override
+//                protected void succeeded() {
+//                    super.succeeded();
+//                    try {
+//                        openStudentForm();
+//                    } catch (Exception ex) {
+//                        Logger.getLogger(LoginFormController.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+//                }
+//
+//                @Override
+//                protected Void call() throws Exception {
+//                    progress0.set(1);
+//                    DatabaseInterface.updateLocalRecordData(progress1);
+//                    DatabaseInterface.updateLocalCourseData(progress2);
+//                    return null;
+//                }
+//            };
+////            bar.progressProperty().bind(progressTask.progressProperty());
+//            bar.progressProperty().bind(progress0.multiply(0.2).add(progress1.multiply(0.4).add(progress2.multiply(0.4))));
+//            new Thread(progressTask).start();
+//        } else {
+//            MessageBox.show(selfStage,
+//                    "The username / password you entered is incorrect.\nPlease try again.",
+//                    "Please re-enter your username / password",
+//                    MessageBox.ICON_INFORMATION);
+//            buttonLogin.setDisable(false);
+//        }
+//    }
     @FXML
     private void login(ActionEvent event) throws Exception {
-        if (DatabaseInterface.isUser(choiceType.getValue().toString(), username.getText(), getMD5(password.getText(), true))) {
-            buttonLogin.setDisable(true);
-            Task<Void> progressTask = new Task<Void>() {
-                @Override
-                protected void succeeded() {
-                    super.succeeded();
-                    try {
-                        openStudentForm();
-                    } catch (Exception ex) {
-                        Logger.getLogger(LoginFormController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+        buttonLogin.setDisable(true);
+        
+        SimpleDoubleProperty progress0 = new SimpleDoubleProperty(0);
+        SimpleDoubleProperty progress1 = new SimpleDoubleProperty(0);
+        SimpleDoubleProperty progress2 = new SimpleDoubleProperty(0);
+
+        Task<Void> progressTask = new Task<Void>() {
+
+            @Override
+            protected void succeeded() {
+                super.succeeded();
+                try {
+                    openStudentForm();
+                } catch (Exception ex) {
+                    Logger.getLogger(LoginFormController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            @Override
+            protected Void call() throws Exception {
+                if (DatabaseInterface.isUser(choiceType.getValue().toString(), username.getText(), getMD5(password.getText(), true))) { 
+                    progress0.set(1);
+                    DatabaseInterface.updateLocalRecordData(progress1);
+                    DatabaseInterface.updateLocalCourseData(progress2);
+                } else {
+                    MessageBox.show(selfStage,
+                            "The username / password you entered is incorrect.\nPlease try again.",
+                            "Please re-enter your username / password",
+                            MessageBox.ICON_INFORMATION);
+                    buttonLogin.setDisable(false);
                 }
 
-                @Override
-                protected Void call() throws Exception {
-                    updateProgress(10, 100);
-                    DatabaseInterface.updateLocalRecordData();
-                    updateProgress(50, 100);
-                    DatabaseInterface.updateLocalCourseData();
-                    updateProgress(100, 100);
-                    return null;
-                }
-            };
-            bar.progressProperty().bind(progressTask.progressProperty());
-            new Thread(progressTask).start();
-        } else {
-            MessageBox.show(selfStage,
-                    "The username / password you entered is incorrect.\nPlease try again.",
-                    "Please re-enter your username / password",
-                    MessageBox.ICON_INFORMATION);
-            buttonLogin.setDisable(false);
-        }
+                return null;
+            }
+        };
+
+        bar.progressProperty().bind(progress0.multiply(0.1).add(progress1.multiply(0.45).add(progress2.multiply(0.45))));
+        new Thread(progressTask).start();
     }
 
     @FXML

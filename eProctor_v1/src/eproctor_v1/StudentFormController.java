@@ -28,6 +28,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -46,7 +48,7 @@ public class StudentFormController implements Initializable {
 
     @FXML
     VBox vbox;
-
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -275,7 +277,7 @@ public class StudentFormController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("ExamForm.fxml"));
         Parent root = (Parent) loader.load();
         ExamFormController controller = (ExamFormController) loader.getController();
-        Scene scene = new Scene(root);
+        Scene scene = new Scene(root,1024, 768);
         Stage stage = new Stage();
         controller.setStage(stage);
         stage.setScene(scene);

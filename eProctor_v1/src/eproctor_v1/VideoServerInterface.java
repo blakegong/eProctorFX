@@ -1,6 +1,5 @@
 package eproctor_v1;
 
-import com.googlecode.javacv.CanvasFrame;
 import com.googlecode.javacv.FrameGrabber;
 import com.googlecode.javacv.cpp.opencv_core.IplImage;
 import static com.googlecode.javacv.cpp.opencv_core.cvFlip;
@@ -13,7 +12,6 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
-import javax.imageio.ImageIO;
 
 public class VideoServerInterface {
 
@@ -21,10 +19,10 @@ public class VideoServerInterface {
     public static String course_code, session_code;
 
     public static ServiceSendImage serviceSendImage;
-    public static FrameGrabber grabber;
+    
 
     public static class ServiceSendImage extends Service<Image> {
-        
+        private FrameGrabber grabber;
         private String me;
         private String ip;
         private int port;
@@ -36,13 +34,17 @@ public class VideoServerInterface {
             return new Task<Image>() {
                 @Override
                 protected Image call() throws Exception {
-                    grabber = FrameGrabber.createDefault(0);
+                    if (getGrabber() == null) {
+                        super.failed();
+                        return null;
+                    }
+                    
                     grabber.start();
                     IplImage img;
                     BufferedImage buf;
 
                     while (true) {
-                        img = grabber.grab();
+                        img = getGrabber().grab();
                         cvFlip(img, img, 1);// l-r = 90_degrees_steps_anti_clockwise
                         buf = img.getBufferedImage();
                         this.updateValue(SwingFXUtils.toFXImage(buf, null));
@@ -85,6 +87,14 @@ public class VideoServerInterface {
 
         public void setPort(int port) {
             this.port = port;
+        }
+
+        public void setGrabber(FrameGrabber grabber) {
+            this.grabber = grabber;
+        }
+
+        public FrameGrabber getGrabber() {
+            return grabber;
         }
     }
 

@@ -9,6 +9,7 @@ import com.mongodb.*;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -85,12 +86,19 @@ public class DatabaseInterface {
         }
     }
 
-    public static void updateLocalRecordData() {
+    public static void updateLocalRecordData(SimpleDoubleProperty progress) {
+        if (progress != null) // update progress bar...
+            progress.set(0);
+        
         recordDataStudent = new ArrayList();
         QueryBuilder recordQb = new QueryBuilder();
         //TODO diff domain
-        recordQb.put("student_code").is(userCode);
+        recordQb.put("student_code").is(userCode);             
         DBCursor recordCursor = record.find(recordQb.get());
+        
+        if (progress != null) // update progress bar...
+            progress.set(0.2);
+        
         while (recordCursor.hasNext()) {
             DBObject recordObj = recordCursor.next();
             QueryBuilder courseQb = new QueryBuilder();
@@ -104,7 +112,13 @@ public class DatabaseInterface {
             SessionRow sessionRow = new SessionRow(((ObjectId) sessionObj.get("_id")).toString(), (String) sessionObj.get("code"), (Date) sessionObj.get("start"), (Date) sessionObj.get("end"), (String) sessionObj.get("location"));
 
             recordDataStudent.add(new RecordRow(((ObjectId) recordObj.get("_id")).toString(), courseRow, sessionRow, (String) recordObj.get("student_code"), (String) recordObj.get("grade"), (String) recordObj.get("remark")));
+            
+            if (progress != null) // update progress bar...
+                progress.set(progress.add(0.8/recordCursor.size()).get());
         }
+        
+        if (progress != null) // update progress bar...
+            progress.set(1);
     }
     
     public static void updateLocalRecordDataProctor() {
@@ -129,12 +143,19 @@ public class DatabaseInterface {
         }
     }
 
-    public static void updateLocalCourseData() {
+    public static void updateLocalCourseData(SimpleDoubleProperty progress) {
+        if (progress != null) // update progress bar...
+            progress.set(0);
+        
         courseData = new ArrayList();
         QueryBuilder qbStudent = new QueryBuilder();
         qbStudent.put("user_code").is(userCode);
         DBObject objStudent = student.findOne(qbStudent.get());
         BasicDBList listCourses = (BasicDBList) objStudent.get("enrolledCourses");
+        
+        if (progress != null) // update progress bar...
+            progress.set(0.2);
+        
         for (Object course_code : listCourses) {
             List<SessionRow> sessionData = new ArrayList();
             QueryBuilder qbCourse = new QueryBuilder();
@@ -150,13 +171,20 @@ public class DatabaseInterface {
             }
             CourseRow courseRow = new CourseRow(((ObjectId) objCourse.get("_id")).toString(), (String) objCourse.get("code"), (String) objCourse.get("name"), sessionData);
             courseData.add(courseRow);
+            
+            if (progress != null) // update progress bar...
+                progress.set(progress.add(0.8/listCourses.size()).get());
+            System.out.println("progress: " + progress.get());
         }
+        
+        if (progress != null) // update progress bar...
+            progress.set(1);
     }
 
     public static void updateLocalData() {
         if (domain.equals("Student")) {
-            updateLocalRecordData();
-            updateLocalCourseData();
+            updateLocalRecordData(null);
+            updateLocalCourseData(null);
         } else {
             updateLocalRecordDataProctor();
         }
