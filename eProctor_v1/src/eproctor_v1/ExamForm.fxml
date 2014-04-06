@@ -42,6 +42,11 @@
             </Button>
           </children>
         </HBox>
+        <ToggleButton mnemonicParsing="false" prefHeight="36.0" prefWidth="129.0" text="ToggleButton">
+          <VBox.margin>
+            <Insets top="120.0" />
+          </VBox.margin>
+        </ToggleButton>
       </children>
     </VBox>
   </children>

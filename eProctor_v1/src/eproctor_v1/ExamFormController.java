@@ -125,19 +125,21 @@ public class ExamFormController implements Initializable {
         VideoServerInterface.serviceSendImage.setSession_code(session_code);
         VideoServerInterface.serviceSendImage.setIp(ip);
         VideoServerInterface.serviceSendImage.setPort(port);
-        VideoServerInterface.serviceSendImage.setVideoImageView(videoImageView);
-
+        videoImageView.imageProperty().bind(VideoServerInterface.serviceSendImage.valueProperty());
         VideoServerInterface.serviceSendImage.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 
             @Override
             public void handle(WorkerStateEvent t) {
-//                System.out.println("finished.");
-//                videoImageView.setImage(VideoServerInterface.serviceSendImage.getValue());
-//                videoImageView.setImage(i);
-                
+                System.out.println("succeeded..");
             }
         });
-        
+        VideoServerInterface.serviceSendImage.setOnCancelled(new EventHandler<WorkerStateEvent>() {
+
+            @Override
+            public void handle(WorkerStateEvent t) {
+                System.out.println("cancelled.");
+            }
+        });
         VideoServerInterface.serviceSendImage.start();
     }
 }
