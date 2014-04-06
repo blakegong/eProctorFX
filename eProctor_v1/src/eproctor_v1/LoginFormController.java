@@ -35,6 +35,17 @@ import javafx.stage.StageStyle;
 import javax.imageio.ImageIO;
 import jfx.messagebox.MessageBox;
 
+/**
+ * This class is FXML Controller class. It consists exclusively of methods that
+ * operate on LoginUI or return java.lang.Object. It contains polymorphic
+ * algorithm that operate on collections.
+ * <p>
+ * The methods of this class all throw a <tt>NullPointerException</tt>
+ * if the collections or class objects provided to them are null.
+ *
+ * @author Gong Yue
+ * @author Chen Liyang
+ */
 public class LoginFormController implements Initializable {
 
     private Stage selfStage;
@@ -96,6 +107,18 @@ public class LoginFormController implements Initializable {
 //            buttonLogin.setDisable(false);
 //        }
 //    }
+
+    /**
+     * This method handle the login event.
+     * <p>
+     * If login is successful then UI will switch to another.</p>
+     * <p>
+     * else, message box will be filled with certain information.</p>
+     *
+     * @param event the event to be handle
+     * @throws Exception if overwrite error
+     * @see LoginForm.fxml
+     */
     @FXML
     private void login(ActionEvent event) throws Exception {
         buttonLogin.setDisable(true);
@@ -138,6 +161,15 @@ public class LoginFormController implements Initializable {
         new Thread(progressTask).start();
     }
 
+    /**
+     * This method handle the exit operation.
+     * <p>
+     * destroy objects which contains user or exam information.</p>
+     * <p>
+     * close UI and close the software.</p>
+     *
+     * @param event
+     */
     @FXML
     private void exit(ActionEvent event) {
         System.exit(0);
@@ -145,6 +177,11 @@ public class LoginFormController implements Initializable {
 
     private double dragInitialX, dragInitialY;
 
+    /**
+     * This method handles mouse click/press event
+     *
+     * @param me short for MouseEvent
+     */
     @FXML
     private void mousePressedHandler(MouseEvent me) {
         if (me.getButton() != MouseButton.MIDDLE) {
@@ -153,6 +190,11 @@ public class LoginFormController implements Initializable {
         }
     }
 
+    /**
+     * This method handles mouse dragge event
+     *
+     * @param me short for MouseEvent
+     */
     @FXML
     private void mouseDraggedHandler(MouseEvent me) {
         if (me.getButton() != MouseButton.MIDDLE) {
@@ -161,15 +203,37 @@ public class LoginFormController implements Initializable {
         }
     }
 
+    /**
+     * This method initialize url.
+     *
+     * @param url The location used to resolve relative paths for the root
+     * object, or null if the location is not known.
+     * @param rb The resources used to localize the root object, or null if the
+     * root object was not localized.
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }
 
+    /**
+     * This method set selfStage to stage.
+     *
+     * @param stage Stage
+     */
     public void setStage(Stage stage) {
         selfStage = stage;
     }
 
+    /**
+     * This method open StudentForm by initializing a Stage and
+     * StudentFormController.
+     * <p>
+     * Show student home UI after initialization finished.</p>
+     *
+     *
+     * @throws IOException
+     */
     private void openStudentForm() throws Exception {
         selfStage.close();
         Stage stage = new Stage();
@@ -184,6 +248,14 @@ public class LoginFormController implements Initializable {
         stage.show();
     }
 
+    /**
+     * This method implements MD5 generating algorithm.
+     *
+     * @param input String for user password
+     * @param getHex boolean
+     * @return MD5 MD5 string respect to input String
+     * @throws NoSuchAlgorithmException throws
+     */
     public static String getMD5(String input, boolean getHex)
             throws NoSuchAlgorithmException {
         MessageDigest md;
@@ -197,6 +269,11 @@ public class LoginFormController implements Initializable {
         }
     }
 
+    /**
+     *
+     * @param bytes desired bytes
+     * @return hexChars the re-formated bytes as a String
+     */
     public static String bytesToHex(byte[] bytes) {
         char[] hexArray = "0123456789abcdef".toCharArray();
         char[] hexChars = new char[bytes.length * 2];

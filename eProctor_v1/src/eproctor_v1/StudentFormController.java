@@ -39,7 +39,8 @@ import jfx.messagebox.MessageBox;
 /**
  * FXML Controller class
  *
- * @author Yue
+ * @author Gong Yue
+ * @author Chen Liyang
  */
 public class StudentFormController implements Initializable {
 
@@ -48,7 +49,15 @@ public class StudentFormController implements Initializable {
 
     @FXML
     VBox vbox;
-    
+
+    /**
+     * This method initialize url.
+     *
+     * @param url The location used to resolve relative paths for the root
+     * object, or null if the location is not known.
+     * @param rb The resources used to localize the root object, or null if the
+     * root object was not localized.
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -57,6 +66,10 @@ public class StudentFormController implements Initializable {
         DatabaseInterface.getInfoData(this, infoData);
     }
 
+    /**
+     * This class is a basic information container used to provide combined
+     * information of a row in table.
+     */
     public class InfoRow extends HBox {
 
         private Label lblCourseCode;
@@ -71,6 +84,13 @@ public class StudentFormController implements Initializable {
         private Date end;
         private int state;
 
+        /**
+         * Basic constructor of InfoRow, returning an object of InfoRow
+         *
+         * @param courseRow
+         * @param recordRow
+         *
+         */
         public InfoRow(DatabaseInterface.CourseRow courseRow, DatabaseInterface.RecordRow recordRow) {
             setId("hbox");
             lblCourseCode = new Label(courseRow.getCode());
@@ -93,7 +113,7 @@ public class StudentFormController implements Initializable {
             indicator.setMinSize(30, 30);
             indicator.setProgress(80);
             indicator.setId("indicator");
-            
+
             this.courseRow = courseRow;
             this.recordRow = recordRow;
             setState();
@@ -101,15 +121,20 @@ public class StudentFormController implements Initializable {
 
                 private Date start;
                 private Date end;
-                
+
                 @Override
                 protected Task<Void> createTask() {
                     return null;
                 }
-                
+
             };
         }
 
+        /**
+         * set current service stage. The state may be book-not-ready state;
+         * book-ready state; review state; testing state, which are respecting
+         * to different stage of UI.
+         */
         private void setState() {
             if (recordRow == null) {
                 state = 0;
@@ -136,7 +161,7 @@ public class StudentFormController implements Initializable {
                 setStateTesting();
             }
         }
-        
+
         private void setStateNotBooked() {
             DatabaseInterface.getListSessions(choiceBox.getItems(), courseRow);
             choiceBox.getSelectionModel().selectFirst();
@@ -147,8 +172,9 @@ public class StudentFormController implements Initializable {
             lblInfo.setText("This means something wrong");
             button.setText("Book");
             button.setOnAction((ActionEvent e) -> {
-                if (choiceBox.getSelectionModel().getSelectedIndex() < 0)
+                if (choiceBox.getSelectionModel().getSelectedIndex() < 0) {
                     return;
+                }
                 Task<Void> bookTask = new Task<Void>() {
                     @Override
                     protected void succeeded() {
@@ -168,7 +194,7 @@ public class StudentFormController implements Initializable {
                                 MessageBox.ICON_INFORMATION);
                         button.setDisable(false);
                     }
-                    
+
                     @Override
                     protected Void call() throws Exception {
                         int sessionIndex = choiceBox.getSelectionModel().getSelectedIndex();
@@ -213,7 +239,7 @@ public class StudentFormController implements Initializable {
                                 MessageBox.ICON_INFORMATION);
                         button.setDisable(false);
                     }
-                    
+
                     @Override
                     protected Void call() throws Exception {
                         DatabaseInterface.deleteBooking(recordRow.getId());
@@ -284,11 +310,15 @@ public class StudentFormController implements Initializable {
         stage.setTitle("ePoctor Student Client");
         stage.setScene(scene);
         stage.show();
-        
+
         controller.startServiceFetchMsg(courseRow, sessionRow);
         controller.startServiceSendImage(DatabaseInterface.userCode, courseRow.getCode(), sessionRow.getCode(), "localhost", 6002, controller.videoImageView);
     }
 
+    /**
+     *
+     * @param stage
+     */
     public void setStage(Stage stage) {
         selfStage = stage;
     }

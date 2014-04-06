@@ -16,6 +16,13 @@ import javafx.concurrent.Task;
 import javafx.scene.Node;
 import org.bson.types.ObjectId;
 
+/**
+ * This class is a server/database interface class runs on client side. It has
+ * communication with server through different DBCollections.
+ *
+ * @author Gong Yue
+ * @author Chen Liyang
+ */
 public class DatabaseInterface {
 
     private static DBCollection user, record, course, session, student, proctor, message;
@@ -24,10 +31,22 @@ public class DatabaseInterface {
     private static List<RecordRow> recordDataStudent;
     private static List<RecordRowProctor> recordDataProctor;
     private static List<CourseRow> courseData;
-    
     protected static ServiceSendMsg serviceSendMsg;
     protected static ServiceFetchMsg serviceFetchMsg;
 
+    /**
+     * Suppresses default constructor, ensuring non-instantiability.
+     */
+    public DatabaseInterface() {
+    }
+
+    /**
+     * This method set courseData into appropriate format and pass it to UI and
+     * its controller.
+     *
+     * @param controller Controller for
+     * @param infoData
+     */
     public static void getInfoData(StudentFormController controller, ObservableList<Node> infoData) {
         for (CourseRow courseRow : courseData) {
             RecordRow recordRow = null;
@@ -41,10 +60,10 @@ public class DatabaseInterface {
         }
     }
 
-    public DatabaseInterface() {
-
-    }
-
+    /**
+     *
+     * @throws UnknownHostException
+     */
     public static void connectEProctorServer() throws UnknownHostException {
         MongoClientURI uri = new MongoClientURI("mongodb://admin:admin@oceanic.mongohq.com:10014/eProctor");
         MongoClient mongoClient = new MongoClient(uri);
@@ -53,6 +72,10 @@ public class DatabaseInterface {
         message = db.getCollection("Message");
     }
 
+    /**
+     *
+     * @throws UnknownHostException
+     */
     public static void connectSchoolServer() throws UnknownHostException {
         MongoClientURI uri = new MongoClientURI("mongodb://admin:admin@oceanic.mongohq.com:10015/NTU_Server");
         MongoClient mongoClient = new MongoClient(uri);
@@ -64,6 +87,13 @@ public class DatabaseInterface {
         proctor = db.getCollection("Proctor");
     }
 
+    /**
+     *
+     * @param domain
+     * @param username
+     * @param password
+     * @return
+     */
     public static boolean isUser(String domain, String username, String password) {
         QueryBuilder qb = new QueryBuilder();
         qb.put("username").is(username).put("password").is(password);
@@ -89,7 +119,7 @@ public class DatabaseInterface {
     public static void updateLocalRecordData(SimpleDoubleProperty progress) {
         if (progress != null) // update progress bar...
             progress.set(0);
-        
+
         recordDataStudent = new ArrayList();
         QueryBuilder recordQb = new QueryBuilder();
         //TODO diff domain
@@ -120,7 +150,10 @@ public class DatabaseInterface {
         if (progress != null) // update progress bar...
             progress.set(1);
     }
-    
+
+    /**
+     *
+     */
     public static void updateLocalRecordDataProctor() {
         recordDataProctor = new ArrayList();
         QueryBuilder recordQb = new QueryBuilder();
@@ -142,6 +175,7 @@ public class DatabaseInterface {
             recordDataProctor.add(new RecordRowProctor(((ObjectId) recordObj.get("_id")).toString(), courseRow, sessionRow, (String) recordObj.get("proctor_code")));
         }
     }
+
 
     public static void updateLocalCourseData(SimpleDoubleProperty progress) {
         if (progress != null) // update progress bar...
@@ -181,6 +215,9 @@ public class DatabaseInterface {
             progress.set(1);
     }
 
+    /**
+     *
+     */
     public static void updateLocalData() {
         if (domain.equals("Student")) {
             updateLocalRecordData(null);
@@ -190,28 +227,44 @@ public class DatabaseInterface {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public static String getTextAreaRecentMessages() {
         //return Messager.pollMsg(Main.user_id, "Student");
         return "Not done yet";
     }
 
+    /**
+     *
+     * @param courseRow
+     * @param sessionRow
+     * @return
+     */
     public static RecordRow addBooking(CourseRow courseRow, SessionRow sessionRow) {
         BasicDBObjectBuilder document = new BasicDBObjectBuilder();
         document.add("course_code", courseRow.code)
                 .add("session_code", sessionRow.getCode());
-        if (domain.equals("Student"))
+        if (domain.equals("Student")) {
             document.add("student_code", userCode).add("grade", "").add("remark", "");
-        else
+        } else {
             document.add("proctor_code", userCode);
+        }
         record.insert(document.get());
         updateLocalData();
-        for (RecordRow recordRow: recordDataStudent) {
-            if (recordRow.course.code.equals(courseRow.code) && recordRow.session.getCode().equals(sessionRow.getCode()) && recordRow.student_code.equals(userCode))
+        for (RecordRow recordRow : recordDataStudent) {
+            if (recordRow.course.code.equals(courseRow.code) && recordRow.session.getCode().equals(sessionRow.getCode()) && recordRow.student_code.equals(userCode)) {
                 return recordRow;
+            }
         }
         return null;
     }
-    
+
+    /**
+     *
+     * @param id
+     */
     public static void deleteBooking(String id) {
         QueryBuilder qb = new QueryBuilder();
         qb.put("_id").is(new ObjectId(id));
@@ -219,6 +272,11 @@ public class DatabaseInterface {
         updateLocalData();
     }
 
+    /**
+     *
+     * @param list
+     * @param courseRow
+     */
     public static void getListSessions(ObservableList<String> list, CourseRow courseRow) {
         while (!list.isEmpty()) {
             list.remove(0);
@@ -230,7 +288,17 @@ public class DatabaseInterface {
             list.add(startFormat.format(sessionRow.start) + endFormat.format(sessionRow.end));
         }
     }
-    
+
+    /**
+     *
+     * @param receiverCode
+     * @param courseCode
+     * @param sessionCode
+     * @param text
+     * @param date
+     * @param type
+     * @return
+     */
     public static boolean sendMessage(String receiverCode, String courseCode, String sessionCode, String text, Date date, String type) {
         WriteResult wr = message.insert(new BasicDBObject().append("sender_code", userCode)
                 .append("receiver_code", receiverCode)
@@ -246,7 +314,14 @@ public class DatabaseInterface {
         }
         return true;
     }
-    
+
+    /**
+     *
+     * @param me
+     * @param course_code
+     * @param session_code
+     * @return
+     */
     public static String pullMessage(String me, String course_code, String session_code) {
         BasicDBObject query = new BasicDBObject("course_code", course_code)
                 .append("session_code", session_code)
@@ -267,6 +342,10 @@ public class DatabaseInterface {
         return msgAll;
     }
 
+    /**
+     * This class will handle the fetching message services extending from
+     * Service by using polling message from server/database.
+     */
     public static class ServiceFetchMsg extends Service<Void> {
 
         private String me;
@@ -290,19 +369,35 @@ public class DatabaseInterface {
             };
         }
 
+        /**
+         *
+         * @param me
+         */
         public void setMe(String me) {
             this.me = me;
         }
 
+        /**
+         *
+         * @param course_code
+         */
         public void setCourse_code(String course_code) {
             this.course_code = course_code;
         }
 
+        /**
+         *
+         * @param session_code
+         */
         public void setSession_code(String session_code) {
             this.session_code = session_code;
         }
     }
 
+    /**
+     * This class will handle the sending message services extending from
+     * Service by using push message to server/database.
+     */
     public static class ServiceSendMsg extends Service<Void> {
 
         private String me;
@@ -327,35 +422,69 @@ public class DatabaseInterface {
             };
         }
 
+        /**
+         *
+         * @param me
+         */
         public void setMe(String me) {
             this.me = me;
         }
 
+        /**
+         *
+         * @param course_code
+         */
         public void setCourse_code(String course_code) {
             this.course_code = course_code;
         }
 
+        /**
+         *
+         * @param session_code
+         */
         public void setSession_code(String session_code) {
             this.session_code = session_code;
         }
 
+        /**
+         *
+         * @param proctor_code
+         */
         public void setProctor_code(String proctor_code) {
             this.proctor_code = proctor_code;
         }
 
+        /**
+         *
+         * @param text
+         */
         public void setText(String text) {
             this.text = text;
         }
 
+        /**
+         *
+         * @param time
+         */
         public void setTime(Date time) {
             this.time = time;
         }
 
+        /**
+         *
+         * @param type
+         */
         public void setType(String type) {
             this.type = type;
         }
     }
-    
+
+    /**
+     * This class is the data container of student review UI table row.
+     * <p>
+     * one RecordRow object contains record id, course code, session code,
+     * student id, student grade and exam remark.</p>
+     */
     public static class RecordRow {
 
         private final String id;
@@ -365,6 +494,15 @@ public class DatabaseInterface {
         private final String grade;
         private final String remark;
 
+        /**
+         *
+         * @param id
+         * @param course
+         * @param session
+         * @param student_code
+         * @param grade
+         * @param remark
+         */
         public RecordRow(String id, CourseRow course, SessionRow session, String student_code, String grade, String remark) {
             this.id = id;
             this.course = course;
@@ -374,24 +512,46 @@ public class DatabaseInterface {
             this.remark = remark;
         }
 
+        /**
+         *
+         * @return
+         */
         public SessionRow getSession() {
             return session;
         }
 
+        /**
+         *
+         * @return
+         */
         public String getGrade() {
             return grade;
         }
 
+        /**
+         *
+         * @return
+         */
         public String getRemark() {
             return remark;
         }
 
+        /**
+         *
+         * @return
+         */
         public String getId() {
             return id;
         }
-        
+
     }
-    
+
+    /**
+     * This class is the data container of proctor review UI table row.
+     * <p>
+     * one RecordRow object contains record id, course code, session code and
+     * proctor id.</p>
+     */
     public static class RecordRowProctor {
 
         private final String id;
@@ -399,6 +559,13 @@ public class DatabaseInterface {
         private final SessionRow session;
         private final String proctor_code;
 
+        /**
+         *
+         * @param id
+         * @param course
+         * @param session
+         * @param proctor_code
+         */
         public RecordRowProctor(String id, CourseRow course, SessionRow session, String proctor_code) {
             this.id = id;
             this.course = course;
@@ -406,11 +573,21 @@ public class DatabaseInterface {
             this.proctor_code = proctor_code;
         }
 
+        /**
+         *
+         * @return
+         */
         public SessionRow getSession() {
             return session;
         }
     }
 
+    /**
+     * This class is the data container of student booking UI course table row.
+     * <p>
+     * one RecordRow object contains object id, course code, course name and an
+     * arrayList of exam sessions.</p>
+     */
     public static class CourseRow {
 
         private final String id;
@@ -418,6 +595,13 @@ public class DatabaseInterface {
         private final String name;
         private final List<SessionRow> sessions;
 
+        /**
+         *
+         * @param id
+         * @param code
+         * @param name
+         * @param sessions
+         */
         public CourseRow(String id, String code, String name, List<SessionRow> sessions) {
             this.id = id;
             this.code = code;
@@ -425,20 +609,39 @@ public class DatabaseInterface {
             this.sessions = sessions;
         }
 
+        /**
+         *
+         * @return
+         */
         public String getCode() {
             return code;
         }
 
+        /**
+         *
+         * @return
+         */
         public String getName() {
             return name;
         }
 
+        /**
+         *
+         * @return
+         */
         public List<SessionRow> getSessions() {
             return sessions;
         }
-        
+
     }
 
+    /**
+     * This class is the data container of student booking UI exam session table
+     * row.
+     * <p>
+     * one RecordRow object contains object id, course code, start time, end
+     * time and exam location</p>
+     */
     public static class SessionRow {
 
         private final String id;
@@ -447,6 +650,14 @@ public class DatabaseInterface {
         private final Date end;
         private final String location;
 
+        /**
+         *
+         * @param id
+         * @param code
+         * @param start
+         * @param end
+         * @param location
+         */
         public SessionRow(String id, String code, Date start, Date end, String location) {
             this.id = id;
             this.code = code;
@@ -455,22 +666,42 @@ public class DatabaseInterface {
             this.location = location;
         }
 
+        /**
+         *
+         * @return
+         */
         public Date getStart() {
             return start;
         }
 
+        /**
+         *
+         * @return
+         */
         public Date getEnd() {
             return end;
         }
 
+        /**
+         *
+         * @return
+         */
         public String getId() {
             return id;
         }
 
+        /**
+         *
+         * @return
+         */
         public String getCode() {
             return code;
         }
 
+        /**
+         *
+         * @return
+         */
         public String getLocation() {
             return location;
         }
