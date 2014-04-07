@@ -3,13 +3,40 @@
 <?import java.lang.*?>
 <?import java.net.*?>
 <?import java.util.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
 <AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="900.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="eproctor_v1.StudentFormController">
   <children>
-    <VBox fx:id="vbox" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="600.0" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="100.0" />
+    <HBox alignment="CENTER_RIGHT" layoutX="100.0" layoutY="66.0" prefHeight="34.0" prefWidth="600.0">
+      <children>
+        <ImageView fx:id="aboutImageView" fitHeight="40.0" fitWidth="40.0" onMouseClicked="#openAboutForm" pickOnBounds="true" preserveRatio="true">
+          <image>
+            <Image url="http://png-2.findicons.com/files/icons/2219/dot_pictograms/256/information.png" />
+          </image>
+          <HBox.margin>
+            <Insets right="5.0" fx:id="x1" />
+          </HBox.margin>
+        </ImageView>
+        <ImageView fx:id="settingImageView" disable="false" fitHeight="40.0" fitWidth="40.0" focusTraversable="false" onMouseClicked="#openSettingForm" opacity="1.0" pickOnBounds="true" preserveRatio="true" HBox.margin="$x1">
+          <image>
+            <Image url="http://www.clker.com/cliparts/2/5/7/f/1297719143988960365gear_red.png" backgroundLoading="true" />
+          </image>
+        </ImageView>
+        <ImageView fx:id="logoutImageView" fitHeight="40.0" fitWidth="40.0" onMouseClicked="#logout" pickOnBounds="true" preserveRatio="true">
+          <image>
+            <Image url="http://icons.iconarchive.com/icons/visualpharm/icons8-metro-style/128/System-Logout-icon.png" />
+          </image>
+          <HBox.margin>
+            <Insets />
+          </HBox.margin>
+        </ImageView>
+      </children>
+    </HBox>
+    <VBox fx:id="vbox" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="-1.0" prefWidth="600.0" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="130.0" />
   </children>
   <stylesheets>
     <URL value="@StudentForm.css" />

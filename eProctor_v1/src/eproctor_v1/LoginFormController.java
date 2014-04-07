@@ -68,46 +68,6 @@ public class LoginFormController implements Initializable {
     @FXML
     ProgressBar bar;
 
-//    @FXML
-//    private void login(ActionEvent event) throws Exception {
-//        if (DatabaseInterface.isUser(choiceType.getValue().toString(), username.getText(), getMD5(password.getText(), true))) {
-//            buttonLogin.setDisable(true);
-//            
-//            SimpleDoubleProperty progress0 = new SimpleDoubleProperty(0);
-//            SimpleDoubleProperty progress1 = new SimpleDoubleProperty(0);
-//            SimpleDoubleProperty progress2 = new SimpleDoubleProperty(0);            
-//            
-//            Task<Void> progressTask = new Task<Void>() {                
-//                @Override
-//                protected void succeeded() {
-//                    super.succeeded();
-//                    try {
-//                        openStudentForm();
-//                    } catch (Exception ex) {
-//                        Logger.getLogger(LoginFormController.class.getName()).log(Level.SEVERE, null, ex);
-//                    }
-//                }
-//
-//                @Override
-//                protected Void call() throws Exception {
-//                    progress0.set(1);
-//                    DatabaseInterface.updateLocalRecordData(progress1);
-//                    DatabaseInterface.updateLocalCourseData(progress2);
-//                    return null;
-//                }
-//            };
-////            bar.progressProperty().bind(progressTask.progressProperty());
-//            bar.progressProperty().bind(progress0.multiply(0.2).add(progress1.multiply(0.4).add(progress2.multiply(0.4))));
-//            new Thread(progressTask).start();
-//        } else {
-//            MessageBox.show(selfStage,
-//                    "The username / password you entered is incorrect.\nPlease try again.",
-//                    "Please re-enter your username / password",
-//                    MessageBox.ICON_INFORMATION);
-//            buttonLogin.setDisable(false);
-//        }
-//    }
-
     /**
      * This method handle the login event.
      * <p>
@@ -246,6 +206,8 @@ public class LoginFormController implements Initializable {
         stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
+        
+        controller.setStudentScene(scene);
     }
 
     /**

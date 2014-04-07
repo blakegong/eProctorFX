@@ -45,10 +45,20 @@ import jfx.messagebox.MessageBox;
 public class StudentFormController implements Initializable {
 
     private Stage selfStage;
+    private Scene studentScene, examScene, settingScene;
     private ObservableList<Node> infoData;
 
     @FXML
     VBox vbox;
+    
+    @FXML
+    private ImageView settingImageView;
+    
+    @FXML
+    private ImageView aboutImageView;
+    
+    @FXML
+    private ImageView logoutImageView;
 
     /**
      * This method initialize url.
@@ -64,6 +74,10 @@ public class StudentFormController implements Initializable {
         infoData = FXCollections.observableArrayList();
         Bindings.bindContentBidirectional(infoData, vbox.getChildren());
         DatabaseInterface.getInfoData(this, infoData);
+    }
+
+    public void setStudentScene(Scene studentScene) {
+        this.studentScene = studentScene;
     }
 
     /**
@@ -302,12 +316,14 @@ public class StudentFormController implements Initializable {
 
     private void openExamForm(DatabaseInterface.CourseRow courseRow, DatabaseInterface.SessionRow sessionRow) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("ExamForm.fxml"));
-        Scene scene = new Scene(loader.load());
+//        Scene scene = new Scene(loader.load());
+        examScene = new Scene(loader.load());
         ExamFormController controller = (ExamFormController) loader.getController();
         
         Stage stage = new Stage();
         stage.setTitle("Examing");
-        stage.setScene(scene);
+//        stage.setScene(scene);
+        stage.setScene(examScene);
         stage.show();
         controller.setStage(stage);
 
@@ -315,6 +331,27 @@ public class StudentFormController implements Initializable {
         controller.startServiceSendImage(DatabaseInterface.userCode, courseRow.getCode(), sessionRow.getCode(), "localhost", 6002, controller.videoImageView);
     }
 
+    @FXML
+    private void openSettingForm() throws Exception {
+        System.out.println("open setting form");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("SettingForm.fxml"));
+//        settingScene = new Scene(loader.load());
+//        SettingFormController controller = (SettingFormController) loader.getController();
+//        selfStage.setScene(settingScene);
+    }
+    
+    @FXML
+    private void openAboutForm() throws Exception {
+        System.out.println("open about form");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("AboutForm.fxml"));
+    }
+    
+    @FXML
+    private void logout() throws Exception {
+        System.out.println("logout");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginForm.fxml"));
+    }
+    
     /**
      *
      * @param stage
