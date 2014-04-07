@@ -171,6 +171,9 @@ public class ExamFormController implements Initializable {
             public void handle(WorkerStateEvent t) {
                 if (DatabaseInterface.serviceFetchMsg.getValue().compareTo("ending") == 0) { // if he is kicked out.
                     System.out.println("Your are disqualified from current exam session. Your exam session will end in 5 seconds.");
+                    // start timer
+                    
+                    // close exam stage
                 }
                 System.out.println("serviceFetchMsg succeeded?");
             }
