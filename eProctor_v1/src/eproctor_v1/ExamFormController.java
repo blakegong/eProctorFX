@@ -1,26 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package eproctor_v1;
 
 import com.googlecode.javacv.FrameGrabber;
 import java.net.URL;
 import java.util.Date;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -64,8 +58,11 @@ public class ExamFormController implements Initializable {
     protected ImageView videoImageView;
 
     @FXML
+    private Label statusLabel;
+
+    @FXML
     private Button exitButton;
-    
+
     @FXML
     private void sendMsg() {
         msgSendButton.setDisable(true);
@@ -104,12 +101,12 @@ public class ExamFormController implements Initializable {
         try {
             VideoServerInterface.serviceSendImage.getGrabber().stop();
         } catch (FrameGrabber.Exception ex) {
-//            Logger.getLogger(ExamFormController.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
         }
-//        exitButton.getScene().getWindow();
+//        selfStage.close(); // JVM problem?
+        System.out.println("studentExam_close: " + selfStage.toString());
     }
-    
+
     /**
      * This method initialize ExamFormUI by setting up exam paper.
      *
@@ -160,12 +157,42 @@ public class ExamFormController implements Initializable {
         this.courseRow = courseRow;
         this.sessionRow = sessionRow;
 
-        DatabaseInterface.serviceFetchMsg = new DatabaseInterface.ServiceFetchMsg();
-        DatabaseInterface.serviceFetchMsg.setMe(DatabaseInterface.userCode);
-        DatabaseInterface.serviceFetchMsg.setCourse_code(courseRow.getCode());
-        DatabaseInterface.serviceFetchMsg.setSession_code(sessionRow.getCode());
-        DatabaseInterface.serviceFetchMsg.start();
+        DatabaseInterface.serviceFetchMsg = new DatabaseInterface.ServiceFetchMsg(DatabaseInterface.userCode, courseRow.getCode(), sessionRow.getCode());
+        DatabaseInterface.serviceFetchMsg.setOnFailed(new EventHandler<WorkerStateEvent>() {
+
+            @Override
+            public void handle(WorkerStateEvent t) {
+                System.out.println("serviceFetchMsg failed");
+            }
+        });
+        DatabaseInterface.serviceFetchMsg.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+
+            @Override
+            public void handle(WorkerStateEvent t) {
+                if (DatabaseInterface.serviceFetchMsg.getValue().compareTo("ending") == 0) { // if he is kicked out.
+                    System.out.println("Your are disqualified from current exam session. Your exam session will end in 5 seconds.");
+                }
+                System.out.println("serviceFetchMsg succeeded?");
+            }
+        });
+        DatabaseInterface.serviceFetchMsg.setOnRunning(new EventHandler<WorkerStateEvent>() {
+
+            @Override
+            public void handle(WorkerStateEvent t) {
+                System.out.println("serviceFetchMsg running.");
+            }
+        });
+        DatabaseInterface.serviceFetchMsg.setOnScheduled(new EventHandler<WorkerStateEvent>() {
+
+            @Override
+            public void handle(WorkerStateEvent t) {
+                System.out.println("serviceFetchMsg schuduled.");
+            }
+        });
         msgReceived.textProperty().bind(DatabaseInterface.serviceFetchMsg.messageProperty());
+        statusLabel.styleProperty().bind(DatabaseInterface.serviceFetchMsg.titleProperty());
+        
+        DatabaseInterface.serviceFetchMsg.start();
     }
 
     /**
@@ -184,7 +211,6 @@ public class ExamFormController implements Initializable {
         try {
             VideoServerInterface.serviceSendImage.setGrabber(FrameGrabber.createDefault(0));
         } catch (FrameGrabber.Exception ex) {
-//            Logger.getLogger(ExamFormController.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
         }
         VideoServerInterface.serviceSendImage.setMe(user_code);

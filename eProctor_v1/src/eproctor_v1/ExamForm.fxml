@@ -6,8 +6,10 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.web.*?>
 
 <HBox padding="$x1" prefHeight="-1.0" prefWidth="-1.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="eproctor_v1.ExamFormController">
@@ -42,11 +44,34 @@
             </Button>
           </children>
         </HBox>
-        <Button fx:id="exitButton" mnemonicParsing="false" onAction="#exitSession" prefHeight="26.0" prefWidth="200.0" text="End exm and exit">
-          <VBox.margin>
-            <Insets top="130.0" />
-          </VBox.margin>
-        </Button>
+        <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" VBox.margin="$x2">
+          <children>
+            <Label fx:id="statusLabel" text="Exam Status:">
+              <effect>
+                <ColorAdjust>
+                  <input>
+                    <ColorAdjust>
+                      <input>
+                        <ColorAdjust />
+                      </input>
+                    </ColorAdjust>
+                  </input>
+                </ColorAdjust>
+              </effect>
+              <font>
+                <Font size="15.0" />
+              </font>
+              <VBox.margin>
+                <Insets bottom="10.0" />
+              </VBox.margin>
+            </Label>
+            <Button fx:id="exitButton" mnemonicParsing="false" onAction="#exitSession" prefHeight="26.0" prefWidth="200.0" text="End exm and exit">
+              <VBox.margin>
+                <Insets fx:id="x2" />
+              </VBox.margin>
+            </Button>
+          </children>
+        </VBox>
       </children>
     </VBox>
   </children>

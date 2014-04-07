@@ -10,6 +10,7 @@ import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -35,8 +36,8 @@ public class DatabaseInterface {
     protected static ServiceFetchMsg serviceFetchMsg;
 
     /**
-     * This is the Constructor of DatabaseInterface class
-     * Suppresses default constructor, ensuring non-instantiation.
+     * This is the Constructor of DatabaseInterface class Suppresses default
+     * constructor, ensuring non-instantiation.
      */
     public DatabaseInterface() {
     }
@@ -62,7 +63,8 @@ public class DatabaseInterface {
     }
 
     /**
-     *This method is to connect EProctor application to mongodb Server
+     * This method is to connect EProctor application to mongodb Server
+     *
      * @throws UnknownHostException
      */
     public static void connectEProctorServer() throws UnknownHostException {
@@ -74,7 +76,9 @@ public class DatabaseInterface {
     }
 
     /**
-     *This method is to connect EProctor application to School Server(i.e. NTU Server)
+     * This method is to connect EProctor application to School Server(i.e. NTU
+     * Server)
+     *
      * @throws UnknownHostException
      */
     public static void connectSchoolServer() throws UnknownHostException {
@@ -89,7 +93,9 @@ public class DatabaseInterface {
     }
 
     /**
-     *This method is to verify the account of user (student, proctor, supervisor )
+     * This method is to verify the account of user (student, proctor,
+     * supervisor )
+     *
      * @param domain type of user (student, proctor, supervisor)
      * @param username username of the user
      * @param password password of the user which can be verified by server
@@ -116,26 +122,31 @@ public class DatabaseInterface {
             return true;
         }
     }
-    
+
     /**
-     *This method is to update student local record data to (server) database
-     *Method add data onto database if there is any data on student side to be updated.
-     * 
-     * @param progress 
+     * This method is to update student local record data to (server) database
+     * Method add data onto database if there is any data on student side to be
+     * updated.
+     *
+     * @param progress
      */
     public static void updateLocalRecordData(SimpleDoubleProperty progress) {
         if (progress != null) // update progress bar...
+        {
             progress.set(0);
+        }
 
         recordDataStudent = new ArrayList();
         QueryBuilder recordQb = new QueryBuilder();
         //TODO diff domain
-        recordQb.put("student_code").is(userCode);             
+        recordQb.put("student_code").is(userCode);
         DBCursor recordCursor = record.find(recordQb.get());
-        
+
         if (progress != null) // update progress bar...
+        {
             progress.set(0.2);
-        
+        }
+
         while (recordCursor.hasNext()) {
             DBObject recordObj = recordCursor.next();
             QueryBuilder courseQb = new QueryBuilder();
@@ -149,20 +160,25 @@ public class DatabaseInterface {
             SessionRow sessionRow = new SessionRow(((ObjectId) sessionObj.get("_id")).toString(), (String) sessionObj.get("code"), (Date) sessionObj.get("start"), (Date) sessionObj.get("end"), (String) sessionObj.get("location"));
 
             recordDataStudent.add(new RecordRow(((ObjectId) recordObj.get("_id")).toString(), courseRow, sessionRow, (String) recordObj.get("student_code"), (String) recordObj.get("grade"), (String) recordObj.get("remark")));
-            
+
             if (progress != null) // update progress bar...
-                progress.set(progress.add(0.8/recordCursor.size()).get());
+            {
+                progress.set(progress.add(0.8 / recordCursor.size()).get());
+            }
         }
-        
+
         if (progress != null) // update progress bar...
+        {
             progress.set(1);
+        }
     }
 
     /**
-     *This method is to update Proctor local record data to (server) database
+     * This method is to update Proctor local record data to (server) database
      * <p>
-     * Method add data onto database if there is any data on Proctor side to be updated.
-     * 
+     * Method add data onto database if there is any data on Proctor side to be
+     * updated.
+     *
      */
     public static void updateLocalRecordDataProctor() {
         recordDataProctor = new ArrayList();
@@ -186,25 +202,30 @@ public class DatabaseInterface {
         }
     }
 
-   /**
-     *This method is to update local course record data to (server) database
-     *Method add data onto database if there is any data on user side to be updated.
-     * 
-     * @param progress 
+    /**
+     * This method is to update local course record data to (server) database
+     * Method add data onto database if there is any data on user side to be
+     * updated.
+     *
+     * @param progress
      */
     public static void updateLocalCourseData(SimpleDoubleProperty progress) {
         if (progress != null) // update progress bar...
+        {
             progress.set(0);
-        
+        }
+
         courseData = new ArrayList();
         QueryBuilder qbStudent = new QueryBuilder();
         qbStudent.put("user_code").is(userCode);
         DBObject objStudent = student.findOne(qbStudent.get());
         BasicDBList listCourses = (BasicDBList) objStudent.get("enrolledCourses");
-        
+
         if (progress != null) // update progress bar...
+        {
             progress.set(0.2);
-        
+        }
+
         for (Object course_code : listCourses) {
             List<SessionRow> sessionData = new ArrayList();
             QueryBuilder qbCourse = new QueryBuilder();
@@ -220,18 +241,23 @@ public class DatabaseInterface {
             }
             CourseRow courseRow = new CourseRow(((ObjectId) objCourse.get("_id")).toString(), (String) objCourse.get("code"), (String) objCourse.get("name"), sessionData);
             courseData.add(courseRow);
-            
+
             if (progress != null) // update progress bar...
-                progress.set(progress.add(0.8/listCourses.size()).get());
+            {
+                progress.set(progress.add(0.8 / listCourses.size()).get());
+            }
         }
-        
+
         if (progress != null) // update progress bar...
+        {
             progress.set(1);
+        }
     }
 
     /**
-     *This method works as an interface to update user data onto database
-     * <p> data contains student info, course info and proctor info
+     * This method works as an interface to update user data onto database
+     * <p>
+     * data contains student info, course info and proctor info
      */
     public static void updateLocalData() {
         if (domain.equals("Student")) {
@@ -243,9 +269,12 @@ public class DatabaseInterface {
     }
 
     /**
-     *This method is to get the message (course info) and displaying on the screen
+     * This method is to get the message (course info) and displaying on the
+     * screen
      * <p>
-     * This will display courses student take for Student or courses proctor invigilate for Proctor  
+     * This will display courses student take for Student or courses proctor
+     * invigilate for Proctor
+     *
      * @return String contains the courses
      */
     public static String getTextAreaRecentMessages() {
@@ -254,7 +283,8 @@ public class DatabaseInterface {
     }
 
     /**
-     *This is to book exams of courses for student
+     * This is to book exams of courses for student
+     *
      * @param courseRow course information
      * @param sessionRow exam information
      * @return recordRow if the exam session can be found else return null
@@ -279,7 +309,8 @@ public class DatabaseInterface {
     }
 
     /**
-     *This method is to delete the exams student have booked
+     * This method is to delete the exams student have booked
+     *
      * @param id exam record id
      */
     public static void deleteBooking(String id) {
@@ -290,8 +321,9 @@ public class DatabaseInterface {
     }
 
     /**
-     *This method is to form a list of exam sessions of course
-     * @param list ObservableList String list of formated exam session 
+     * This method is to form a list of exam sessions of course
+     *
+     * @param list ObservableList String list of formated exam session
      * @param courseRow course info
      */
     public static void getListSessions(ObservableList<String> list, CourseRow courseRow) {
@@ -307,14 +339,16 @@ public class DatabaseInterface {
     }
 
     /**
-     *This method is to send message
-     * @param receiverCode id of receiver 
-     * @param courseCode  id of course
-     * @param sessionCode  id of exam session
+     * This method is to send message
+     *
+     * @param receiverCode id of receiver
+     * @param courseCode id of course
+     * @param sessionCode id of exam session
      * @param text content of the message
      * @param date time of the sending action
      * @param type different type of message (normal message,warning message)
-     * @return true indicate successful sending message, else fail to send message
+     * @return true indicate successful sending message, else fail to send
+     * message
      */
     public static boolean sendMessage(String receiverCode, String courseCode, String sessionCode, String text, Date date, String type) {
         WriteResult wr = message.insert(new BasicDBObject().append("sender_code", userCode)
@@ -333,13 +367,16 @@ public class DatabaseInterface {
     }
 
     /**
-     *This method is to get message from server (database)
+     * This method is to get message from server (database)
+     *
      * @param me id of myself(user_id)
      * @param course_code id of course
      * @param session_code id of exam session
      * @return string of message
      */
     public static String pullMessage(String me, String course_code, String session_code) {
+        int status = 0; // exam status carried by message, 0: normal, 1: warning, 2: ending
+
         BasicDBObject query = new BasicDBObject("course_code", course_code)
                 .append("session_code", session_code)
                 .append("$or", new BasicDBObject("receiver_code", me).append("sender_code", me));
@@ -351,43 +388,79 @@ public class DatabaseInterface {
             DBObject temp = cur.next();
             String msgTemp = "";
 
+            if (status < (int) temp.get("status")) // get a worest status;
+            {
+                status = (int) temp.get("status");
+            }
+
             msgTemp = temp.toString();
 
             msgAll += msgTemp + "\n";
         }
 
-        return msgAll;
+        return msgAll + "#" + status;
     }
 
     /**
      * This class will handle the fetching message services extending from
      * Service by using polling message from server/database.
      */
-    public static class ServiceFetchMsg extends Service<Void> {
-
+    public static class ServiceFetchMsg extends Service<String> {
         private String me;
         private String course_code;
         private String session_code;
+        
+        protected ServiceFetchMsg(String me, String course_code, String session_code) {
+            this.setMe(me);
+            this.setCourse_code(course_code);
+            this.setSession_code(session_code);
+        }
 
         @Override
-        protected Task<Void> createTask() {
-            return new Task<Void>() {
+        protected Task<String> createTask() {
+            return new Task<String>() {
                 @Override
-                protected Void call() throws Exception {
+                protected String call() throws Exception {
                     int test = 0;
-                    while (!this.isCancelled()) {
-//                        updateMessage(pullMessage(me, course_code, session_code));
-                        updateMessage("" + test++);
+                    int status = 0;
+                    while (!this.isCancelled() && status != 3) {
+//                        String msg = pullMessage(me, course_code, session_code);
+//                        this.updateMessage(msg);
+                        this.updateMessage("" + test++);
+                        
+//                        status = Integer.parseInt(msg.split("#")[0]);
+                        status = test % 3;
+                        
+//                        this.updateValue(statusIntToStatusString());
+                        this.updateTitle("-fx-background-color: " + statusIntToStatusString(status));
+
                         Thread.sleep(1000);
                     }
-
-                    return null;
+                    
+                    if (status == 3) {
+                        return "ending";
+                    }
+                    
+                    return "ServiceFetchMsg Ended...";
                 }
             };
         }
 
+        public String statusIntToStatusString(int status) {
+            if (status == 0) {
+                return "green";
+            } else if (status == 1) {
+                return "yellow";
+            } else if (status == 2) {
+                return "red";
+            } else {
+                return "black";
+            }
+        }
+
         /**
-         *This is to set me
+         * This is to set me
+         *
          * @param me
          */
         public void setMe(String me) {
@@ -395,7 +468,8 @@ public class DatabaseInterface {
         }
 
         /**
-         *This is to set course _code
+         * This is to set course _code
+         *
          * @param course_code
          */
         public void setCourse_code(String course_code) {
@@ -403,7 +477,8 @@ public class DatabaseInterface {
         }
 
         /**
-         *This is to set session_code
+         * This is to set session_code
+         *
          * @param session_code
          */
         public void setSession_code(String session_code) {
@@ -416,7 +491,6 @@ public class DatabaseInterface {
      * Service by using push message to server/database.
      */
     public static class ServiceSendMsg extends Service<Void> {
-
         private String me;
         private String course_code;
         private String session_code;
@@ -440,7 +514,8 @@ public class DatabaseInterface {
         }
 
         /**
-         *This is to set me
+         * This is to set me
+         *
          * @param me
          */
         public void setMe(String me) {
@@ -448,7 +523,8 @@ public class DatabaseInterface {
         }
 
         /**
-         *This is to set course_code
+         * This is to set course_code
+         *
          * @param course_code
          */
         public void setCourse_code(String course_code) {
@@ -456,7 +532,8 @@ public class DatabaseInterface {
         }
 
         /**
-         *This is to set session_code
+         * This is to set session_code
+         *
          * @param session_code
          */
         public void setSession_code(String session_code) {
@@ -464,7 +541,8 @@ public class DatabaseInterface {
         }
 
         /**
-         *This is to set proctor_code
+         * This is to set proctor_code
+         *
          * @param proctor_code
          */
         public void setProctor_code(String proctor_code) {
@@ -472,7 +550,8 @@ public class DatabaseInterface {
         }
 
         /**
-         *This is to set text
+         * This is to set text
+         *
          * @param text
          */
         public void setText(String text) {
@@ -480,7 +559,8 @@ public class DatabaseInterface {
         }
 
         /**
-         *This is to set time
+         * This is to set time
+         *
          * @param time
          */
         public void setTime(Date time) {
@@ -488,7 +568,8 @@ public class DatabaseInterface {
         }
 
         /**
-         *This is to set type
+         * This is to set type
+         *
          * @param type
          */
         public void setType(String type) {
@@ -512,7 +593,8 @@ public class DatabaseInterface {
         private final String remark;
 
         /**
-         *This is to set RecordRow (student exam information)
+         * This is to set RecordRow (student exam information)
+         *
          * @param id
          * @param course
          * @param session
@@ -530,7 +612,8 @@ public class DatabaseInterface {
         }
 
         /**
-         *This is getter of sessionRow
+         * This is getter of sessionRow
+         *
          * @return
          */
         public SessionRow getSession() {
@@ -538,7 +621,8 @@ public class DatabaseInterface {
         }
 
         /**
-         *This is getter of getGrade
+         * This is getter of getGrade
+         *
          * @return
          */
         public String getGrade() {
@@ -546,7 +630,8 @@ public class DatabaseInterface {
         }
 
         /**
-         *This is getter of getRemark
+         * This is getter of getRemark
+         *
          * @return
          */
         public String getRemark() {
@@ -554,7 +639,8 @@ public class DatabaseInterface {
         }
 
         /**
-         *This is getter of id
+         * This is getter of id
+         *
          * @return
          */
         public String getId() {
@@ -577,7 +663,8 @@ public class DatabaseInterface {
         private final String proctor_code;
 
         /**
-         *This is constructor for RecordRowProctor
+         * This is constructor for RecordRowProctor
+         *
          * @param id
          * @param course
          * @param session
@@ -591,7 +678,8 @@ public class DatabaseInterface {
         }
 
         /**
-         *This is getter of sessionRow
+         * This is getter of sessionRow
+         *
          * @return
          */
         public SessionRow getSession() {
@@ -613,7 +701,8 @@ public class DatabaseInterface {
         private final List<SessionRow> sessions;
 
         /**
-         *This is constructor for CourseRow
+         * This is constructor for CourseRow
+         *
          * @param id
          * @param code
          * @param name
@@ -627,7 +716,8 @@ public class DatabaseInterface {
         }
 
         /**
-         *This is getter for code
+         * This is getter for code
+         *
          * @return
          */
         public String getCode() {
@@ -635,7 +725,8 @@ public class DatabaseInterface {
         }
 
         /**
-         *This is getter name
+         * This is getter name
+         *
          * @return
          */
         public String getName() {
@@ -643,7 +734,8 @@ public class DatabaseInterface {
         }
 
         /**
-         *This is getter for session
+         * This is getter for session
+         *
          * @return
          */
         public List<SessionRow> getSessions() {
@@ -668,7 +760,8 @@ public class DatabaseInterface {
         private final String location;
 
         /**
-         *This is constructor of SessionRow
+         * This is constructor of SessionRow
+         *
          * @param id
          * @param code
          * @param start
@@ -684,7 +777,8 @@ public class DatabaseInterface {
         }
 
         /**
-         *This is getter for start
+         * This is getter for start
+         *
          * @return
          */
         public Date getStart() {
@@ -692,7 +786,8 @@ public class DatabaseInterface {
         }
 
         /**
-         *This is getter for end
+         * This is getter for end
+         *
          * @return
          */
         public Date getEnd() {
@@ -700,7 +795,8 @@ public class DatabaseInterface {
         }
 
         /**
-         *This is getter for id
+         * This is getter for id
+         *
          * @return
          */
         public String getId() {
@@ -708,7 +804,8 @@ public class DatabaseInterface {
         }
 
         /**
-         *This is getter for code
+         * This is getter for code
+         *
          * @return
          */
         public String getCode() {
@@ -716,7 +813,8 @@ public class DatabaseInterface {
         }
 
         /**
-         *This is getter for location
+         * This is getter for location
+         *
          * @return
          */
         public String getLocation() {

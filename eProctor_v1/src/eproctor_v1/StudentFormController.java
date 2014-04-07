@@ -302,15 +302,14 @@ public class StudentFormController implements Initializable {
 
     private void openExamForm(DatabaseInterface.CourseRow courseRow, DatabaseInterface.SessionRow sessionRow) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("ExamForm.fxml"));
-        Parent root = (Parent) loader.load();
+        Scene scene = new Scene(loader.load());
         ExamFormController controller = (ExamFormController) loader.getController();
-        Scene scene = new Scene(root,1024, 768);
+        
         Stage stage = new Stage();
-        controller.setStage(stage);
-        stage.setScene(scene);
-        stage.setTitle("ePoctor Student Client");
+        stage.setTitle("Examing");
         stage.setScene(scene);
         stage.show();
+        controller.setStage(stage);
 
         controller.startServiceFetchMsg(courseRow, sessionRow);
         controller.startServiceSendImage(DatabaseInterface.userCode, courseRow.getCode(), sessionRow.getCode(), "localhost", 6002, controller.videoImageView);
