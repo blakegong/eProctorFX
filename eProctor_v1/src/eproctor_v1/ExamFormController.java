@@ -104,7 +104,7 @@ public class ExamFormController implements Initializable {
         try {
             VideoServerInterface.serviceSendImage.getGrabber().stop();
         } catch (FrameGrabber.Exception ex) {
-            Logger.getLogger(ExamFormController.class.getName()).log(Level.SEVERE, null, ex);
+//            Logger.getLogger(ExamFormController.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
         }
 //        exitButton.getScene().getWindow();
@@ -184,7 +184,7 @@ public class ExamFormController implements Initializable {
         try {
             VideoServerInterface.serviceSendImage.setGrabber(FrameGrabber.createDefault(0));
         } catch (FrameGrabber.Exception ex) {
-            Logger.getLogger(ExamFormController.class.getName()).log(Level.SEVERE, null, ex);
+//            Logger.getLogger(ExamFormController.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
         }
         VideoServerInterface.serviceSendImage.setMe(user_code);

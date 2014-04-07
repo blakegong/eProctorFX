@@ -278,7 +278,8 @@ public class StudentFormController implements Initializable {
                 try {
                     openExamForm(courseRow, recordRow.getSession());
                 } catch (Exception ex) {
-                    Logger.getLogger(StudentFormController.class.getName()).log(Level.SEVERE, null, ex);
+//                    Logger.getLogger(StudentFormController.class.getName()).log(Level.SEVERE, null, ex);
+                    ex.printStackTrace();
                 }
             });
         }

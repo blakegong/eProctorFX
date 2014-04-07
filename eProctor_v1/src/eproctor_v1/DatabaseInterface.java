@@ -208,7 +208,6 @@ public class DatabaseInterface {
             
             if (progress != null) // update progress bar...
                 progress.set(progress.add(0.8/listCourses.size()).get());
-            System.out.println("progress: " + progress.get());
         }
         
         if (progress != null) // update progress bar...
