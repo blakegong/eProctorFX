@@ -1,20 +1,11 @@
 package eproctor_v1;
 
-import com.googlecode.javacv.CanvasFrame;
-import com.googlecode.javacv.FrameGrabber;
-import com.googlecode.javacv.cpp.opencv_core;
-import static com.googlecode.javacv.cpp.opencv_core.cvFlip;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -29,10 +20,12 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javax.imageio.ImageIO;
 import jfx.messagebox.MessageBox;
 
 /**
@@ -52,10 +45,8 @@ public class LoginFormController implements Initializable {
 
     @FXML
     TextField username;
-
     @FXML
     TextField password;
-
     @FXML
     ChoiceBox choiceType;
     @FXML
@@ -93,9 +84,10 @@ public class LoginFormController implements Initializable {
             protected void succeeded() {
                 super.succeeded();
                 try {
-                    openStudentForm();
+//                    openStudentForm();
+                    openFrameForm();
                 } catch (Exception ex) {
-                    Logger.getLogger(LoginFormController.class.getName()).log(Level.SEVERE, null, ex);
+                    ex.printStackTrace();
                 }
             }
 
@@ -151,7 +143,7 @@ public class LoginFormController implements Initializable {
     }
 
     /**
-     * This method handles mouse dragge event
+     * This method handles mouse drag event
      *
      * @param me short for MouseEvent
      */
@@ -196,18 +188,42 @@ public class LoginFormController implements Initializable {
      */
     private void openStudentForm() throws Exception {
         selfStage.close();
-        Stage stage = new Stage();
+        
         FXMLLoader loader = new FXMLLoader(getClass().getResource("StudentForm.fxml"));
         Parent root = (Parent) loader.load();
         StudentFormController controller = (StudentFormController) loader.getController();
-        controller.setStage(stage);
         Scene scene = new Scene(root);
+
+        Stage stage = new Stage();
         stage.setTitle("eProctor Student Client");
         stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
         
-        controller.setStudentScene(scene);
+        controller.setStage(stage);
+    }
+    
+    private void openFrameForm() throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("FrameFormBorderPane.fxml"));
+//        AnchorPane mainPane = loader.load();
+//        StackPane mainPane = loader.load();
+        BorderPane mainPane = loader.load();
+        mainPane.getTop().setStyle(null);
+//        mainPane.setStyle("-fx-background-image: url(\"images/studentHome.png\"); -fx-background-repeat: stretch;");
+//        mainPane.setId("mainPane");
+        Scene frameScene = new Scene(mainPane, 713, 560);
+
+        FrameFormController controller = (FrameFormController) loader.getController();
+        
+        Stage frameStage = new Stage();
+        frameStage.setTitle("eProctor Student Client");
+        frameStage.setScene(frameScene);
+        frameStage.setResizable(false);
+        frameStage.show();
+        controller.setSelfStage(frameStage);
+        controller.openStudentForm();
+        
+        selfStage.close();
     }
 
     /**
@@ -246,5 +262,4 @@ public class LoginFormController implements Initializable {
         }
         return new String(hexChars);
     }
-
 }

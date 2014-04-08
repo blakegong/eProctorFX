@@ -148,6 +148,15 @@ public class DatabaseInterface {
         }
 
         while (recordCursor.hasNext()) {
+//            BasicDBObject queryOrOr = new BasicDBObject();
+//            while (recordCursor.hasNext()) {
+//                DBObject temp = recordCursor.next();
+//                queryOrOr.append("code", temp.get("course_code"));
+//            }
+//            BasicDBObject query = new BasicDBObject("$or", queryOrOr);
+//            DBCursor cur = course.findOne(query);
+            
+            ////
             DBObject recordObj = recordCursor.next();
             QueryBuilder courseQb = new QueryBuilder();
             courseQb.put("code").is(recordObj.get("course_code"));
@@ -161,14 +170,12 @@ public class DatabaseInterface {
 
             recordDataStudent.add(new RecordRow(((ObjectId) recordObj.get("_id")).toString(), courseRow, sessionRow, (String) recordObj.get("student_code"), (String) recordObj.get("grade"), (String) recordObj.get("remark")));
 
-            if (progress != null) // update progress bar...
-            {
+            if (progress != null) { // update progress bar...
                 progress.set(progress.add(0.8 / recordCursor.size()).get());
             }
         }
 
-        if (progress != null) // update progress bar...
-        {
+        if (progress != null) { // update progress bar...
             progress.set(1);
         }
     }
