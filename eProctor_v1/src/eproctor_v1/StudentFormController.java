@@ -5,17 +5,20 @@
  */
 package eproctor_v1;
 
-import java.io.IOException;
+import static eproctor_v1.Timer.intSecToReadableSecond;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.ResourceBundle;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -26,12 +29,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import jfx.messagebox.MessageBox;
 
 /**
@@ -47,7 +48,7 @@ public class StudentFormController implements Initializable {
 
     @FXML
     VBox vbox;
-    
+
     /**
      * This method initialize url.
      *
@@ -69,6 +70,7 @@ public class StudentFormController implements Initializable {
      * information of a row in table.
      */
     public class InfoRow extends HBox {
+
         private Label lblCourseCode;
         private Label lblCourseName;
         private Label lblInfo;
@@ -80,6 +82,9 @@ public class StudentFormController implements Initializable {
         private Date start;
         private Date end;
         private int state;
+
+        private int count;
+        private Timeline timer;
 
         /**
          * Basic constructor of InfoRow, returning an object of InfoRow
@@ -108,7 +113,7 @@ public class StudentFormController implements Initializable {
             indicator = new ProgressIndicator();
             indicator.setVisible(false);
 //            indicator.setMinSize(30, 30);
-            indicator.setPrefSize(20, 20);
+            indicator.setPrefSize(25, 25);
             indicator.setProgress(80);
             indicator.setId("indicator");
 
@@ -143,8 +148,8 @@ public class StudentFormController implements Initializable {
             end = recordRow.getSession().getEnd();
             Date current = new Date();
             if (start.after(current)) {
-                //the entrance opens one hour before exam
-                if (start.getTime() - current.getTime() > 1000 * 60 * 60) {
+                //the entrance opens 30 minutes before exam
+                if (start.getTime() - current.getTime() > 1000 * 30 * 60) {
                     state = 1;
                     setStateBookedNotReady();
                 } else {
@@ -249,6 +254,37 @@ public class StudentFormController implements Initializable {
                 button.setDisable(true);
                 new Thread(deleteTask).start();
             });
+
+            // = = = = = = =
+            // start a countDOWN timer
+//            count = (int) ((start.getTime() - new Date().getTime()) / 1000);
+            count = 30 * 60 + 15; // for testing
+            timer = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    if (count < 30 * 60) {
+                        System.out.println("Exam entrance opened.");
+                        timer.stop();
+                    }
+                    count--;
+                    System.out.println("count: " + count);
+                    int level = 3;
+                    if (count > 60 * 60) {
+                        level = 2;
+                    }
+                    lblInfo.setText("time to exam: " + intSecToReadableSecond(count, level));
+                }
+            }));
+            timer.setCycleCount(count);
+            timer.setOnFinished(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent arg0) {
+                    setStateBookedReady();
+                }
+            });
+            timer.play();
+            // = = = = = = =
         }
 
         private void setStateBookedReady() {
@@ -263,6 +299,30 @@ public class StudentFormController implements Initializable {
             button.setOnAction((ActionEvent e) -> {
                 //open exam
             });
+
+            
+            // = = = = = = =
+            // start a countDOWN timer
+//            count = (int) ((start.getTime() - new Date().getTime()) / 1000);
+            count = 30 * 60 + 15; // for testing
+            timer = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    count--;
+                    System.out.println("count: " + count);
+                    lblInfo.setText("time to exam: " + intSecToReadableSecond(count, 4));
+                }
+            }));
+            timer.setCycleCount(count);
+            timer.setOnFinished(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent arg0) {
+                    setStateBookedReady();
+                }
+            });
+            timer.play();
+            // = = = = = = =
         }
 
         private void setStateTesting() {
@@ -276,10 +336,39 @@ public class StudentFormController implements Initializable {
                 try {
                     openExamForm(courseRow, recordRow.getSession());
                 } catch (Exception ex) {
-//                    Logger.getLogger(StudentFormController.class.getName()).log(Level.SEVERE, null, ex);
                     ex.printStackTrace();
                 }
             });
+
+            // = = = = = = =
+            // start a countUP timer
+//            count = (int) ((new Date().getTime() - start.getTime() ) / 1000);
+            count = 60 * 14 + 40; // for testing
+            timer = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    count++;
+                    System.out.println("count: " + count);
+                    lblInfo.setText("exam has started for " + intSecToReadableSecond(count, 4));
+
+                    if (count >= 60 * 15) {
+                        lblInfo.setText("Exam extrance has closed. (15 mins passed)");
+                        System.out.println("timer should stop.");
+                        timer.stop();
+                    }
+                }
+            }));
+            timer.setCycleCount(Timeline.INDEFINITE);
+            timer.setOnFinished(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent arg0) {
+                    System.out.println("timer stopped. Entrance closed.");
+//                    button.setDisable(true);
+                }
+            });
+            timer.play();
+            // = = = = = = =
         }
 
         private void setStateReview() {
@@ -302,7 +391,7 @@ public class StudentFormController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("ExamForm.fxml"));
         Scene examScene = new Scene(loader.load());
         ExamFormController controller = (ExamFormController) loader.getController();
-        
+
         Stage stage = new Stage();
         stage.setTitle("Examing");
         stage.setScene(examScene);

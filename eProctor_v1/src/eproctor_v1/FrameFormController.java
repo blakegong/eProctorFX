@@ -1,11 +1,8 @@
-
 package eproctor_v1;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -25,11 +22,7 @@ import javafx.stage.StageStyle;
  * @author CLY
  */
 public class FrameFormController implements Initializable {
-    
-//    @FXML
-//    private AnchorPane mainPane;
-//    @FXML
-//    private StackPane mainPane;
+
     @FXML
     private BorderPane mainPane;
     @FXML
@@ -40,7 +33,7 @@ public class FrameFormController implements Initializable {
     private ImageView logoutImageView;
     @FXML
     private Pane contentPane;
-    
+
     private Stage selfStage;
     private AnchorPane studentView, settingView;
     private StackPane aboutView;
@@ -51,12 +44,10 @@ public class FrameFormController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }   
-    
+    }
+
     @FXML
     protected void openStudentForm() {
-        System.out.println("open student form");
-        
         if (studentView == null) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("StudentForm.fxml"));
             try {
@@ -67,17 +58,23 @@ public class FrameFormController implements Initializable {
         }
         contentPane.getChildren().setAll(studentView);
     }
-    
+
     @FXML
     private void openSettingForm() throws Exception {
-        System.out.println("open setting form");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("SettingForm.fxml"));
+        if (settingView == null) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("SettingForm.fxml"));
+            try {
+                settingView = loader.load();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            SettingFormController settingFormController = loader.getController();
+        }
+        contentPane.getChildren().setAll(settingView);
     }
-    
+
     @FXML
     private void openAboutForm() {
-        System.out.println("open about form");
-        
         if (aboutView == null) {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("AboutFormStackPane.fxml"));
             try {
@@ -91,13 +88,12 @@ public class FrameFormController implements Initializable {
         }
         contentPane.getChildren().setAll(aboutView);
     }
-    
+
     @FXML
     private void logout() throws Exception {
         System.out.println("logout");
         selfStage.close();
-        System.out.println("still alive");
-        
+
         Stage stage = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginForm.fxml"));
         Parent root = (Parent) loader.load();
@@ -111,9 +107,10 @@ public class FrameFormController implements Initializable {
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.show();
     }
-    
+
     public void setBackground() {
-        mainPane.setStyle("-fx-background-image: url(\"images/studentHome.png\"); -fx-background-repeat: stretch;");
+        mainPane.setStyle("-fx-background-image: url(\"/images/studentHome.png\");"); // not working
+        System.out.println("mainPane style: " + mainPane.getStyle());
     }
 
     public void setSelfStage(Stage selfStage) {

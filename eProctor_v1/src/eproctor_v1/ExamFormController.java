@@ -36,7 +36,6 @@ public class ExamFormController implements Initializable {
     private DatabaseInterface.CourseRow courseRow;
 
     private Stage selfStage;
-
     private Scene selfScene;
 
     @FXML
@@ -103,7 +102,7 @@ public class ExamFormController implements Initializable {
         } catch (FrameGrabber.Exception ex) {
             ex.printStackTrace();
         }
-//        selfStage.close(); // JVM problem?
+        selfStage.close(); // JVM problem?
         System.out.println("studentExam_close: " + selfStage.toString());
     }
 
@@ -210,17 +209,12 @@ public class ExamFormController implements Initializable {
      * @param videoImageView ImageView object
      */
     public void startServiceSendImage(String user_code, String course_code, String session_code, String ip, int port, ImageView videoImageView) {
-        VideoServerInterface.serviceSendImage = new VideoServerInterface.ServiceSendImage();
-        try {
-            VideoServerInterface.serviceSendImage.setGrabber(FrameGrabber.createDefault(0));
-        } catch (FrameGrabber.Exception ex) {
-            ex.printStackTrace();
-        }
-        VideoServerInterface.serviceSendImage.setMe(user_code);
-        VideoServerInterface.serviceSendImage.setCourse_code(course_code);
-        VideoServerInterface.serviceSendImage.setSession_code(session_code);
-        VideoServerInterface.serviceSendImage.setIp(ip);
-        VideoServerInterface.serviceSendImage.setPort(port);
+        VideoServerInterface.serviceSendImage = new VideoServerInterface.ServiceSendImage(user_code, ip, port, course_code, session_code);
+//        VideoServerInterface.serviceSendImage.setMe(user_code);
+//        VideoServerInterface.serviceSendImage.setCourse_code(course_code);
+//        VideoServerInterface.serviceSendImage.setSession_code(session_code);
+//        VideoServerInterface.serviceSendImage.setIp(ip);
+//        VideoServerInterface.serviceSendImage.setPort(port);
         videoImageView.imageProperty().bind(VideoServerInterface.serviceSendImage.valueProperty());
         VideoServerInterface.serviceSendImage.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 

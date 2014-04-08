@@ -16,7 +16,7 @@
     <URL value="@FrameForm.css" />
   </stylesheets>
   <top>
-    <HBox alignment="BOTTOM_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="600.0" spacing="5.0">
+    <HBox alignment="BOTTOM_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="710.0" spacing="5.0">
       <children>
         <ImageView fx:id="aboutImageView" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#openAboutForm" pickOnBounds="true" preserveRatio="true">
           <image>

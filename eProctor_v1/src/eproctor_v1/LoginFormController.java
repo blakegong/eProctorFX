@@ -20,10 +20,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import jfx.messagebox.MessageBox;
@@ -84,7 +81,6 @@ public class LoginFormController implements Initializable {
             protected void succeeded() {
                 super.succeeded();
                 try {
-//                    openStudentForm();
                     openFrameForm();
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -205,19 +201,13 @@ public class LoginFormController implements Initializable {
     
     private void openFrameForm() throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("FrameFormBorderPane.fxml"));
-//        AnchorPane mainPane = loader.load();
-//        StackPane mainPane = loader.load();
         BorderPane mainPane = loader.load();
-        mainPane.getTop().setStyle(null);
-//        mainPane.setStyle("-fx-background-image: url(\"images/studentHome.png\"); -fx-background-repeat: stretch;");
-//        mainPane.setId("mainPane");
-        Scene frameScene = new Scene(mainPane, 713, 560);
-
         FrameFormController controller = (FrameFormController) loader.getController();
         
+        Scene frameScene = new Scene(mainPane, 715, 560);
         Stage frameStage = new Stage();
-        frameStage.setTitle("eProctor Student Client");
         frameStage.setScene(frameScene);
+        frameStage.setTitle("eProctor Student Client");
         frameStage.setResizable(false);
         frameStage.show();
         controller.setSelfStage(frameStage);

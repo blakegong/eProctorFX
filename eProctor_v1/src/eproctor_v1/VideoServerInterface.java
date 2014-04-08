@@ -8,6 +8,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
@@ -43,28 +45,39 @@ public class VideoServerInterface {
         private int port;
         private String course_code;
         private String session_code;
+        
+        public ServiceSendImage (String me, String ip, int port, String course_code, String session_code) {
+            this.me = me;
+            this.ip = ip;
+            this.port = port;
+            this.course_code = course_code;
+            this.session_code = session_code;
+        }
 
         @Override
         protected Task<Image> createTask() {
             return new Task<Image>() {
                 @Override
                 protected Image call() throws Exception {
-                    if (getGrabber() == null) {
+                    initGrabber();
+                    
+                    if (grabber == null) {
                         super.failed();
+                        System.out.println("ServiceSendImage: super.failed()");
                         return null;
                     }
                     
                     grabber.start();
                     IplImage img;
                     BufferedImage buf;
-
+                    
                     while (true) {
-                        img = getGrabber().grab();
+                        img = grabber.grab();
                         cvFlip(img, img, 1);// l-r = 90_degrees_steps_anti_clockwise
                         buf = img.getBufferedImage();
                         this.updateValue(SwingFXUtils.toFXImage(buf, null));
 
-//                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                        ByteArrayOutputStream baos = new ByteArrayOutputStream(); // use baos.reset() ?
 //                        ImageIO.write(buf, "jpg", baos);
 //                        baos.flush();
 //                        byte[] imageBytes = baos.toByteArray();
@@ -91,51 +104,15 @@ public class VideoServerInterface {
             sOutput.writeObject(recordObject);
             socket.close();
         }
-
-        /**
-         *
-         * @param me
-         */
-        public void setMe(String me) {
-            this.me = me;
+        
+        public void initGrabber() {
+            try {
+                grabber = FrameGrabber.createDefault(0);
+            } catch (FrameGrabber.Exception ex) {
+                ex.printStackTrace();
+            }
         }
-
-        /**
-         *
-         * @param course_code
-         */
-        public void setCourse_code(String course_code) {
-            this.course_code = course_code;
-        }
-
-        /**
-         *
-         * @param session_code
-         */
-        public void setSession_code(String session_code) {
-            this.session_code = session_code;
-        }
-
-        /**
-         *
-         * @param ip
-         */
-        public void setIp(String ip) {
-            this.ip = ip;
-        }
-
-        /**
-         *
-         * @param port
-         */
-        public void setPort(int port) {
-            this.port = port;
-        }
-
-        public void setGrabber(FrameGrabber grabber) {
-            this.grabber = grabber;
-        }
-
+        
         public FrameGrabber getGrabber() {
             return grabber;
         }
