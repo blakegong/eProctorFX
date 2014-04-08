@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="450.0" prefWidth="270.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="eproctor.student.ReviewFormController">
+  <children>
+    <VBox layoutX="0.0" layoutY="0.0" prefHeight="450.0" prefWidth="270.0">
+      <children>
+        <Label text="Id" />
+        <Label fx:id="lblId" text="" />
+        <Label text="Course Code" />
+        <Label fx:id="lblCourseCode" text="" />
+        <Label text="Course" />
+        <Label fx:id="lblCourse" text="" />
+        <Label text="Session" />
+        <Label fx:id="lblSession" text="" />
+        <Label text="Start Time" />
+        <Label fx:id="lblStartTime" text="" />
+        <Label text="End Time" />
+        <Label fx:id="lblEndTime" text="" />
+        <Label text="Proctor" />
+        <Label fx:id="lblProctor" text="" />
+        <Label text="Grade" />
+        <Label fx:id="lblGrade" text="" />
+        <Label text="Remark" />
+        <Label fx:id="lblRemark" text="" />
+      </children>
+      <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+      </padding>
+    </VBox>
+  </children>
+</AnchorPane>

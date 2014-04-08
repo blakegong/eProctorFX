@@ -1,0 +1,11 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+.mainFxmlClass {
+
+}
+
+#msgProgressIndicator {
+    -fx-font-size: 0;
+}

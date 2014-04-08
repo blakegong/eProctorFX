@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1000.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="eproctor.student.StudentFormController">
+  <children>
+    <Pane fx:id="rightPane" layoutX="717.0" layoutY="136.0" prefHeight="450.0" prefWidth="269.0" />
+    <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="14.0" layoutY="136.0" prefHeight="450.0" prefViewportHeight="450.0" prefViewportWidth="687.0" prefWidth="690.0">
+      <content>
+        <VBox fx:id="vbox" alignment="CENTER" maxWidth="-1.0" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" />
+      </content>
+    </ScrollPane>
+    <Button layoutX="724.0" layoutY="109.0" mnemonicParsing="false" onAction="#openAboutPane" text="About" />
+    <Button layoutX="806.0" layoutY="109.0" mnemonicParsing="false" onAction="#openSettingPane" text="Setting" />
+    <Button layoutX="888.0" layoutY="110.0" mnemonicParsing="false" onAction="#logout" text="Logout" />
+  </children>
+  <stylesheets>
+    <URL value="@StudentForm.css" />
+  </stylesheets>
+</AnchorPane>
