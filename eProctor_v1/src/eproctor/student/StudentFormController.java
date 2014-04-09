@@ -1,14 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+// uncomment:
+//
+//button.setDisable(true); // only can enter once
+//
+//if (count >= 60 * 15) {
+//    lblInfo.setText("Exam extrance has closed. (15 mins passed)");
+//    System.out.println("timer should stop.");
+//    timer.stop();
+//}
 package eproctor.student;
 
 import static eproctor.student.Timer.intSecToReadableSecond;
-import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
@@ -45,6 +47,7 @@ import jfx.messagebox.MessageBox;
  */
 public class StudentFormController implements Initializable {
 
+    private FrameFormController frameFormController;
     private Stage selfStage;
     private ObservableList<Node> infoData;
 
@@ -87,6 +90,7 @@ public class StudentFormController implements Initializable {
 
         private int count;
         private Timeline timer;
+        private boolean isReviewing;
 
         /**
          * Basic constructor of InfoRow, returning an object of InfoRow
@@ -115,24 +119,24 @@ public class StudentFormController implements Initializable {
             indicator = new ProgressIndicator();
             indicator.setVisible(false);
 //            indicator.setMinSize(30, 30);
-            indicator.setPrefSize(25, 25);
+            indicator.setPrefSize(27, 27);
             indicator.setProgress(80);
             indicator.setId("indicator");
 
             this.courseRow = courseRow;
             this.recordRow = recordRow;
             setState();
-            Service<Void> timeService = new Service<Void>() {
-
-                private Date start;
-                private Date end;
-
-                @Override
-                protected Task<Void> createTask() {
-                    return null;
-                }
-
-            };
+//            Service<Void> timeService = new Service<Void>() {
+//
+//                private Date start;
+//                private Date end;
+//
+//                @Override
+//                protected Task<Void> createTask() {
+//                    return null;
+//                }
+//
+//            };
         }
 
         /**
@@ -265,11 +269,9 @@ public class StudentFormController implements Initializable {
                 @Override
                 public void handle(ActionEvent event) {
                     if (count < 30 * 60) {
-                        System.out.println("Exam entrance opened.");
                         timer.stop();
                     }
                     count--;
-                    System.out.println("count: " + count);
                     int level = 3;
                     if (count > 60 * 60) {
                         level = 2;
@@ -302,7 +304,6 @@ public class StudentFormController implements Initializable {
                 //open exam
             });
 
-            
             // = = = = = = =
             // start a countDOWN timer
 //            count = (int) ((start.getTime() - new Date().getTime()) / 1000);
@@ -311,7 +312,6 @@ public class StudentFormController implements Initializable {
                 @Override
                 public void handle(ActionEvent event) {
                     count--;
-                    System.out.println("count: " + count);
                     lblInfo.setText("time to exam: " + intSecToReadableSecond(count, 4));
                 }
             }));
@@ -320,7 +320,7 @@ public class StudentFormController implements Initializable {
 
                 @Override
                 public void handle(ActionEvent arg0) {
-                    setStateBookedReady();
+                    setStateTesting();
                 }
             });
             timer.play();
@@ -335,8 +335,11 @@ public class StudentFormController implements Initializable {
             lblInfo.setText("00:43:54 until the exam ends");
             button.setText("Exam");
             button.setOnAction((ActionEvent e) -> {
+                timer.stop();
+
                 try {
-                    openExamForm(courseRow, recordRow.getSession());
+//                    button.setDisable(true); // only can enter once
+                    openExamForm(courseRow, recordRow.getSession(), (int) ((end.getTime() - start.getTime()) / 1000));
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -350,14 +353,13 @@ public class StudentFormController implements Initializable {
                 @Override
                 public void handle(ActionEvent event) {
                     count++;
-                    System.out.println("count: " + count);
                     lblInfo.setText("exam has started for " + intSecToReadableSecond(count, 4));
 
-                    if (count >= 60 * 15) {
-                        lblInfo.setText("Exam extrance has closed. (15 mins passed)");
-                        System.out.println("timer should stop.");
-                        timer.stop();
-                    }
+//                    if (count >= 60 * 15) {
+//                        lblInfo.setText("Exam extrance has closed. (15 mins passed)");
+//                        System.out.println("timer should stop.");
+//                        timer.stop();
+//                    }
                 }
             }));
             timer.setCycleCount(Timeline.INDEFINITE);
@@ -374,6 +376,7 @@ public class StudentFormController implements Initializable {
         }
 
         private void setStateReview() {
+
             VBox tempVbox = new VBox();
             tempVbox.getChildren().addAll(lblCourseName, lblInfo);
             this.getChildren().remove(0, this.getChildren().size());
@@ -383,10 +386,19 @@ public class StudentFormController implements Initializable {
             } else {
                 lblInfo.setText("result is " + recordRow.getGrade());
             }
+
+//            isReviewing = false;
             button.setText("Review");
             button.setOnAction((ActionEvent e) -> {
                 try {
-//                    openReviewPane(recordRow, courseRow);
+//                    if (isReviewing) {
+//                        button.setText("Review");
+//                        frameFormController.closeReviewView();
+//                    } else {
+//                        button.setText("Close");
+                    frameFormController.openReviewView(recordRow, courseRow);
+//                    }
+//                    isReviewing = !isReviewing;
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -394,7 +406,7 @@ public class StudentFormController implements Initializable {
         }
     }
 
-//    private void openReviewPane(DatabaseInterface.RecordRow recordRow, DatabaseInterface.CourseRow courseRow) throws Exception {
+    private void openReviewPane(DatabaseInterface.RecordRow recordRow, DatabaseInterface.CourseRow courseRow) throws Exception {
 //        System.out.println("inside");
 //        AnchorPane pane = new AnchorPane();
 //        FXMLLoader loader = new FXMLLoader(getClass().getResource("ReviewForm.fxml"));
@@ -408,9 +420,11 @@ public class StudentFormController implements Initializable {
 //            ex.printStackTrace();
 //        }
 //        rightPane.getChildren().setAll(pane);
-//    }
-    
-    private void openExamForm(DatabaseInterface.CourseRow courseRow, DatabaseInterface.SessionRow sessionRow) throws Exception {
+        frameFormController.openReviewView(recordRow, courseRow);
+    }
+
+    private void openExamForm(DatabaseInterface.CourseRow courseRow, DatabaseInterface.SessionRow sessionRow, int examDuration) throws Exception {
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("ExamForm.fxml"));
         Scene examScene = new Scene(loader.load());
         ExamFormController controller = (ExamFormController) loader.getController();
@@ -421,8 +435,9 @@ public class StudentFormController implements Initializable {
         stage.show();
         controller.setStage(stage);
 
-        controller.startServiceFetchMsg(courseRow, sessionRow);
+        controller.startTimer(examDuration);
         controller.startServiceSendImage(DatabaseInterface.userCode, courseRow.getCode(), sessionRow.getCode(), "localhost", 6002, controller.videoImageView);
+        controller.startServiceFetchMsg(courseRow, sessionRow);
     }
 
     /**
@@ -431,5 +446,9 @@ public class StudentFormController implements Initializable {
      */
     public void setStage(Stage stage) {
         selfStage = stage;
+    }
+
+    public void setFrameFormController(FrameFormController frameFormController) {
+        this.frameFormController = frameFormController;
     }
 }

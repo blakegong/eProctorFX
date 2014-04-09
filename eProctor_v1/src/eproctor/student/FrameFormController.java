@@ -11,10 +11,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -35,18 +36,23 @@ public class FrameFormController implements Initializable {
     @FXML
     private ImageView logoutImageView;
     @FXML
-    private Pane contentPane;
+    private Label settingLabel;
+    @FXML
+    private Label aboutLabel;
+    @FXML
+    private Label logoutLabel;
 
     private Stage selfStage;
-    private AnchorPane studentView, settingView;
+    private AnchorPane studentView, reviewView, settingView;
     private StackPane aboutView;
 
-    /**
-     * Initializes the controller class.
-     */
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        this.setToolTips();
+        this.openStudentForm();
+        
     }
 
     @FXML
@@ -58,8 +64,10 @@ public class FrameFormController implements Initializable {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
+            StudentFormController studentFormController = loader.getController();
+            studentFormController.setFrameFormController(this);
         }
-        contentPane.getChildren().setAll(studentView);
+        mainPane.setCenter(studentView);
     }
 
     @FXML
@@ -72,8 +80,10 @@ public class FrameFormController implements Initializable {
                 ex.printStackTrace();
             }
             SettingFormController settingFormController = loader.getController();
+            settingFormController.setFrameFormController(this);
+            settingFormController.setStage(selfStage);
         }
-        contentPane.getChildren().setAll(settingView);
+        mainPane.setCenter(settingView);
     }
 
     @FXML
@@ -89,7 +99,7 @@ public class FrameFormController implements Initializable {
             aboutFormController.setFrameFormController(this);
             aboutFormController.setBackground();
         }
-        contentPane.getChildren().setAll(aboutView);
+        mainPane.setCenter(aboutView);
     }
 
     @FXML
@@ -109,6 +119,33 @@ public class FrameFormController implements Initializable {
         stage.setResizable(false);
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.show();
+    }
+
+    public void openReviewView(DatabaseInterface.RecordRow recordRow, DatabaseInterface.CourseRow courseRow) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("ReviewForm.fxml"));
+        try {
+            reviewView = loader.load();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        ReviewFormController controller = (ReviewFormController) loader.getController();
+        controller.setFrameFormController(this);
+        controller.setRecordRow(recordRow);
+        controller.setCourseRow(courseRow);
+        controller.updateDetails();
+
+        mainPane.setCenter(reviewView);
+    }
+
+    public void closeReviewView() {
+        mainPane.setBottom(null);
+        this.openStudentForm();
+    }
+
+    public void setToolTips() {
+        this.settingLabel.setTooltip(new Tooltip("Open setting view"));
+        this.aboutLabel.setTooltip(new Tooltip("Open about view"));
+        this.logoutLabel.setTooltip(new Tooltip("Log out"));
     }
 
     public void setBackground() {

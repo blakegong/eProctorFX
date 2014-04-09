@@ -21,6 +21,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -73,7 +74,7 @@ public class LoginFormController implements Initializable {
     @FXML
     private void login(ActionEvent event) throws Exception {
         buttonLogin.setDisable(true);
-        
+
         SimpleDoubleProperty progress0 = new SimpleDoubleProperty(0);
         SimpleDoubleProperty progress1 = new SimpleDoubleProperty(0);
         SimpleDoubleProperty progress2 = new SimpleDoubleProperty(0);
@@ -92,7 +93,7 @@ public class LoginFormController implements Initializable {
 
             @Override
             protected Void call() throws Exception {
-                if (DatabaseInterface.isUser(choiceType.getValue().toString(), username.getText(), getMD5(password.getText(), true))) { 
+                if (DatabaseInterface.isUser(choiceType.getValue().toString(), username.getText(), getMD5(password.getText(), true))) {
                     progress0.set(1);
                     DatabaseInterface.updateLocalRecordData(progress1);
                     DatabaseInterface.updateLocalCourseData(progress2);
@@ -188,7 +189,7 @@ public class LoginFormController implements Initializable {
      */
     private void openStudentForm() throws Exception {
         selfStage.close();
-        
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("student/StudentForm.fxml"));
         Parent root = (Parent) loader.load();
         StudentFormController controller = (StudentFormController) loader.getController();
@@ -199,28 +200,31 @@ public class LoginFormController implements Initializable {
         stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
-        
+
         controller.setStage(stage);
     }
-
 
     private void openFrameForm() throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("student/FrameForm.fxml"));
         BorderPane mainPane = loader.load();
+        mainPane.setStyle("-fx-background-size: stretch; -fx-background-repeat: stretch; -fx-background-image: url(\"http://ppcdn.500px.org/66423453/2539c590235e52a9d8fb880f370ddea0f25b9e36/2048.jpg\");");
+//        mainPane.setStyle("-fx-background-size: stretch; -fx-background-repeat: stretch; -fx-background-image: url(\"images/loginScreen.png\");");
         FrameFormController controller = (FrameFormController) loader.getController();
-        
-        Scene frameScene = new Scene(mainPane, 715, 560);
+
+//        Scene frameScene = new Scene(mainPane);
+        Scene frameScene = new Scene(mainPane, 720, 560);
         Stage frameStage = new Stage();
         frameStage.setScene(frameScene);
         frameStage.setTitle("eProctor Student Client");
         frameStage.setResizable(false);
         frameStage.show();
         controller.setSelfStage(frameStage);
-        controller.openStudentForm();
-        
+//        controller.setToolTips();
+//        controller.openStudentForm();
+
         selfStage.close();
     }
-    
+
     /**
      * This method implements MD5 generating algorithm.
      *

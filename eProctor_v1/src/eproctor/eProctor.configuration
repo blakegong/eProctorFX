@@ -1,0 +1,10 @@
+#config
+#0 as default
+#ip can be localhost or 172.XX.XXX.XXX
+#night_mode default 0/false
+#font_size default 14
+ip=localhost
+port=6002
+nightMode=0
+fontSize=14
+backgroundMusic=

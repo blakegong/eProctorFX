@@ -4,6 +4,7 @@ import com.googlecode.javacv.FrameGrabber;
 import com.googlecode.javacv.cpp.opencv_core.IplImage;
 import static com.googlecode.javacv.cpp.opencv_core.cvFlip;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.Socket;
@@ -11,6 +12,7 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
+import javax.imageio.ImageIO;
 
 /**
  * This class is a video server interface class runs on client side. It has
@@ -42,6 +44,7 @@ public class VideoServerInterface {
         private int port;
         private String course_code;
         private String session_code;
+        public boolean isLocal;
         
         public ServiceSendImage (String me, String ip, int port, String course_code, String session_code) {
             this.me = me;
@@ -49,6 +52,7 @@ public class VideoServerInterface {
             this.port = port;
             this.course_code = course_code;
             this.session_code = session_code;
+            this.isLocal = false;
         }
 
         @Override
@@ -68,18 +72,22 @@ public class VideoServerInterface {
                     IplImage img;
                     BufferedImage buf;
                     
+                    System.out.println("video: islocal: " + isLocal);
+                                        
                     while (true) {
                         img = grabber.grab();
                         cvFlip(img, img, 1);// l-r = 90_degrees_steps_anti_clockwise
                         buf = img.getBufferedImage();
                         this.updateValue(SwingFXUtils.toFXImage(buf, null));
 
-//                        ByteArrayOutputStream baos = new ByteArrayOutputStream(); // use baos.reset() ?
-//                        ImageIO.write(buf, "jpg", baos);
-//                        baos.flush();
-//                        byte[] imageBytes = baos.toByteArray();
-//                        baos.close();
-//                        send(imageBytes);
+                        if (!isLocal) {
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream(); // use baos.reset() ?
+                            ImageIO.write(buf, "jpg", baos);
+                            baos.flush();
+                            byte[] imageBytes = baos.toByteArray();
+                            baos.close();
+                            send(imageBytes);
+                        }
                     }
                 }
             };

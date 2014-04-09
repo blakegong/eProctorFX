@@ -5,3 +5,7 @@
 .mainFxmlClass {
 
 }
+
+.label {
+    -fx-font-size: 14;
+}

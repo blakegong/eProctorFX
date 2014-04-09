@@ -6,6 +6,6 @@
 
 }
 
-#msgProgressIndicator {
-    -fx-font-size: 0;
+#timeLabel {
+    -fx-wrap-text: true;
 }

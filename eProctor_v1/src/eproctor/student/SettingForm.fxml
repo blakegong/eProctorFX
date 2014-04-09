@@ -4,8 +4,85 @@
 <?import java.net.*?>
 <?import java.util.*?>
 <?import javafx.collections.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="200.0" prefWidth="200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="eproctor.student.SettingFormController" />
+<AnchorPane prefHeight="-1.0" prefWidth="-1.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="eproctor.student.SettingFormController">
+  <children>
+    <HBox alignment="CENTER" layoutX="0.0" layoutY="0.0" prefHeight="440.0" prefWidth="720.0" spacing="30.0">
+      <children>
+        <VBox alignment="TOP_LEFT" prefHeight="-1.0" prefWidth="-1.0" spacing="40.0">
+          <children>
+            <Label text="Font Size" />
+            <Label text="Font Family" />
+            <Label text="Background Music" />
+            <Label text="Night Mode" />
+          </children>
+          <padding>
+            <Insets />
+          </padding>
+          <HBox.margin>
+            <Insets top="30.0" fx:id="x1" />
+          </HBox.margin>
+        </VBox>
+        <VBox prefHeight="-1.0" prefWidth="-1.0" spacing="30.0" HBox.margin="$x1">
+          <children>
+            <ChoiceBox fx:id="fontSizeCB" prefWidth="70.0">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="项 1" />
+                  <String fx:value="项 2" />
+                  <String fx:value="项 3" />
+                </FXCollections>
+              </items>
+            </ChoiceBox>
+            <ChoiceBox fx:id="fontFamilyCB" prefWidth="70.0">
+              <items>
+                <FXCollections fx:factory="observableArrayList">
+                  <String fx:value="项 1" />
+                  <String fx:value="项 2" />
+                  <String fx:value="项 3" />
+                </FXCollections>
+              </items>
+            </ChoiceBox>
+            <Button fx:id="backgroundMusicButton" mnemonicParsing="false" onAction="#chooseBackgroundMusic" prefWidth="70.0" text="Button" />
+            <ToggleButton fx:id="nightModeTB" mnemonicParsing="false" prefWidth="70.0" selected="false" text="Night" textAlignment="CENTER" underline="false">
+              <font>
+                <Font name="System Bold" size="12.0" />
+              </font>
+            </ToggleButton>
+            <Button fx:id="goBackButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#goBack" prefHeight="25.0" prefWidth="70.0" text="Go Back">
+              <VBox.margin>
+                <Insets top="20.0" />
+              </VBox.margin>
+            </Button>
+          </children>
+        </VBox>
+        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+          <children>
+            <ImageView fx:id="cameraImageView" fitHeight="178.75" fitWidth="238.3333382082369" pickOnBounds="true" preserveRatio="true">
+              <VBox.margin>
+                <Insets bottom="20.0" />
+              </VBox.margin>
+            </ImageView>
+            <ToggleButton fx:id="testCameraTB" mnemonicParsing="false" onAction="#testCamera" prefWidth="-1.0" selected="false" text="Test Camera" textAlignment="CENTER" textFill="#0066ff" underline="false">
+              <font>
+                <Font size="14.0" />
+              </font>
+            </ToggleButton>
+          </children>
+        </VBox>
+      </children>
+      <padding>
+        <Insets bottom="100.0" left="90.0" right="60.0" top="60.0" />
+      </padding>
+    </HBox>
+  </children>
+  <stylesheets>
+    <URL value="@SettingForm.css" />
+  </stylesheets>
+</AnchorPane>

@@ -7,33 +7,57 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="450.0" prefWidth="270.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="eproctor.student.ReviewFormController">
+<AnchorPane prefHeight="-1.0" prefWidth="-1.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="eproctor.student.ReviewFormController">
   <children>
-    <VBox layoutX="0.0" layoutY="0.0" prefHeight="450.0" prefWidth="270.0">
+    <HBox layoutX="0.0" layoutY="0.0" prefHeight="440.0" prefWidth="720.0" spacing="50.0">
       <children>
-        <Label text="Id" />
-        <Label fx:id="lblId" text="" />
-        <Label text="Course Code" />
-        <Label fx:id="lblCourseCode" text="" />
-        <Label text="Course" />
-        <Label fx:id="lblCourse" text="" />
-        <Label text="Session" />
-        <Label fx:id="lblSession" text="" />
-        <Label text="Start Time" />
-        <Label fx:id="lblStartTime" text="" />
-        <Label text="End Time" />
-        <Label fx:id="lblEndTime" text="" />
-        <Label text="Proctor" />
-        <Label fx:id="lblProctor" text="" />
-        <Label text="Grade" />
-        <Label fx:id="lblGrade" text="" />
-        <Label text="Remark" />
-        <Label fx:id="lblRemark" text="" />
+        <VBox prefHeight="320.0" prefWidth="100.0" spacing="20.0">
+          <children>
+            <Label text="Id" />
+            <Label text="Course Code" />
+            <Label text="Course" />
+            <Label text="Session" />
+            <Label text="Start Time" />
+            <Label text="End Time" />
+            <Label text="Proctor" />
+            <Label text="Grade" />
+            <Label text="Remark" />
+          </children>
+          <padding>
+            <Insets />
+          </padding>
+        </VBox>
+        <VBox prefHeight="320.0" prefWidth="160.0" spacing="20.0">
+          <children>
+            <Label fx:id="lblId" text="idValue" />
+            <Label fx:id="lblCourseCode" text="courseCodeValue" />
+            <Label fx:id="lblCourse" text="courseValue" />
+            <Label fx:id="lblSession" text="sessionValue" />
+            <Label fx:id="lblStartTime" text="startTimeValue" />
+            <Label fx:id="lblEndTime" text="endTimeValue" />
+            <Label fx:id="lblProctor" text="proctorValue" />
+            <Label fx:id="lblGrade" text="gradeValue" />
+            <Label fx:id="lblRemark" text="remarkValue" />
+          </children>
+        </VBox>
+        <VBox alignment="BOTTOM_CENTER" prefHeight="320.0" prefWidth="100.0">
+          <children>
+            <Button fx:id="goBackButton" contentDisplay="CENTER" mnemonicParsing="false" onAction="#goBack" prefWidth="100.0" text="Go Back" textFill="#0066ff">
+              <font>
+                <Font name="System Bold" size="14.0" />
+              </font>
+            </Button>
+          </children>
+        </VBox>
       </children>
       <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+        <Insets bottom="100.0" left="160.0" right="100.0" top="20.0" />
       </padding>
-    </VBox>
+    </HBox>
   </children>
+  <stylesheets>
+    <URL value="@ReviewForm.css" />
+  </stylesheets>
 </AnchorPane>

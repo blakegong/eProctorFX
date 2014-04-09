@@ -6,13 +6,22 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
 
 <StackPane id="StackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="eproctor.student.AboutFormController">
   <children>
-    <Hyperlink alignment="CENTER" contentDisplay="CENTER" text="http://google.com/" />
+    <Hyperlink alignment="CENTER" contentDisplay="CENTER" text="http://google.com/" textAlignment="CENTER" textFill="#003308">
+      <font>
+        <Font name="Consolas Bold" size="14.0" />
+      </font>
+    </Hyperlink>
     <Pane fx:id="backgroundPane" prefHeight="200.0" prefWidth="200.0">
       <children>
-        <Button fx:id="backBtn" layoutX="277.0" layoutY="334.0" mnemonicParsing="false" onAction="#backPressed" text="Back" />
+        <Button fx:id="backBtn" contentDisplay="CENTER" layoutX="250.0" layoutY="334.0" mnemonicParsing="false" onAction="#backPressed" prefWidth="100.0" text="Back" textAlignment="CENTER" textFill="#0066ff">
+          <font>
+            <Font name="System Bold" size="14.0" />
+          </font>
+        </Button>
       </children>
     </Pane>
   </children>

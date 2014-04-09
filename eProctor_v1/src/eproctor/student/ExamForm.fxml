@@ -19,7 +19,7 @@
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" fx:id="x1" />
       </HBox.margin>
     </WebView>
-    <VBox alignment="TOP_LEFT" prefHeight="200.0" prefWidth="100.0">
+    <VBox alignment="TOP_LEFT" prefHeight="640.0" prefWidth="226.0">
       <children>
         <Label text="Your Face" />
         <ImageView fx:id="videoImageView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
@@ -29,11 +29,11 @@
         </ImageView>
         <Label text="Message Received">
           <VBox.margin>
-            <Insets top="100.0" />
+            <Insets top="30.0" />
           </VBox.margin>
         </Label>
-        <TextArea id="ms" fx:id="msgReceived" prefWidth="200.0" wrapText="true" />
-        <TextField fx:id="msgToSend" prefWidth="200.0" />
+        <TextArea id="ms" fx:id="msgReceived" prefHeight="233.0" prefWidth="226.0" wrapText="true" />
+        <TextField fx:id="msgToSend" minHeight="25.0" prefWidth="200.0" />
         <HBox alignment="CENTER_RIGHT" prefHeight="-1.0" prefWidth="-1.0">
           <children>
             <ProgressIndicator fx:id="msgProgressIndicator" progress="0.0" />
@@ -46,6 +46,11 @@
         </HBox>
         <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" VBox.margin="$x2">
           <children>
+            <Label fx:id="timeLabel" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" prefHeight="87.0" prefWidth="200.0" text="Label">
+              <VBox.margin>
+                <Insets fx:id="x2" />
+              </VBox.margin>
+            </Label>
             <Label fx:id="statusLabel" text="Exam Status:">
               <effect>
                 <ColorAdjust>
@@ -75,4 +80,7 @@
       </children>
     </VBox>
   </children>
+  <stylesheets>
+    <URL value="@ExamForm.css" />
+  </stylesheets>
 </HBox>

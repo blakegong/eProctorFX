@@ -14,7 +14,6 @@ import javafx.scene.layout.Pane;
  * @author CLY
  */
 public class AboutFormController implements Initializable {
-    
     private FrameFormController frameFormController;
 
     @FXML
@@ -33,8 +32,7 @@ public class AboutFormController implements Initializable {
     }
     
     public void setBackground() {
-        backgroundPane.setStyle("-fx-background-image: url(\"http://www.seomofo.com/downloads/new-google-logo-knockoff.png\")");
-        System.out.println("style: " + backgroundPane.getStyle());
+        backgroundPane.setStyle("-fx-background-size: no-repeat; -fx-background-image: url(\"http://files.softicons.com/download/internet-icons/social-sketches-icons-by-an-phan-van/png/256/google.png\")");
     }
 
     public void setFrameFormController(FrameFormController frameFormController) {

@@ -1,7 +1,13 @@
 package eproctor;
 
 import eproctor.student.DatabaseInterface;
+import eproctor.student.SettingFormController;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,6 +19,20 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        File config = new File("/eproctor/eProctor.configuration");
+        Scanner sc = null;
+        try {
+            sc = new Scanner(config);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(SettingFormController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        while (sc != null && sc.hasNext()) {
+            System.out.println(sc.next());
+        }
+        System.out.println("no more.");
+        
+        
         showLogin(stage);
         DatabaseInterface.connectEProctorServer();
         DatabaseInterface.connectSchoolServer();

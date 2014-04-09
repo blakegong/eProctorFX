@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 /**
@@ -18,37 +19,38 @@ import javafx.scene.control.Label;
  */
 public class ReviewFormController implements Initializable {
 
+    private FrameFormController frameFormController;
+
     private DatabaseInterface.RecordRow recordRow;
     private DatabaseInterface.CourseRow courseRow;
 
     @FXML
     private Label lblId;
-
     @FXML
     private Label lblCourseCode;
-
     @FXML
     private Label lblCourse;
-
     @FXML
     private Label lblSession;
-
     @FXML
     private Label lblProctor;
-
 //    @FXML
 //    private Label lblLocation;
     @FXML
     private Label lblStartTime;
-
     @FXML
     private Label lblEndTime;
-
     @FXML
     private Label lblGrade;
-
     @FXML
     private Label lblRemark;
+    @FXML
+    private Button goBackButton;
+    
+    @FXML
+    private void goBack() {
+        frameFormController.openStudentForm();
+    }
 
     /**
      * Initializes the controller class.
@@ -77,4 +79,7 @@ public class ReviewFormController implements Initializable {
         this.courseRow = courseRow;
     }
 
+    public void setFrameFormController(FrameFormController frameFormController) {
+        this.frameFormController = frameFormController;
+    }
 }

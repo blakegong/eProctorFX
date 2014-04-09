@@ -10,7 +10,6 @@ import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -40,6 +39,7 @@ public class DatabaseInterface {
      * constructor, ensuring non-instantiation.
      */
     public DatabaseInterface() {
+        
     }
 
     /**
@@ -140,6 +140,8 @@ public class DatabaseInterface {
         QueryBuilder recordQb = new QueryBuilder();
         //TODO diff domain
         recordQb.put("student_code").is(userCode);
+        
+        System.out.println("updateLocalRecordData: query: " + recordQb.get());
         DBCursor recordCursor = record.find(recordQb.get());
 
         if (progress != null) // update progress bar...
@@ -155,7 +157,7 @@ public class DatabaseInterface {
 //            }
 //            BasicDBObject query = new BasicDBObject("$or", queryOrOr);
 //            DBCursor cur = course.findOne(query);
-            
+
             ////
             DBObject recordObj = recordCursor.next();
             QueryBuilder courseQb = new QueryBuilder();
@@ -348,7 +350,8 @@ public class DatabaseInterface {
     /**
      * This method is to send message
      *
-     * @param receiverCode id of receiver
+     * @param sender_code id of sender
+     * @param receiver_code id of receiver
      * @param courseCode id of course
      * @param sessionCode id of exam session
      * @param text content of the message
@@ -357,9 +360,9 @@ public class DatabaseInterface {
      * @return true indicate successful sending message, else fail to send
      * message
      */
-    public static boolean sendMessage(String receiverCode, String courseCode, String sessionCode, String text, Date date, String type) {
-        WriteResult wr = message.insert(new BasicDBObject().append("sender_code", userCode)
-                .append("receiver_code", receiverCode)
+    public static boolean sendMessage(String sender_code, String receiver_code, String courseCode, String sessionCode, String text, Date date, int type) {
+        WriteResult wr = message.insert(new BasicDBObject().append("sender_code", sender_code)
+                .append("receiver_code", receiver_code)
                 .append("course_code", courseCode)
                 .append("session_code", sessionCode)
                 .append("text", text)
@@ -367,9 +370,10 @@ public class DatabaseInterface {
                 .append("type", type)
                 .append("isRead", false));
         if (wr.getError() != null) {
-            System.out.println(wr.getError());
+            System.out.println("sendMessage failed. \n" + wr.getError());
             return false;
         }
+        System.out.println("sendMessage succeeded.");
         return true;
     }
 
@@ -382,30 +386,67 @@ public class DatabaseInterface {
      * @return string of message
      */
     public static String pullMessage(String me, String course_code, String session_code) {
-        int status = 0; // exam status carried by message, 0: normal, 1: warning, 2: ending
-
+        BasicDBObject orArray[] = new BasicDBObject[2];
+        orArray[0] = new BasicDBObject("receiver_code", me);
+        orArray[1] = new BasicDBObject("sender_code", me);
         BasicDBObject query = new BasicDBObject("course_code", course_code)
-                .append("session_code", session_code)
-                .append("$or", new BasicDBObject("receiver_code", me).append("sender_code", me));
-
+                                        .append("session_code", session_code)
+                                        .append("$or", orArray);
+        
+//        System.out.println("pullMessage: query: " + query);
         DBCursor cur = message.find(query).sort(new BasicDBObject("time", 1));
 
         String msgAll = "";
+        int status = 0; // exam status carried by message, 0: normal, 1: warning, 2: ending // ending = expelled
         while (cur.hasNext()) {
             DBObject temp = cur.next();
+//            System.out.println("pullMessage: temp: \n" + temp);
+
             String msgTemp = "";
 
-            if (status < (int) temp.get("status")) // get a worest status;
-            {
-                status = (int) temp.get("status");
-            }
+            if (status < (int) temp.get("type")) // get a worest status;
+                status = (int) temp.get("type");
+//            System.out.println("pullMessage: status: " + status); 
 
-            msgTemp = temp.toString();
+            msgTemp = "sender_code: " + getName((String)temp.get("sender_code"))
+                    + "\nreceiver_code: " + getName((String)temp.get("receiver_code"))
+                    + "\ntime; " + temp.get("time")
+                    + "\n\t\"" + temp.get("text") + "\"";
+            
+            if ((int)temp.get("type") == 1)
+                msgTemp += "\n(it is a warning!)";
+            if ((int)temp.get("type") == 2)
+                msgTemp += "\n(you are expelled!)";
 
-            msgAll += msgTemp + "\n";
+            msgAll += msgTemp + "\n\n\n";
         }
-
+        
+//        System.out.println("pullMessage: return: \n" + msgAll + "#" + status);
         return msgAll + "#" + status;
+    }
+    
+    public static boolean isProctor() {
+        return true;
+    }
+    
+    public static String getName(String user_code) {
+//        System.out.println("getName: here");
+//        System.out.println("user_code: " + user_code);
+        DBObject result = student.findOne(new BasicDBObject("user_code", user_code));
+//        System.out.println("result: " + result);
+        if (result == null)
+            result = proctor.findOne(new BasicDBObject("user_code", user_code));
+//        System.out.println("getName: name: " + (String)result.get("name"));
+        return (String)result.get("name");
+        
+        
+//        System.out.println("getName: here");
+//        DBObject result = proctor.findOne(new BasicDBObject("user_code", "NTUU1220495H"));
+//        System.out.println("result: " + result);
+//        if (result == null)
+//            result = student.findOne(new BasicDBObject("user_code", "NTUU1220495H"));
+//        System.out.println("getName: name: " + (String)result.get("name"));
+//        return (String)result.get("name");
     }
 
     /**
@@ -413,10 +454,11 @@ public class DatabaseInterface {
      * Service by using polling message from server/database.
      */
     public static class ServiceFetchMsg extends Service<String> {
+
         private String me;
         private String course_code;
         private String session_code;
-        
+
         protected ServiceFetchMsg(String me, String course_code, String session_code) {
             this.setMe(me);
             this.setCourse_code(course_code);
@@ -430,25 +472,28 @@ public class DatabaseInterface {
                 protected String call() throws Exception {
                     int test = 0;
                     int status = 0;
-                    while (!this.isCancelled() && status != 3) {
-//                        String msg = pullMessage(me, course_code, session_code);
-//                        this.updateMessage(msg);
-                        this.updateMessage("" + test++);
-                        
-//                        status = Integer.parseInt(msg.split("#")[0]);
-                        status = test % 3;
-                        
-//                        this.updateValue(statusIntToStatusString());
+                    System.out.println("ServiceFetchMsg: me: " + me + ", course_code: " + course_code + ", session_code: " + session_code);
+                    while (status != 2) {
+                        String msg = pullMessage(me, course_code, session_code);
+                        this.updateMessage(msg);
+//                        this.updateMessage(test++ + " test wrapping test wrapping test wrapping test wrapping test wrapping\n test scrolling\n test scrolling\n test scrolling\n test scrolling\n test scrolling\n test scrolling\n test scrolling\n");
+
+                        status = Integer.parseInt(msg.split("#")[1]);
+                        System.out.println("ServiceFetchMsg: status: " + status);
+//                        status = test % 2;
+//                        if (test == 5)
+//                            status = 2;
+
                         this.updateTitle("-fx-background-color: " + statusIntToStatusString(status));
 
-                        Thread.sleep(1000);
+                        Thread.sleep(3000);
                     }
-                    
-                    if (status == 3) {
+
+                    if (status == 2) {
                         return "ending";
                     }
-                    
-                    return "ServiceFetchMsg Ended...";
+
+                    return "ServiceFetchMsg Ended Unexpected.";
                 }
             };
         }
@@ -498,89 +543,37 @@ public class DatabaseInterface {
      * Service by using push message to server/database.
      */
     public static class ServiceSendMsg extends Service<Void> {
+
         private String me;
         private String course_code;
         private String session_code;
-        private String proctor_code;
+        private String receiver_code;
         private String text;
         private Date time;
-        private String type;
+        private int type;
+        
+        public ServiceSendMsg(String me, String receiver_code, String course_code, String session_code, String text, Date time, int type) {
+            this.me = me;
+            this.course_code = course_code;
+            this.session_code = session_code;
+            this.receiver_code = receiver_code;
+            this.text = text;
+            this.time = time;
+            this.type = type;
+        }
 
         @Override
         protected Task<Void> createTask() {
             return new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {
-                    for (int i = 0; i < 10; i++) {
-                        Thread.sleep(100);
-                    }
-//                    boolean result = sendMessage(me, course_code, session_code, proctor_code, text, time, type);                 
+//                    for (int i = 0; i < 10; i++) {
+//                        Thread.sleep(100);
+//                    }
+                    boolean result = sendMessage(me, course_code, session_code, receiver_code, text, time, type);                 
                     return null;
                 }
             };
-        }
-
-        /**
-         * This is to set me
-         *
-         * @param me
-         */
-        public void setMe(String me) {
-            this.me = me;
-        }
-
-        /**
-         * This is to set course_code
-         *
-         * @param course_code
-         */
-        public void setCourse_code(String course_code) {
-            this.course_code = course_code;
-        }
-
-        /**
-         * This is to set session_code
-         *
-         * @param session_code
-         */
-        public void setSession_code(String session_code) {
-            this.session_code = session_code;
-        }
-
-        /**
-         * This is to set proctor_code
-         *
-         * @param proctor_code
-         */
-        public void setProctor_code(String proctor_code) {
-            this.proctor_code = proctor_code;
-        }
-
-        /**
-         * This is to set text
-         *
-         * @param text
-         */
-        public void setText(String text) {
-            this.text = text;
-        }
-
-        /**
-         * This is to set time
-         *
-         * @param time
-         */
-        public void setTime(Date time) {
-            this.time = time;
-        }
-
-        /**
-         * This is to set type
-         *
-         * @param type
-         */
-        public void setType(String type) {
-            this.type = type;
         }
     }
 
