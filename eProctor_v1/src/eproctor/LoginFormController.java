@@ -1,7 +1,8 @@
 package eproctor;
 
-import eproctor.student.StudentFormController;
 import eproctor.student.DatabaseInterface;
+import eproctor.student.FrameFormController;
+import eproctor.student.StudentFormController;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -83,7 +84,7 @@ public class LoginFormController implements Initializable {
             protected void succeeded() {
                 super.succeeded();
                 try {
-                    openStudentForm();
+                    openFrameForm();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -203,6 +204,23 @@ public class LoginFormController implements Initializable {
     }
 
 
+    private void openFrameForm() throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("student/FrameForm.fxml"));
+        BorderPane mainPane = loader.load();
+        FrameFormController controller = (FrameFormController) loader.getController();
+        
+        Scene frameScene = new Scene(mainPane, 715, 560);
+        Stage frameStage = new Stage();
+        frameStage.setScene(frameScene);
+        frameStage.setTitle("eProctor Student Client");
+        frameStage.setResizable(false);
+        frameStage.show();
+        controller.setSelfStage(frameStage);
+        controller.openStudentForm();
+        
+        selfStage.close();
+    }
+    
     /**
      * This method implements MD5 generating algorithm.
      *

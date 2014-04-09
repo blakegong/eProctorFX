@@ -1,6 +1,6 @@
 .root {
-    /*-fx-background-color: #212f3a;*/
-    /*-fx-background-image: url("../images/studentHome.png");*/
+    -fx-background-color: #212f3a;
+    /*-fx-background-image: url("images/studentHome.png");*/
 }
 
 .mainFxmlClass {
@@ -10,11 +10,8 @@
 .default-button {
     
 }
-.scroll-pane > .viewport  {
-    -fx-background-color: #006D4F;
-}
-
 #vbox {
+    -fx-padding: 10;
 }
 #hbox {
     -fx-alignment: center-left;

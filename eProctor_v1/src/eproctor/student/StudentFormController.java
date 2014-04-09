@@ -5,17 +5,12 @@
  */
 package eproctor.student;
 
-import eproctor.LoginFormController;
-import eproctor.student.DatabaseInterface;
-import eproctor.student.ExamFormController;
 import static eproctor.student.Timer.intSecToReadableSecond;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
@@ -37,10 +32,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import jfx.messagebox.MessageBox;
 
@@ -57,52 +50,6 @@ public class StudentFormController implements Initializable {
 
     @FXML
     VBox vbox;
-    
-    @FXML
-    Pane rightPane;
-    
-    @FXML
-    private void openSettingPane() throws Exception {
-        AnchorPane pane = new AnchorPane();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("SettingForm.fxml"));
-        try {
-            pane = loader.load();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        rightPane.getChildren().setAll(pane);
-    }
-
-    @FXML
-    private void openAboutPane() throws Exception {
-        AnchorPane pane = new AnchorPane();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("AboutForm.fxml"));
-        try {
-            pane = loader.load();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        rightPane.getChildren().setAll(pane);
-    }
-    
-    @FXML
-    private void logout() throws Exception {
-        System.out.println("logout");
-        selfStage.close();
-
-        Stage stage = new Stage();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/eproctor/LoginForm.fxml"));
-        Parent root = (Parent) loader.load();
-        LoginFormController controller = (LoginFormController) loader.getController();
-        controller.setStage(stage);
-        Scene scene = new Scene(root);
-        scene.setFill(null);
-        stage.setTitle("eProctor");
-        stage.setScene(scene);
-        stage.setResizable(false);
-        stage.initStyle(StageStyle.TRANSPARENT);
-        stage.show();
-    }
 
     /**
      * This method initialize url.
@@ -355,6 +302,7 @@ public class StudentFormController implements Initializable {
                 //open exam
             });
 
+            
             // = = = = = = =
             // start a countDOWN timer
 //            count = (int) ((start.getTime() - new Date().getTime()) / 1000);
@@ -438,7 +386,7 @@ public class StudentFormController implements Initializable {
             button.setText("Review");
             button.setOnAction((ActionEvent e) -> {
                 try {
-                    openReviewPane(recordRow, courseRow);
+//                    openReviewPane(recordRow, courseRow);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -446,21 +394,21 @@ public class StudentFormController implements Initializable {
         }
     }
 
-    private void openReviewPane(DatabaseInterface.RecordRow recordRow, DatabaseInterface.CourseRow courseRow) throws Exception {
-        System.out.println("inside");
-        AnchorPane pane = new AnchorPane();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("ReviewForm.fxml"));
-        ReviewFormController controller = (ReviewFormController) loader.getController();
-        controller.setRecordRow(recordRow);
-        controller.setCourseRow(courseRow);
-        controller.updateDetails();
-        try {
-            pane = loader.load();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        rightPane.getChildren().setAll(pane);
-    }
+//    private void openReviewPane(DatabaseInterface.RecordRow recordRow, DatabaseInterface.CourseRow courseRow) throws Exception {
+//        System.out.println("inside");
+//        AnchorPane pane = new AnchorPane();
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("ReviewForm.fxml"));
+//        ReviewFormController controller = (ReviewFormController) loader.getController();
+//        controller.setRecordRow(recordRow);
+//        controller.setCourseRow(courseRow);
+//        controller.updateDetails();
+//        try {
+//            pane = loader.load();
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//        }
+//        rightPane.getChildren().setAll(pane);
+//    }
     
     private void openExamForm(DatabaseInterface.CourseRow courseRow, DatabaseInterface.SessionRow sessionRow) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("ExamForm.fxml"));

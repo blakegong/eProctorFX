@@ -1,0 +1,16 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+.mainFxmlClass {
+
+}
+
+/*#mainPane > .viewport {
+    -fx-background-image: url("images/studentHome.png");
+    -fx-background-repeat: stretch;
+}*/
+
+.BorderPane {
+    -fx-background-image: url("images/loginScreen.png");
+}
