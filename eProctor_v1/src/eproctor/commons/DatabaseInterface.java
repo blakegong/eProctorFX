@@ -29,12 +29,35 @@ import org.bson.types.ObjectId;
 public class DatabaseInterface {
 
     private static DBCollection user, record, course, session, student, proctor, message;
-    public static String domain, username, password, userCode;
+    public static String domain,
+
+    /**
+     *
+     */
+    username,
+
+    /**
+     *
+     */
+    password,
+
+    /**
+     *
+     */
+    userCode;
 //    private static String examCourseCode, examSessionCode, examProctor, examStudent;
     private static List<RecordRowStudent> recordDataStudent;
     private static List<RecordRowProctor> recordDataProctor;
     private static List<CourseRow> courseData;
+
+    /**
+     *
+     */
     public static ServiceSendMsg serviceSendMsg;
+
+    /**
+     *
+     */
     public static ServiceFetchMsg serviceFetchMsg;
 
     /**
@@ -64,6 +87,11 @@ public class DatabaseInterface {
         }
     }
 
+    /**
+     *
+     * @param controller
+     * @param infoData
+     */
     public static void getInfoDataProctor(ProctorFormController controller, ObservableList<Node> infoData) {
         for (RecordRowProctor tempRecord : recordDataProctor) {
             ProctorFormController.InfoRow infoRow = controller.new InfoRow(tempRecord);
@@ -295,6 +323,9 @@ public class DatabaseInterface {
         updateLocalCourseDataStudent(null);
     }
 
+    /**
+     *
+     */
     public static void updateLocalDataProctor() {
         updateLocalRecordDataProctor();
     }
@@ -441,6 +472,12 @@ public class DatabaseInterface {
         private String course_code;
         private String session_code;
         
+        /**
+         *
+         * @param me
+         * @param course_code
+         * @param session_code
+         */
         public ServiceFetchMsg(String me, String course_code, String session_code) {
             this.setMe(me);
             this.setCourse_code(course_code);
@@ -477,6 +514,11 @@ public class DatabaseInterface {
             };
         }
 
+        /**
+         *
+         * @param status
+         * @return
+         */
         public String statusIntToStatusString(int status) {
             if (status == 0) {
                 return "green";
@@ -678,6 +720,10 @@ public class DatabaseInterface {
             return id;
         }
 
+        /**
+         *
+         * @return
+         */
         public CourseRow getCourse() {
             return course;
         }
@@ -705,6 +751,7 @@ public class DatabaseInterface {
          * @param course
          * @param session
          * @param proctor_code
+         * @param studentList
          */
         public RecordRowProctor(String id, CourseRow course, SessionRow session, String proctor_code, ArrayList<StudentRow> studentList) {
             this.id = id;
@@ -723,18 +770,34 @@ public class DatabaseInterface {
             return session;
         }
 
+        /**
+         *
+         * @return
+         */
         public String getId() {
             return id;
         }
 
+        /**
+         *
+         * @return
+         */
         public CourseRow getCourse() {
             return course;
         }
 
+        /**
+         *
+         * @return
+         */
         public String getProctor_code() {
             return proctor_code;
         }
 
+        /**
+         *
+         * @return
+         */
         public ArrayList<StudentRow> getStudentList() {
             return studentList;
         }
@@ -876,19 +939,35 @@ public class DatabaseInterface {
         }
     }
 
+    /**
+     *
+     */
     public static class StudentRow {
         private String username;
         private String name;
 
+        /**
+         *
+         * @param username
+         * @param name
+         */
         public StudentRow(String username, String name) {
             this.username = username;
             this.name = name;
         }
 
+        /**
+         *
+         * @return
+         */
         public String getUsername() {
             return username;
         }
 
+        /**
+         *
+         * @return
+         */
         public String getName() {
             return name;
         }

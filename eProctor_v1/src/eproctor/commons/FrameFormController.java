@@ -45,12 +45,17 @@ public class FrameFormController implements Initializable {
 
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }
 
+    /**
+     *
+     */
     @FXML
     public void openStudentForm() {
         if (studentView == null) {
@@ -64,6 +69,9 @@ public class FrameFormController implements Initializable {
         contentPane.getChildren().setAll(studentView);
     }
 
+    /**
+     *
+     */
     @FXML
     public void openProctorForm() {
         if (proctorView == null) {
@@ -126,11 +134,18 @@ public class FrameFormController implements Initializable {
         stage.show();
     }
 
+    /**
+     *
+     */
     public void setBackground() {
         mainPane.setStyle("-fx-background-image: url(\"/images/studentHome.png\");"); // not working
         System.out.println("mainPane style: " + mainPane.getStyle());
     }
 
+    /**
+     *
+     * @param selfStage
+     */
     public void setSelfStage(Stage selfStage) {
         this.selfStage = selfStage;
     }

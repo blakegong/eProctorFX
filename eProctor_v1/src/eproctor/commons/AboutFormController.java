@@ -9,7 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 
 /**
- * FXML Controller class
+ * Application Form Controller class contains the method to set background
  *
  * @author CLY
  */
@@ -32,11 +32,18 @@ public class AboutFormController implements Initializable {
         // TODO
     }
     
+    /**
+     * This method is to set background
+     */
     public void setBackground() {
         backgroundPane.setStyle("-fx-background-image: url(\"http://www.seomofo.com/downloads/new-google-logo-knockoff.png\")");
         System.out.println("style: " + backgroundPane.getStyle());
     }
 
+    /**
+     * This method is to set frame form by passing in Frame form Controller in class FrameFormController
+     * @param frameFormController
+     */
     public void setFrameFormController(FrameFormController frameFormController) {
         this.frameFormController = frameFormController;
     }
