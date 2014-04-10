@@ -39,20 +39,20 @@ public class VideoServerInterface extends Service<Image> {
     public static class ServiceSendImage extends Service<Image> {
 
         private FrameGrabber grabber;
-        private String me_code;
+        private String username;
         private String ip;
         private int port;
         private String course_code;
         private String session_code;
         private boolean isLocal;
 
-        public ServiceSendImage(String me_code, String ip, int port, String course_code, String session_code) {
-            this.me_code = me_code;
+        public ServiceSendImage(String username, String ip, int port, String course_code, String session_code) {
+            this.username = username;
             this.ip = ip;
             this.port = port;
             this.course_code = course_code;
             this.session_code = session_code;
-            if (me_code == null || ip == null || port == 0 || course_code == null || session_code == null) {
+            if (username == null || ip == null || port == 0 || course_code == null || session_code == null) {
                 this.isLocal = true;
             }
         }
@@ -108,8 +108,8 @@ public class VideoServerInterface extends Service<Image> {
          * @throws Exception socket may throw IOException
          */
         public void send(byte[] imageBytes) throws Exception {
-            RecordObject recordObject = new RecordObject(me_code, imageBytes);
-            System.out.println("ServiceSendImage: me_code; " + me_code);
+            RecordObject recordObject = new RecordObject(username, imageBytes);
+            System.out.println("ServiceSendImage: username; " + username);
             Socket socket = new Socket(ip, port);
             ObjectOutputStream sOutput = new ObjectOutputStream(socket.getOutputStream());
             sOutput.writeObject(recordObject);
@@ -129,7 +129,7 @@ public class VideoServerInterface extends Service<Image> {
         }
     }
 
-    private String me_code;
+    private String username;
     private String domain;
     private String wanted_code;
     private String ip;
@@ -138,15 +138,15 @@ public class VideoServerInterface extends Service<Image> {
     private String session_code;
     public boolean isLocal;
 
-    public VideoServerInterface(String me_code, String wanted_code, String ip, int port, String course_code, String session_code) {
-        this.me_code = me_code;
+    public VideoServerInterface(String username, String wanted_code, String ip, int port, String course_code, String session_code) {
+        this.username = username;
         this.wanted_code = wanted_code;
         this.ip = ip;
         this.port = port;
         this.course_code = course_code;
         this.session_code = session_code;
 
-        if (me_code == null || ip == null || port == 0 || course_code == null || session_code == null) {
+        if (username == null || ip == null || port == 0 || course_code == null || session_code == null) {
             this.isLocal = true;
         }
     }
@@ -163,7 +163,7 @@ public class VideoServerInterface extends Service<Image> {
                         continue;
                     }
 //                    System.out.println("VideoServerInterface: c: " + c++);
-                    RequestObject requestObject = new RequestObject(me_code, wanted_code);
+                    RequestObject requestObject = new RequestObject(username, wanted_code);
                     
                     System.out.println("VideoServerInterfaceRequest: wanted_code; " + wanted_code);
 

@@ -130,7 +130,7 @@ public class InvigilateFormController implements Initializable {
         public void startReceive() {
             System.out.println("student's name: " + student.getName());
             System.out.println("InfoPane: " + DatabaseInterface.userCode + " " + student.getUsername() + " " + "localhost" + 6002 + courseCode + sessionCode);
-            serviceReceiveImage = new VideoServerInterface(DatabaseInterface.userCode, student.getUsername(), "localhost", 6002, courseCode, sessionCode);
+            serviceReceiveImage = new VideoServerInterface(DatabaseInterface.username, student.getUsername(), "localhost", 6002, courseCode, sessionCode);
             imgWebcam.imageProperty().bind(serviceReceiveImage.valueProperty());
             serviceReceiveImage.setOnCancelled(new EventHandler<WorkerStateEvent>() {
 

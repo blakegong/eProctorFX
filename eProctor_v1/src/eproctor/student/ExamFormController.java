@@ -232,8 +232,8 @@ public class ExamFormController implements Initializable {
      * @param port connection port
      * @param videoImageView ImageView object
      */
-    public void startServiceSendImage(String user_code, String course_code, String session_code, String ip, int port, ImageView videoImageView) {
-        VideoServerInterface.serviceSendImage = new VideoServerInterface.ServiceSendImage(user_code, ip, port, course_code, session_code);
+    public void startServiceSendImage(String username, String course_code, String session_code, String ip, int port, ImageView videoImageView) {
+        VideoServerInterface.serviceSendImage = new VideoServerInterface.ServiceSendImage(username, ip, port, course_code, session_code);
         videoImageView.imageProperty().bind(VideoServerInterface.serviceSendImage.valueProperty());
         VideoServerInterface.serviceSendImage.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 
