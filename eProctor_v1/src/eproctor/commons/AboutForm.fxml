@@ -10,18 +10,14 @@
 
 <StackPane id="StackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="eproctor.commons.AboutFormController">
   <children>
-    <Hyperlink alignment="CENTER" contentDisplay="CENTER" text="http://google.com/" textAlignment="CENTER" textFill="#003308">
-      <font>
-        <Font name="Consolas Bold" size="14.0" />
-      </font>
-    </Hyperlink>
     <Pane fx:id="backgroundPane" prefHeight="200.0" prefWidth="200.0">
       <children>
-        <Button fx:id="backBtn" contentDisplay="CENTER" layoutX="250.0" layoutY="334.0" mnemonicParsing="false" onAction="#backPressed" prefWidth="100.0" text="Back" textAlignment="CENTER" textFill="#0066ff">
+        <Button fx:id="backBtn" contentDisplay="CENTER" layoutX="250.0" layoutY="334.0" mnemonicParsing="false" onAction="#backPressed" prefWidth="100.0" text="Back" textAlignment="CENTER" textFill="#212f3a">
           <font>
-            <Font name="System Bold" size="14.0" />
+            <Font name="System Bold" size="14.0" fx:id="x1" />
           </font>
         </Button>
+        <Label font="$x1" layoutX="165.0" layoutY="52.0" text="Developed by: &#9;&#9;NTU CE2006 BCE2 &#10;&#9;&#9;&#9;&#9;&#9;rel_like_doc team&#10;&#10;Team leader:&#9;&#9;&#9;Lu Shengliang&#10;&#10;Team members:&#9;&#9;Chen Desheng, &#10;&#9;&#9;&#9;&#9;&#9;Chen Liyang, &#10;&#9;&#9;&#9;&#9;&#9;Gong Yue, &#10;&#9;&#9;&#9;&#9;&#9;Li Zixuan, &#10;&#9;&#9;&#9;&#9;&#9;Peng Lunan, &#10;&#9;&#9;&#9;&#9;&#9;Yuan Zijie" textAlignment="LEFT" textFill="WHITE" wrapText="true" />
       </children>
     </Pane>
   </children>

@@ -186,9 +186,9 @@ public class ProctorFormController implements Initializable {
                 public void handle(ActionEvent event) {
                     count++;
                     if (count < 0) {
-                        lblInfo.setText("time to exam: " + intSecToReadableSecond(-count, 4));
+                        lblInfo.setText("time to exam:\n\t" + intSecToReadableSecond(-count, 4));
                     } else if (count > 0) {
-                        lblInfo.setText("exam has started for " + intSecToReadableSecond(count, 4));
+                        lblInfo.setText("exam has started for\n\t" + intSecToReadableSecond(count, 4));
                     } else {
                         timer.stop();
                         setState();

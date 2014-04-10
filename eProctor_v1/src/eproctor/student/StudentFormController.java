@@ -23,6 +23,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -255,7 +256,7 @@ public class StudentFormController implements Initializable {
                     if (count > 60 * 60) {
                         level = 2;
                     }
-                    lblInfo.setText("time to exam: " + intSecToReadableSecond(count, level));
+                    lblInfo.setText("time to exam:\n\t" + intSecToReadableSecond(count, level));
                 }
             }));
             timer.setCycleCount(count);
@@ -291,7 +292,7 @@ public class StudentFormController implements Initializable {
                 @Override
                 public void handle(ActionEvent event) {
                     count--;
-                    lblInfo.setText("time to exam: " + intSecToReadableSecond(count, 4));
+                    lblInfo.setText("time to exam:\n\t" + intSecToReadableSecond(count, 4));
                 }
             }));
             timer.setCycleCount(count);
@@ -332,7 +333,7 @@ public class StudentFormController implements Initializable {
                 @Override
                 public void handle(ActionEvent event) {
                     count++;
-                    lblInfo.setText("exam has started for " + intSecToReadableSecond(count, 4));
+                    lblInfo.setText("exam has started for\n\t" + intSecToReadableSecond(count, 4));
 
 //                    if (count >= 60 * 15) {
 //                        lblInfo.setText("Exam extrance has closed. (15 mins passed)");
@@ -396,6 +397,8 @@ public class StudentFormController implements Initializable {
         ExamFormController controller = (ExamFormController) loader.getController();
 
         Stage stage = new Stage();
+        stage.setFullScreen(true);
+        stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         stage.setTitle("Examing");
         stage.setScene(examScene);
         stage.show();

@@ -191,10 +191,15 @@ public class LoginFormController implements Initializable {
     private void openFrameForm() throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("FrameForm.fxml"));
         BorderPane mainPane = loader.load();
-        mainPane.setStyle("-fx-background-size: stretch; -fx-background-repeat: stretch; -fx-background-image: url(\"/eproctor/images/studentHome.png\");");
         FrameFormController controller = (FrameFormController) loader.getController();
 
-        Scene frameScene = new Scene(mainPane, 720, 560);
+        int num = 0;
+        if (DatabaseInterface.domain.equals("Student"))
+            num = DatabaseInterface.courseData.size();
+        else
+            num = DatabaseInterface.recordDataProctor.size();
+        num = num < 5 ? 5 : num;
+        Scene frameScene = new Scene(mainPane, 700, 150 +83 * num);
         Stage frameStage = new Stage();
         frameStage.setScene(frameScene);
         frameStage.setResizable(false);
@@ -208,11 +213,8 @@ public class LoginFormController implements Initializable {
                 break;
             case "Proctor":
                 frameStage.setTitle("eProctor Proctor Client");
+                controller.setToolTips();
                 controller.openProctorForm();
-                break;
-            case "Coordinator":
-                frameStage.setTitle("eProctor Coordinator Client");
-                controller.openCoordinatorForm();
                 break;
         }
         selfStage.close();

@@ -9,8 +9,29 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<ScrollPane id="ScrollPane" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="700.0" prefViewportHeight="1412.0" prefViewportWidth="996.0" prefWidth="1200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="eproctor.proctor.InvigilateFormController">
-  <content>
-    <FlowPane fx:id="flowPane" hgap="30.0" prefHeight="740.0" prefWidth="996.0" vgap="30.0" />
-  </content>
-</ScrollPane>
+<BorderPane prefHeight="700.0" prefWidth="1200.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="eproctor.proctor.InvigilateFormController">
+  <center>
+    <ScrollPane id="ScrollPane" prefHeight="2000.0" prefWidth="3000.0">
+      <content>
+        <FlowPane fx:id="flowPane" prefHeight="200.0" prefWidth="200.0" />
+      </content>
+    </ScrollPane>
+  </center>
+  <right>
+    <VBox prefHeight="200.0" prefWidth="200.0" spacing="5.0">
+      <children>
+        <Label text="Notification Messages Sent" />
+        <TextArea prefWidth="200.0" wrapText="true" />
+        <Label text="Input here:" />
+        <TextField prefWidth="200.0" />
+        <Button mnemonicParsing="false" text="Button" />
+      </children>
+      <padding>
+        <Insets left="10.0" right="10.0" top="100.0" />
+      </padding>
+      <BorderPane.margin>
+        <Insets />
+      </BorderPane.margin>
+    </VBox>
+  </right>
+</BorderPane>

@@ -177,11 +177,12 @@ public class InvigilateFormController implements Initializable {
 //            pane.getChildren().addAll(imgWebcam, imgDesktop, bottom);
             pane.getChildren().addAll(imgWebcam, bottom);
             this.setContent(pane);
-            this.setText(student.getUsername());
+            
         }
 
         public void setStudent(DatabaseInterface.StudentRow student) {
             this.student = student;
+            this.setText(student.getUsername());
         }
 
         public void startReceive() {

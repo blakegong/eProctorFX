@@ -1,5 +1,6 @@
 package eproctor.commons;
 
+import eproctor.proctor.ProctorFormController;
 import eproctor.student.ReviewFormController;
 import eproctor.student.StudentFormController;
 import java.io.IOException;
@@ -44,8 +45,10 @@ public class FrameFormController implements Initializable {
 
     @FXML
     private Label settingLabel;
+    
     @FXML
     private Label aboutLabel;
+    
     @FXML
     private Label logoutLabel;
 
@@ -92,22 +95,6 @@ public class FrameFormController implements Initializable {
         }
         mainPane.setCenter(proctorView);
     }
-    
-    /**
-     *
-     */
-    @FXML
-    public void openCoordinatorForm() {
-        if (coordinatorView == null) {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/eproctor/coordinator/CoordinatorForm.fxml"));
-            try {
-                coordinatorView = loader.load();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        mainPane.setCenter(coordinatorView);
-    }
 
     @FXML
     private void openSettingForm() throws Exception {
@@ -136,7 +123,6 @@ public class FrameFormController implements Initializable {
             }
             AboutFormController aboutFormController = loader.getController();
             aboutFormController.setFrameFormController(this);
-            aboutFormController.setBackground();
         }
         mainPane.setCenter(aboutView);
     }
@@ -191,8 +177,6 @@ public class FrameFormController implements Initializable {
      *
      */
     public void setBackground() {
-        mainPane.setStyle("-fx-background-image: url(\"/eproctor/images/studentHome.png\");");
-        System.out.println("mainPane style: " + mainPane.getStyle());
     }
 
     /**
