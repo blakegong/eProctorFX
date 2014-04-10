@@ -1,3 +1,3 @@
 eProctorFX
 ==========
-Let's just make this one awesome >.<
+Please find corresponding packages (for your OS) in the /lib folder.
