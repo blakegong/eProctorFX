@@ -1,9 +1,5 @@
 .root {
-/*<<<<<<< HEAD:eProctor_v1/src/eproctor/commons/LoginForm.css*/
     -fx-background-image: url("/eproctor/images/loginScreen.png");
-/*=======
-    -fx-background-image: url("../images/loginScreen.png");*/
-/*>>>>>>> 0afa6450b8606b1fe257fbb847646e730d0bfe8c:eProctor_v1/src/eproctor/commons/LoginForm.css*/
 }
 
 .default-input {

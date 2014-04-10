@@ -137,7 +137,6 @@ public class ProctorFormController implements Initializable {
                 //open exam
             });
 
-            
             // = = = = = = =
             // start a countDOWN timer
 //            count = (int) ((start.getTime() - new Date().getTime()) / 1000);
@@ -208,7 +207,7 @@ public class ProctorFormController implements Initializable {
             // = = = = = = =
         }
     }
-    
+
     private void openInvigilateForm(DatabaseInterface.RecordRowProctor recordRow) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("InvigilateForm.fxml"));
         Scene invigilateScene = new Scene(loader.load());
@@ -219,7 +218,7 @@ public class ProctorFormController implements Initializable {
         stage.setScene(invigilateScene);
         stage.show();
         controller.setStage(stage);
-        
+
     }
 
     /**

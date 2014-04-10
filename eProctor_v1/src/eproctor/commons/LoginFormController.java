@@ -1,8 +1,5 @@
 package eproctor.commons;
 
-//<<<<<<< HEAD:eProctor_v1/src/eproctor/commons/LoginFormController.java
-import eproctor.student.StudentFormController;
-import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -14,13 +11,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -29,10 +24,10 @@ import javafx.stage.Stage;
 import jfx.messagebox.MessageBox;
 
 /**
- * This class is login Controller class. Control the whole login process
- * It consists exclusively of methods that
- * operate on LoginUI or return java.lang.Object. It contains polymorphic
- * algorithm that operate on collections.
+ * This class is login Controller class. Control the whole login process It
+ * consists exclusively of methods that operate on LoginUI or return
+ * java.lang.Object. It contains polymorphic algorithm that operate on
+ * collections.
  * <p>
  * The methods of this class all throw a <tt>NullPointerException</tt>
  * if the collections or class objects provided to them are null.
@@ -46,19 +41,19 @@ public class LoginFormController implements Initializable {
 
     @FXML
     TextField username;
-    
+
     @FXML
     TextField password;
-    
+
     @FXML
     ChoiceBox choiceType;
-    
+
     @FXML
     private Button buttonLogin;
-    
+
     @FXML
     private Font x1;
-    
+
     @FXML
     private Button buttonExit;
 
@@ -100,10 +95,6 @@ public class LoginFormController implements Initializable {
             protected Void call() throws Exception {
                 if (DatabaseInterface.isUser(choiceType.getValue().toString(), username.getText(), getMD5(password.getText(), true))) {
                     progress0.set(1);
-//<<<<<<< HEAD:eProctor_v1/src/eproctor/commons/LoginFormController.java
-                    DatabaseInterface.updateLocalRecordDataStudent(progress1);
-                    DatabaseInterface.updateLocalCourseDataStudent(progress2);
-//=======
                     switch (DatabaseInterface.domain) {
                         case "Student":
                             DatabaseInterface.updateLocalRecordDataStudent(progress1);
@@ -112,8 +103,10 @@ public class LoginFormController implements Initializable {
                         case "Proctor":
                             DatabaseInterface.updateLocalRecordDataProctor();
                             break;
+//                        case "Coordinator":
+//                            DatabaseInterface.updateLocalRecordDataCoordinator();
+//                            break;
                     }
-//>>>>>>> 0afa6450b8606b1fe257fbb847646e730d0bfe8c:eProctor_v1/src/eproctor/commons/LoginFormController.java
                 } else {
                     MessageBox.show(selfStage,
                             "The username / password you entered is incorrect.\nPlease try again.",
@@ -195,57 +188,18 @@ public class LoginFormController implements Initializable {
         selfStage = stage;
     }
 
-//<<<<<<< HEAD:eProctor_v1/src/eproctor/commons/LoginFormController.java
-//    /**
-//     * This method open StudentForm by initializing a Stage and
-//     * StudentFormController.
-//     * <p>
-//     * Show student home UI after initialization finished.</p>
-//     *
-//     *
-//     * @throws IOException
-//     */
-//    private void openStudentForm() throws Exception {
-//        selfStage.close();
-//
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("student/StudentForm.fxml"));
-//        Parent root = (Parent) loader.load();
-//        StudentFormController controller = (StudentFormController) loader.getController();
-//        Scene scene = new Scene(root);
-//
-//        Stage stage = new Stage();
-//        stage.setTitle("eProctor Student Client");
-//        stage.setResizable(false);
-//        stage.setScene(scene);
-//        stage.show();
-//
-//        controller.setStage(stage);
-//    }
-//
     private void openFrameForm() throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("FrameForm.fxml"));
-//=======
-//    private void openFrameForm() throws Exception {
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("FrameForm.fxml"));
-//>>>>>>> 0afa6450b8606b1fe257fbb847646e730d0bfe8c:eProctor_v1/src/eproctor/commons/LoginFormController.java
         BorderPane mainPane = loader.load();
-        mainPane.setStyle("-fx-background-size: stretch; -fx-background-repeat: stretch; -fx-background-image: url(\"/eproctor/images/loginScreen.png\");");
+        mainPane.setStyle("-fx-background-size: stretch; -fx-background-repeat: stretch; -fx-background-image: url(\"/eproctor/images/studentHome.png\");");
         FrameFormController controller = (FrameFormController) loader.getController();
 
-//<<<<<<< HEAD:eProctor_v1/src/eproctor/commons/LoginFormController.java
-//        Scene frameScene = new Scene(mainPane);
         Scene frameScene = new Scene(mainPane, 720, 560);
-//=======
-//        Scene frameScene = new Scene(mainPane, 715, 560);
-//>>>>>>> 0afa6450b8606b1fe257fbb847646e730d0bfe8c:eProctor_v1/src/eproctor/commons/LoginFormController.java
         Stage frameStage = new Stage();
         frameStage.setScene(frameScene);
         frameStage.setResizable(false);
         frameStage.show();
         controller.setSelfStage(frameStage);
-//<<<<<<< HEAD:eProctor_v1/src/eproctor/commons/LoginFormController.java
-
-//=======
         switch (DatabaseInterface.domain) {
             case "Student":
                 frameStage.setTitle("eProctor Student Client");
@@ -255,8 +209,11 @@ public class LoginFormController implements Initializable {
                 frameStage.setTitle("eProctor Proctor Client");
                 controller.openProctorForm();
                 break;
+            case "Coordinator":
+                frameStage.setTitle("eProctor Coordinator Client");
+                controller.openCoordinatorForm();
+                break;
         }
-//>>>>>>> 0afa6450b8606b1fe257fbb847646e730d0bfe8c:eProctor_v1/src/eproctor/commons/LoginFormController.java
         selfStage.close();
     }
 
@@ -282,7 +239,8 @@ public class LoginFormController implements Initializable {
     }
 
     /**
-     *This is to reformate passing-in bytes
+     * This is to reformate passing-in bytes
+     *
      * @param bytes desired bytes
      * @return hexChars the re-formated bytes as a String
      */

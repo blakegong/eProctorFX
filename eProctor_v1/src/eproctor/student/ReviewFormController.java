@@ -6,10 +6,7 @@
 package eproctor.student;
 
 import eproctor.commons.DatabaseInterface;
-//<<<<<<< HEAD
 import eproctor.commons.FrameFormController;
-//=======
-//>>>>>>> 0afa6450b8606b1fe257fbb847646e730d0bfe8c
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -24,37 +21,41 @@ import javafx.scene.control.Label;
  */
 public class ReviewFormController implements Initializable {
 
-//<<<<<<< HEAD
     private FrameFormController frameFormController;
-
-//=======
-//>>>>>>> 0afa6450b8606b1fe257fbb847646e730d0bfe8c
     private DatabaseInterface.RecordRowStudent recordRow;
     private DatabaseInterface.CourseRow courseRow;
 
     @FXML
     private Label lblId;
+
     @FXML
     private Label lblCourseCode;
+
     @FXML
     private Label lblCourse;
+
     @FXML
     private Label lblSession;
+
     @FXML
     private Label lblProctor;
 //    @FXML
 //    private Label lblLocation;
     @FXML
     private Label lblStartTime;
+
     @FXML
     private Label lblEndTime;
+
     @FXML
     private Label lblGrade;
+
     @FXML
     private Label lblRemark;
+
     @FXML
     private Button goBackButton;
-    
+
     @FXML
     private void goBack() {
         frameFormController.openStudentForm();

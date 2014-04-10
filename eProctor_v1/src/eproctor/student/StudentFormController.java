@@ -1,22 +1,8 @@
-// uncomment:
-//
-//button.setDisable(true); // only can enter once
-//
-//if (count >= 60 * 15) {
-//    lblInfo.setText("Exam extrance has closed. (15 mins passed)");
-//    System.out.println("timer should stop.");
-//    timer.stop();
-//}
 package eproctor.student;
 
 import eproctor.commons.DatabaseInterface;
-//<<<<<<< HEAD
 import eproctor.commons.FrameFormController;
 import static eproctor.commons.Timer.intSecToReadableSecond;
-//=======
-//import static eproctor.commons.Timer.intSecToReadableSecond;
-//import java.io.IOException;
-//>>>>>>> 0afa6450b8606b1fe257fbb847646e730d0bfe8c
 import java.net.URL;
 import java.util.Date;
 import java.util.ResourceBundle;
@@ -25,7 +11,6 @@ import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -33,13 +18,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -133,17 +116,6 @@ public class StudentFormController implements Initializable {
             this.courseRow = courseRow;
             this.recordRow = recordRow;
             setState();
-//            Service<Void> timeService = new Service<Void>() {
-//
-//                private Date start;
-//                private Date end;
-//
-//                @Override
-//                protected Task<Void> createTask() {
-//                    return null;
-//                }
-//
-//            };
         }
 
         /**
@@ -327,11 +299,7 @@ public class StudentFormController implements Initializable {
 
                 @Override
                 public void handle(ActionEvent arg0) {
-//<<<<<<< HEAD
-//                    setStateTesting();
-//=======
                     setState();
-//>>>>>>> 0afa6450b8606b1fe257fbb847646e730d0bfe8c
                 }
             });
             timer.play();
@@ -417,24 +385,7 @@ public class StudentFormController implements Initializable {
         }
     }
 
-//<<<<<<< HEAD
     private void openReviewPane(DatabaseInterface.RecordRowStudent recordRow, DatabaseInterface.CourseRow courseRow) throws Exception {
-//=======
-//    private void openReviewPane(DatabaseInterface.RecordRowStudent recordRow, DatabaseInterface.CourseRow courseRow) throws Exception {
-//>>>>>>> 0afa6450b8606b1fe257fbb847646e730d0bfe8c
-//        System.out.println("inside");
-//        AnchorPane pane = new AnchorPane();
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("ReviewForm.fxml"));
-//        ReviewFormController controller = (ReviewFormController) loader.getController();
-//        controller.setRecordRow(recordRow);
-//        controller.setCourseRow(courseRow);
-//        controller.updateDetails();
-//        try {
-//            pane = loader.load();
-//        } catch (IOException ex) {
-//            ex.printStackTrace();
-//        }
-//        rightPane.getChildren().setAll(pane);
         frameFormController.openReviewView(recordRow, courseRow);
     }
 

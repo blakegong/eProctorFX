@@ -29,7 +29,6 @@ public class VideoServerInterface {
     public static String course_code, session_code;
 
     public static ServiceSendImage serviceSendImage;
-    
 
     /**
      * This is a static class extends from Service. One object of this class
@@ -45,8 +44,8 @@ public class VideoServerInterface {
         private String course_code;
         private String session_code;
         public boolean isLocal;
-        
-        public ServiceSendImage (String me, String ip, int port, String course_code, String session_code) {
+
+        public ServiceSendImage(String me, String ip, int port, String course_code, String session_code) {
             this.me = me;
             this.ip = ip;
             this.port = port;
@@ -61,19 +60,19 @@ public class VideoServerInterface {
                 @Override
                 protected Image call() throws Exception {
                     initGrabber();
-                    
+
                     if (grabber == null) {
                         super.failed();
                         System.out.println("ServiceSendImage: super.failed()");
                         return null;
                     }
-                    
+
                     grabber.start();
                     IplImage img;
                     BufferedImage buf;
-                    
+
                     System.out.println("video: islocal: " + isLocal);
-                                        
+
                     while (true) {
                         img = grabber.grab();
                         cvFlip(img, img, 1);// l-r = 90_degrees_steps_anti_clockwise
@@ -109,7 +108,7 @@ public class VideoServerInterface {
             sOutput.writeObject(recordObject);
             socket.close();
         }
-        
+
         public void initGrabber() {
             try {
                 grabber = FrameGrabber.createDefault(0);
@@ -117,7 +116,7 @@ public class VideoServerInterface {
                 ex.printStackTrace();
             }
         }
-        
+
         public FrameGrabber getGrabber() {
             return grabber;
         }
