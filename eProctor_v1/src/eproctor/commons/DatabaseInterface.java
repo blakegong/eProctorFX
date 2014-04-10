@@ -478,14 +478,6 @@ public class DatabaseInterface {
     }
 
     /**
-     * This is the Constructor of DatabaseInterface class Suppresses default
-     * constructor, ensuring non-instantiation.
-     */
-    public DatabaseInterface() {
-        
-    }
-
-    /**
      * This class will handle the fetching message services extending from
      * Service by using polling message from server/database.
      */
@@ -620,6 +612,16 @@ public class DatabaseInterface {
             };
         }
     }
+
+    
+    /**
+     * This is the Constructor of DatabaseInterface class Suppresses default
+     * constructor, ensuring non-instantiation.
+     */
+    public DatabaseInterface() {
+        
+    }
+
 
     /**
      * This class is the data container of student review UI table row.

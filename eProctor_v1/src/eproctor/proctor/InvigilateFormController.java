@@ -10,6 +10,7 @@ import eproctor.commons.VideoServerInterface;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
@@ -17,8 +18,11 @@ import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Separator;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
@@ -81,11 +85,12 @@ public class InvigilateFormController implements Initializable {
 
         private ImageView imgWebcam;
 //        private ImageView imgDesktop;
-        private Button btnTerminate;
+//        private Button btnTerminate;
         private TextArea msgReceived;
         private TextField msgToSend;
         private Button btnSend;
         private VideoServerInterface serviceReceiveImage;
+        private ChoiceBox msgType;
 
         public InfoPane() {
             initializeUI();
@@ -94,18 +99,26 @@ public class InvigilateFormController implements Initializable {
         private void initializeUI() {
             btnSend = new Button("Send");
             msgReceived = new TextArea();
-            msgReceived.setMinWidth(200);
+            msgReceived.setMinWidth(170);
             msgToSend = new TextField();
-            msgToSend.setMinWidth(200);
-            VBox chatBox = new VBox();
+            msgToSend.setMinWidth(180);
+            VBox chatBox = new VBox(5);
             chatBox.setAlignment(Pos.BOTTOM_RIGHT);
-            chatBox.setMaxSize(200, 100);
-            chatBox.getChildren().addAll(msgReceived, msgToSend, btnSend);
-            btnTerminate = new Button("Terminate Exam");
-            HBox bottom = new HBox(50);
+            chatBox.setMaxSize(180, 80);
+            Separator separator = new Separator();
+            separator.setOrientation(Orientation.VERTICAL);
+            msgType = new ChoiceBox(FXCollections.observableArrayList("First", "Second", "Third"));
+            msgType.setMinWidth(100);
+            HBox sendLine = new HBox(20);
+            sendLine.getChildren().addAll(msgType, btnSend);
+            chatBox.getChildren().addAll(msgToSend, sendLine);
+//            btnTerminate = new Button("Terminate Exam");
+            HBox bottom = new HBox();
             bottom.setAlignment(Pos.CENTER);
             bottom.setMinSize(400, 100);
-            bottom.getChildren().addAll(btnTerminate, chatBox);
+            bottom.setMaxSize(400, 100);
+//            bottom.getChildren().addAll(btnTerminate, chatBox);
+            bottom.getChildren().addAll(msgReceived, separator, chatBox);
             Image image1 = new Image("/eproctor/images/studentHome.png");
             imgWebcam = new ImageView();
             imgWebcam.setImage(image1);
@@ -157,5 +170,7 @@ public class InvigilateFormController implements Initializable {
             });
             serviceReceiveImage.start();
         }
+    
+        
     }
 }
