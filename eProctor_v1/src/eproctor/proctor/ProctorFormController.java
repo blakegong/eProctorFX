@@ -70,7 +70,6 @@ public class ProctorFormController implements Initializable {
         private Label lblCourseCode;
         private Label lblCourseName;
         private Label lblInfo;
-        private ChoiceBox choiceBox;
         private Button button;
         private ProgressIndicator indicator;
         private DatabaseInterface.RecordRowProctor recordRow;
@@ -101,7 +100,8 @@ public class ProctorFormController implements Initializable {
             button = new Button();
             button.setMinWidth(150);
             button.setId("button");
-            
+            indicator = new ProgressIndicator();
+            indicator.setVisible(false);
             this.recordRow = recordRow;
             setState();
         }
@@ -118,6 +118,7 @@ public class ProctorFormController implements Initializable {
             if (start.after(current)) {
                 setStateBookedReady();
             } else if (end.before(current)) {
+                System.out.println("haha");
 //                setStateReview();
             } else {
                 setStateTesting();
@@ -167,7 +168,7 @@ public class ProctorFormController implements Initializable {
             this.getChildren().remove(0, this.getChildren().size());
             this.getChildren().addAll(lblCourseCode, tempVbox, button, indicator);
             lblInfo.setText("00:43:54 until the exam ends");
-            button.setText("Exam");
+            button.setText("Invigilate");
             button.setOnAction((ActionEvent e) -> {
                 try {
                     openInvigilateForm(recordRow);
@@ -210,12 +211,12 @@ public class ProctorFormController implements Initializable {
     
     private void openInvigilateForm(DatabaseInterface.RecordRowProctor recordRow) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("InvigilateForm.fxml"));
-        Scene examScene = new Scene(loader.load());
+        Scene invigilateScene = new Scene(loader.load());
         InvigilateFormController controller = (InvigilateFormController) loader.getController();
 
         Stage stage = new Stage();
         stage.setTitle("Invigilating");
-        stage.setScene(examScene);
+        stage.setScene(invigilateScene);
         stage.show();
         controller.setStage(stage);
         

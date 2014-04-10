@@ -72,14 +72,14 @@ public class InvigilateFormController implements Initializable {
             bottom.setAlignment(Pos.CENTER);
             bottom.setMinSize(400, 100);
             bottom.getChildren().addAll(btnTerminate, chatBox);
-            Image image1 = new Image("../images/studentHome.png");
+            Image image1 = new Image("/eproctor/images/studentHome.png");
             imgWebcam = new ImageView();
             imgWebcam.setImage(image1);
             imgWebcam.setFitWidth(400);
             imgWebcam.setFitHeight(300);
-//            Image image2 = new Image(getClass().getResourceAsStream("../images/loginScreen.png"));
+            Image image2 = new Image("/eproctor/images/loginScreen.png");
             imgDesktop = new ImageView();
-//            imgDesktop.setImage(image2);
+            imgDesktop.setImage(image2);
             imgDesktop.setFitWidth(400);
             imgDesktop.setFitHeight(300);
             VBox pane = new VBox();
