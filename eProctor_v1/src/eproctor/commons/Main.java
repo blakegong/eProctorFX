@@ -1,14 +1,6 @@
 package eproctor.commons;
 
-//<<<<<<< HEAD:eProctor_v1/src/eproctor/commons/Main.java
-import java.io.File;
-import java.io.FileNotFoundException;
-//=======
-//>>>>>>> 0afa6450b8606b1fe257fbb847646e730d0bfe8c:eProctor_v1/src/eproctor/commons/Main.java
 import java.io.IOException;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -25,21 +17,7 @@ import javafx.stage.StageStyle;
 public class Main extends Application {
 
     @Override
-    public void start(Stage stage) throws Exception {
-        File config = new File("/eproctor/eProctor.configuration");
-        Scanner sc = null;
-        try {
-            sc = new Scanner(config);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(SettingFormController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        while (sc != null && sc.hasNext()) {
-            System.out.println(sc.next());
-        }
-        System.out.println("no more.");
-        
-        
+    public void start(Stage stage) throws Exception {    
         showLogin(stage);
         DatabaseInterface.connectEProctorServer();
         DatabaseInterface.connectSchoolServer();
@@ -58,11 +36,7 @@ public class Main extends Application {
     * @throws IOException 
     */
     private void showLogin(Stage stage) throws IOException {
-//<<<<<<< HEAD:eProctor_v1/src/eproctor/commons/Main.java
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/eproctor/commons/LoginForm.fxml"));
-//=======
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginForm.fxml"));
-//>>>>>>> 0afa6450b8606b1fe257fbb847646e730d0bfe8c:eProctor_v1/src/eproctor/commons/Main.java
         Parent root = (Parent) loader.load();
         LoginFormController controller = (LoginFormController) loader.getController();
         controller.setStage(stage);

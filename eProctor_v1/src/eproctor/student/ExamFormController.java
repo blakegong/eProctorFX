@@ -1,5 +1,6 @@
 package eproctor.student;
 
+import eproctor.commons.VideoServerInterface;
 import eproctor.commons.Timer;
 import eproctor.commons.DatabaseInterface;
 import com.googlecode.javacv.FrameGrabber;

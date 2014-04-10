@@ -1,8 +1,7 @@
 package eproctor.commons;
 
 import com.googlecode.javacv.FrameGrabber;
-import eproctor.student.VideoServerInterface;
-import eproctor.student.VideoServerInterface.ServiceSendImage;
+import eproctor.commons.VideoServerInterface.ServiceSendImage;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -63,7 +62,7 @@ public class SettingFormController implements Initializable {
         if (file != null) {
             try {
                 desktop.open(file);
-                update("backgroundMusic", file.getPath());
+//                update("backgroundMusic", file.getPath());
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -81,7 +80,6 @@ public class SettingFormController implements Initializable {
             testCameraTB.setText("Test Camera");
         } else {
             VideoServerInterface.serviceSendImage = new ServiceSendImage(null, null, 0, null, null);
-            VideoServerInterface.serviceSendImage.isLocal = true;
             cameraImageView.imageProperty().bind(VideoServerInterface.serviceSendImage.valueProperty());
             VideoServerInterface.serviceSendImage.setOnCancelled(new EventHandler<WorkerStateEvent>() {
 

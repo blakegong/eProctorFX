@@ -217,12 +217,19 @@ public class DatabaseInterface {
             SessionRow sessionRow = new SessionRow(((ObjectId) sessionObj.get("_id")).toString(), (String) sessionObj.get("code"), (Date) sessionObj.get("start"), (Date) sessionObj.get("end"), (String) sessionObj.get("location"));
 
             ArrayList<StudentRow> studentList = new ArrayList();
-            QueryBuilder studentQb = new QueryBuilder();
-            studentQb.put("course_code").is(recordObj.get("course_code")).put("session_code").is(recordObj.get("session_code"));
-            DBCursor studentCursor = record.find(studentQb.get());
+            BasicDBObject queryTemp = new BasicDBObject("course_code", recordObj.get("course_code")).append("session_code", recordObj.get("session_code"))
+                    .append("student_code", new BasicDBObject("$exists", true));
+            System.out.println("queryTemp: \n" + queryTemp);
+            DBCursor studentCursor = record.find(queryTemp);
             while (studentCursor.hasNext()) {
                 DBObject studentObj = studentCursor.next();
-                StudentRow temp = new StudentRow((String) studentObj.get("username"), (String) studentObj.get("name"));
+                QueryBuilder qbStudent = new QueryBuilder();
+                qbStudent.put("user_code").is(studentObj.get("student_code"));
+                System.out.println("qbStudent: \n" + qbStudent.get());
+                DBObject dboStudent = student.findOne(qbStudent.get());
+                System.out.println("updateLocalRecordDataProctor: studentObj: " + studentObj);
+                System.out.println("updateLocalRecordDataProctor: dboStudent: " + dboStudent);
+                StudentRow temp = new StudentRow((String) dboStudent.get("username"), (String) dboStudent.get("name"));
                 studentList.add(temp);
             }
             recordDataProctor.add(new RecordRowProctor(((ObjectId) recordObj.get("_id")).toString(), courseRow, sessionRow, (String) recordObj.get("proctor_code"), studentList));
@@ -514,7 +521,7 @@ public class DatabaseInterface {
 //                        this.updateMessage(test++ + " test wrapping test wrapping test wrapping test wrapping test wrapping\n test scrolling\n test scrolling\n test scrolling\n test scrolling\n test scrolling\n test scrolling\n test scrolling\n");
 
                         status = Integer.parseInt(msg.split("#")[1]);
-                        System.out.println("ServiceFetchMsg: status: " + status);
+//                        System.out.println("ServiceFetchMsg: status: " + status);
 //                        status = test % 2;
 //                        if (test == 5)
 //                            status = 2;
@@ -607,10 +614,7 @@ public class DatabaseInterface {
             return new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {
-//                    for (int i = 0; i < 10; i++) {
-//                        Thread.sleep(100);
-//                    }
-                    boolean result = sendMessage(me, course_code, session_code, receiver_code, text, time, type);
+                    boolean result = sendMessage(me, receiver_code, course_code, session_code, text, time, type);
                     return null;
                 }
             };

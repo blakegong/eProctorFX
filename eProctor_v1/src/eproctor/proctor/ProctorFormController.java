@@ -145,7 +145,7 @@ public class ProctorFormController implements Initializable {
                 @Override
                 public void handle(ActionEvent event) {
                     count--;
-                    System.out.println("count: " + count);
+//                    System.out.println("count: " + count);
                     lblInfo.setText("time to exam: " + intSecToReadableSecond(count, 4));
                 }
             }));
@@ -184,7 +184,7 @@ public class ProctorFormController implements Initializable {
                 @Override
                 public void handle(ActionEvent event) {
                     count++;
-                    System.out.println("count: " + count);
+//                    System.out.println("count: " + count);
                     lblInfo.setText("exam has started for " + intSecToReadableSecond(count, 4));
 
                     if (count >= 60 * 15) {
@@ -218,7 +218,10 @@ public class ProctorFormController implements Initializable {
         stage.setScene(invigilateScene);
         stage.show();
         controller.setStage(stage);
-
+        controller.setCourseCode(recordRow.getCourse().getCode());
+        controller.setSessionCode(recordRow.getSession().getCode());
+        controller.setStudents(recordRow.getStudentList());
+        controller.showStudents();
     }
 
     /**

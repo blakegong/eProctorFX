@@ -203,6 +203,7 @@ public class LoginFormController implements Initializable {
         switch (DatabaseInterface.domain) {
             case "Student":
                 frameStage.setTitle("eProctor Student Client");
+                controller.setToolTips();
                 controller.openStudentForm();
                 break;
             case "Proctor":
