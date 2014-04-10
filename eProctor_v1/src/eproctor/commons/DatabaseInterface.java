@@ -37,8 +37,8 @@ public class DatabaseInterface {
     private static DBCollection user, record, course, session, student, proctor, message;
     public static String domain, username, password, userCode;
     private static List<RecordRowStudent> recordDataStudent;
-    private static List<RecordRowProctor> recordDataProctor;
-    private static List<CourseRow> courseData;
+    public static List<RecordRowProctor> recordDataProctor;
+    public static List<CourseRow> courseData;
     public static ServiceSendMsg serviceSendMsg;
     public static ServiceFetchMsg serviceFetchMsg;
 

@@ -12,5 +12,9 @@
 }*/
 
 .BorderPane {
-    -fx-background-image: url("/eproctor/images/studentHome.png");
+    /*-fx-background-image: url("/eproctor/images/studentHome.png");*/
+}
+
+#hboxFramePaneTitle {
+    -fx-background-image: url("/eproctor/images/framePaneTitle.png");
 }

@@ -38,10 +38,6 @@ public class ReviewFormController implements Initializable {
     private Label lblSession;
 
     @FXML
-    private Label lblProctor;
-//    @FXML
-//    private Label lblLocation;
-    @FXML
     private Label lblStartTime;
 
     @FXML

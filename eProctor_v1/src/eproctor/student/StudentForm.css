@@ -11,14 +11,14 @@
     
 }
 #vbox {
-    -fx-padding: 10;
+    -fx-padding: 0;
 }
 #hbox {
     -fx-alignment: center-left;
     -fx-padding: 15;
-    -fx-border-color: #006D4F;
+    -fx-border-color: #148C56;
     /*-fx-background-insets: 15;*/
-    -fx-background-color: #00A779;
+    -fx-background-color: #3FC087;
 }
 #courseCode {
     -fx-text-fill: white;

@@ -11,7 +11,7 @@
     
 }
 #vbox {
-    -fx-padding: 10;
+    -fx-padding: 0;
 }
 #hbox {
     -fx-alignment: center-left;

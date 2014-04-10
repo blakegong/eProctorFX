@@ -11,7 +11,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -195,7 +194,7 @@ public class FrameFormController implements Initializable {
      *
      */
     public void setBackground() {
-        mainPane.setStyle("-fx-background-image: url(\"/eproctor/images/studentHome.png\");");
+        mainPane.setStyle("-fx-background-image: url(\"/eproctor/images/studentHome.png\");"); // not working
         System.out.println("mainPane style: " + mainPane.getStyle());
     }
 
