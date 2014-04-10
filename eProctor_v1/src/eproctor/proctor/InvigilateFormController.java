@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package eproctor.proctor;
 
 import java.net.URL;
@@ -30,10 +29,10 @@ import javafx.stage.Stage;
 public class InvigilateFormController implements Initializable {
 
     private Stage selfStage;
-    
+
     @FXML
     FlowPane flowPane;
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -44,19 +43,20 @@ public class InvigilateFormController implements Initializable {
     void setStage(Stage stage) {
         selfStage = stage;
     }
-    
+
     public class InfoPane extends TitledPane {
+
         private ImageView imgWebcam;
         private ImageView imgDesktop;
         private Button btnTerminate;
         private TextArea msgReceived;
         private TextField msgToSend;
         private Button btnSend;
-        
+
         public InfoPane() {
             initializeUI();
         }
-        
+
         private void initializeUI() {
             btnSend = new Button("Send");
             msgReceived = new TextArea();
@@ -88,7 +88,7 @@ public class InvigilateFormController implements Initializable {
             this.setContent(pane);
             this.setText("gong0025");
         }
-        
+
     }
-    
+
 }

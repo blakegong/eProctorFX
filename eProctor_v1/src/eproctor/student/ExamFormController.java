@@ -1,12 +1,8 @@
 package eproctor.student;
 
-//<<<<<<< HEAD
 import eproctor.commons.Timer;
-//=======
-//>>>>>>> 0afa6450b8606b1fe257fbb847646e730d0bfe8c
 import eproctor.commons.DatabaseInterface;
 import com.googlecode.javacv.FrameGrabber;
-import static eproctor.commons.Timer.intSecToReadableSecond;
 import java.net.URL;
 import java.util.Date;
 import java.util.ResourceBundle;
@@ -51,20 +47,28 @@ public class ExamFormController implements Initializable {
 
     @FXML
     private WebView browser;
+
     @FXML
     private TextArea msgReceived;
+
     @FXML
     private TextField msgToSend;
+
     @FXML
     private ProgressIndicator msgProgressIndicator;
+
     @FXML
     private Button msgSendButton;
+
     @FXML
     protected ImageView videoImageView;
+
     @FXML
     private Label statusLabel;
+
     @FXML
     private Label timeLabel;
+
     @FXML
     private Button exitButton;
 
@@ -73,7 +77,7 @@ public class ExamFormController implements Initializable {
         msgSendButton.setDisable(true);
         // random a proctor
         String receiver_code = "NTUP3891093T";
-        DatabaseInterface.serviceSendMsg = new DatabaseInterface.ServiceSendMsg(DatabaseInterface.userCode, receiver_code,courseRow.getCode(), sessionRow.getCode(), msgToSend.getText(), new Date(), 0);
+        DatabaseInterface.serviceSendMsg = new DatabaseInterface.ServiceSendMsg(DatabaseInterface.userCode, receiver_code, courseRow.getCode(), sessionRow.getCode(), msgToSend.getText(), new Date(), 0);
         DatabaseInterface.serviceSendMsg.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 
             @Override
@@ -118,7 +122,6 @@ public class ExamFormController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-//        browser = new WebView();
         WebEngine webEngine = browser.getEngine();
         webEngine.load("https://www.google.com.sg/#q=nanshen+memeda");
     }

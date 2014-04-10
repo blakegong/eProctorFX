@@ -16,6 +16,7 @@
         <FXCollections fx:factory="observableArrayList">
           <String fx:value="Student" />
           <String fx:value="Proctor" />
+          <String fx:value="Coordinator" />
         </FXCollections>
       </items>
     </ChoiceBox>

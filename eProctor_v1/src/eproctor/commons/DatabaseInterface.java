@@ -1,19 +1,23 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package eproctor.commons;
 
-import com.mongodb.*;
-//<<<<<<< HEAD:eProctor_v1/src/eproctor/commons/DatabaseInterface.java
-//=======
+import com.mongodb.BasicDBList;
+import com.mongodb.BasicDBObject;
+import com.mongodb.BasicDBObjectBuilder;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
+import com.mongodb.QueryBuilder;
+import com.mongodb.WriteResult;
 import eproctor.proctor.ProctorFormController;
-//>>>>>>> 0afa6450b8606b1fe257fbb847646e730d0bfe8c:eProctor_v1/src/eproctor/commons/DatabaseInterface.java
 import eproctor.student.StudentFormController;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
@@ -31,52 +35,19 @@ import org.bson.types.ObjectId;
 public class DatabaseInterface {
 
     private static DBCollection user, record, course, session, student, proctor, message;
-    public static String domain,
-
-    username,
-
-    /**
-     *
-     */
-    password,
-
-    /**
-     *
-     */
-    userCode;
-//    private static String examCourseCode, examSessionCode, examProctor, examStudent;
+    public static String domain, username, password, userCode;
     private static List<RecordRowStudent> recordDataStudent;
     private static List<RecordRowProctor> recordDataProctor;
     private static List<CourseRow> courseData;
-//<<<<<<< HEAD:eProctor_v1/src/eproctor/commons/DatabaseInterface.java
-//    public static ServiceSendMsg serviceSendMsg;
-//=======
-
-    /**
-     *
-     */
     public static ServiceSendMsg serviceSendMsg;
-
-    /**
-     *
-     */
-//>>>>>>> 0afa6450b8606b1fe257fbb847646e730d0bfe8c:eProctor_v1/src/eproctor/commons/DatabaseInterface.java
     public static ServiceFetchMsg serviceFetchMsg;
-
-    /**
-     * This is the Constructor of DatabaseInterface class Suppresses default
-     * constructor, ensuring non-instantiation.
-     */
-    public DatabaseInterface() {
-        
-    }
 
     /**
      * This method sets courseData into appropriate format and pass it to UI and
      * its controller.
      *
      * @param controller Controller for Student form
-     * @param infoData Observablelist of student information
+     * @param infoData ObservableList of student information
      */
     public static void getInfoDataStudent(StudentFormController controller, ObservableList<Node> infoData) {
         for (CourseRow courseRow : courseData) {
@@ -153,7 +124,7 @@ public class DatabaseInterface {
             case "Proctor":
                 obj = proctor.findOne(qb.get());
                 break;
-            default://search in a non exist db
+            default://search in a non exist db, so can return null
                 obj = record.findOne(qb.get());
                 break;
         }
@@ -187,7 +158,7 @@ public class DatabaseInterface {
         QueryBuilder recordQb = new QueryBuilder();
         //TODO diff domain
         recordQb.put("student_code").is(userCode);
-        
+
         System.out.println("updateLocalRecordData: query: " + recordQb.get());
         DBCursor recordCursor = record.find(recordQb.get());
 
@@ -197,15 +168,6 @@ public class DatabaseInterface {
         }
 
         while (recordCursor.hasNext()) {
-//            BasicDBObject queryOrOr = new BasicDBObject();
-//            while (recordCursor.hasNext()) {
-//                DBObject temp = recordCursor.next();
-//                queryOrOr.append("code", temp.get("course_code"));
-//            }
-//            BasicDBObject query = new BasicDBObject("$or", queryOrOr);
-//            DBCursor cur = course.findOne(query);
-
-            ////
             DBObject recordObj = recordCursor.next();
             QueryBuilder courseQb = new QueryBuilder();
             courseQb.put("code").is(recordObj.get("course_code"));
@@ -318,24 +280,15 @@ public class DatabaseInterface {
             progress.set(1);
         }
     }
-
+    
     /**
      * This method works as an interface to update user data onto database
      * <p>
      * data contains student info, course info and proctor info
      */
     public static void updateLocalDataStudent() {
-//<<<<<<< HEAD:eProctor_v1/src/eproctor/commons/DatabaseInterface.java
-//        if (domain.equals("Student")) {
-//            updateLocalRecordDataStudent(null);
-//            updateLocalCourseDataStudent(null);
-//        } else {
-//            updateLocalRecordDataProctor();
-//        }
-//=======
         updateLocalRecordDataStudent(null);
         updateLocalCourseDataStudent(null);
-//>>>>>>> 0afa6450b8606b1fe257fbb847646e730d0bfe8c:eProctor_v1/src/eproctor/commons/DatabaseInterface.java
     }
 
     /**
@@ -344,7 +297,7 @@ public class DatabaseInterface {
     public static void updateLocalDataProctor() {
         updateLocalRecordDataProctor();
     }
-    
+
     /**
      * This method is to get the message (course info) and displaying on the
      * screen
@@ -458,9 +411,9 @@ public class DatabaseInterface {
         orArray[0] = new BasicDBObject("receiver_code", me);
         orArray[1] = new BasicDBObject("sender_code", me);
         BasicDBObject query = new BasicDBObject("course_code", course_code)
-                                        .append("session_code", session_code)
-                                        .append("$or", orArray);
-        
+                .append("session_code", session_code)
+                .append("$or", orArray);
+
 //        System.out.println("pullMessage: query: " + query);
         DBCursor cur = message.find(query).sort(new BasicDBObject("time", 1));
 
@@ -473,41 +426,41 @@ public class DatabaseInterface {
             String msgTemp = "";
 
             if (status < (int) temp.get("type")) // get a worest status;
+            {
                 status = (int) temp.get("type");
-//            System.out.println("pullMessage: status: " + status); 
+            }
+//            System.out.println("pullMessage: status: " + status);
 
-            msgTemp = "sender_code: " + getName((String)temp.get("sender_code"))
-                    + "\nreceiver_code: " + getName((String)temp.get("receiver_code"))
+            msgTemp = "sender_code: " + getName((String) temp.get("sender_code"))
+                    + "\nreceiver_code: " + getName((String) temp.get("receiver_code"))
                     + "\ntime; " + temp.get("time")
                     + "\n\t\"" + temp.get("text") + "\"";
-            
-            if ((int)temp.get("type") == 1)
+
+            if ((int) temp.get("type") == 1) {
                 msgTemp += "\n(it is a warning!)";
-            if ((int)temp.get("type") == 2)
+            }
+            if ((int) temp.get("type") == 2) {
                 msgTemp += "\n(you are expelled!)";
+            }
 
             msgAll += msgTemp + "\n\n\n";
         }
-        
+
 //        System.out.println("pullMessage: return: \n" + msgAll + "#" + status);
         return msgAll + "#" + status;
     }
-    
-    public static boolean isProctor() {
-        return true;
-    }
-    
+
     public static String getName(String user_code) {
 //        System.out.println("getName: here");
 //        System.out.println("user_code: " + user_code);
         DBObject result = student.findOne(new BasicDBObject("user_code", user_code));
 //        System.out.println("result: " + result);
-        if (result == null)
+        if (result == null) {
             result = proctor.findOne(new BasicDBObject("user_code", user_code));
+        }
 //        System.out.println("getName: name: " + (String)result.get("name"));
-        return (String)result.get("name");
-        
-        
+        return (String) result.get("name");
+
 //        System.out.println("getName: here");
 //        DBObject result = proctor.findOne(new BasicDBObject("user_code", "NTUU1220495H"));
 //        System.out.println("result: " + result);
@@ -515,6 +468,14 @@ public class DatabaseInterface {
 //            result = student.findOne(new BasicDBObject("user_code", "NTUU1220495H"));
 //        System.out.println("getName: name: " + (String)result.get("name"));
 //        return (String)result.get("name");
+    }
+
+    /**
+     * This is the Constructor of DatabaseInterface class Suppresses default
+     * constructor, ensuring non-instantiation.
+     */
+    public DatabaseInterface() {
+        
     }
 
     /**
@@ -526,17 +487,13 @@ public class DatabaseInterface {
         private String me;
         private String course_code;
         private String session_code;
-//<<<<<<< HEAD:eProctor_v1/src/eproctor/commons/DatabaseInterface.java
 
-//=======
-        
         /**
          *
          * @param me
          * @param course_code
          * @param session_code
          */
-//>>>>>>> 0afa6450b8606b1fe257fbb847646e730d0bfe8c:eProctor_v1/src/eproctor/commons/DatabaseInterface.java
         public ServiceFetchMsg(String me, String course_code, String session_code) {
             this.setMe(me);
             this.setCourse_code(course_code);
@@ -634,7 +591,7 @@ public class DatabaseInterface {
         private String text;
         private Date time;
         private int type;
-        
+
         public ServiceSendMsg(String me, String receiver_code, String course_code, String session_code, String text, Date time, int type) {
             this.me = me;
             this.course_code = course_code;
@@ -653,7 +610,7 @@ public class DatabaseInterface {
 //                    for (int i = 0; i < 10; i++) {
 //                        Thread.sleep(100);
 //                    }
-                    boolean result = sendMessage(me, course_code, session_code, receiver_code, text, time, type);                 
+                    boolean result = sendMessage(me, course_code, session_code, receiver_code, text, time, type);
                     return null;
                 }
             };
@@ -663,8 +620,8 @@ public class DatabaseInterface {
     /**
      * This class is the data container of student review UI table row.
      * <p>
- one RecordRowStudent object contains record id, course code, session code,
- student id, student grade and exam remark.</p>
+     * one RecordRowStudent object contains record id, course code, session
+     * code, student id, student grade and exam remark.</p>
      */
     public static class RecordRowStudent {
 
@@ -743,8 +700,8 @@ public class DatabaseInterface {
     /**
      * This class is the data container of proctor review UI table row.
      * <p>
- one RecordRowStudent object contains record id, course code, session code and
- proctor id.</p>
+     * one RecordRowStudent object contains record id, course code, session code
+     * and proctor id.</p>
      */
     public static class RecordRowProctor {
 
@@ -811,14 +768,14 @@ public class DatabaseInterface {
         public ArrayList<StudentRow> getStudentList() {
             return studentList;
         }
-        
+
     }
 
     /**
      * This class is the data container of student booking UI course table row.
      * <p>
- one RecordRowStudent object contains object id, course code, course name and an
- arrayList of exam sessions.</p>
+     * one RecordRowStudent object contains object id, course code, course name
+     * and an arrayList of exam sessions.</p>
      */
     public static class CourseRow {
 
@@ -875,8 +832,8 @@ public class DatabaseInterface {
      * This class is the data container of student booking UI exam session table
      * row.
      * <p>
- one RecordRowStudent object contains object id, course code, start time, end
- time and exam location</p>
+     * one RecordRowStudent object contains object id, course code, start time,
+     * end time and exam location</p>
      */
     public static class SessionRow {
 
@@ -953,12 +910,14 @@ public class DatabaseInterface {
      * This is to set student info including username and password
      */
     public static class StudentRow {
+
         private String username;
         private String name;
 
         /**
-         *Set username and name
-         * @param username a String user use to login 
+         * Set username and name
+         *
+         * @param username a String user use to login
          * @param name a String which is name of user
          */
         public StudentRow(String username, String name) {
@@ -967,7 +926,8 @@ public class DatabaseInterface {
         }
 
         /**
-         *actuator for username
+         * actuator for username
+         *
          * @return user's username
          */
         public String getUsername() {
@@ -975,12 +935,13 @@ public class DatabaseInterface {
         }
 
         /**
-         *actuator for name
+         * actuator for name
+         *
          * @return name of User
          */
         public String getName() {
             return name;
         }
-        
+
     }
 }

@@ -1,9 +1,5 @@
 package eproctor.commons;
 
-//<<<<<<< HEAD:eProctor_v1/src/eproctor/commons/AboutFormController.java
-//=======
-import eproctor.commons.FrameFormController;
-//>>>>>>> 0afa6450b8606b1fe257fbb847646e730d0bfe8c:eProctor_v1/src/eproctor/commons/AboutFormController.java
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -17,23 +13,24 @@ import javafx.scene.layout.Pane;
  * @author CLY
  */
 public class AboutFormController implements Initializable {
+
     private FrameFormController frameFormController;
 
     @FXML
     private Button backBtn;
     @FXML
     private Pane backgroundPane;
-    
+
     @FXML
     private void backPressed() {
         frameFormController.openStudentForm();
     }
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }
-    
+
     /**
      * This method is to set background
      */
@@ -42,7 +39,9 @@ public class AboutFormController implements Initializable {
     }
 
     /**
-     * This method is to set frame form by passing in Frame form Controller in class FrameFormController
+     * This method is to set frame form by passing in Frame form Controller in
+     * class FrameFormController
+     *
      * @param frameFormController
      */
     public void setFrameFormController(FrameFormController frameFormController) {

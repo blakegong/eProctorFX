@@ -1,8 +1,6 @@
 package eproctor.commons;
 
-import eproctor.commons.FrameFormController;
 import com.googlecode.javacv.FrameGrabber;
-import eproctor.student.VideoServerInterface;
 import eproctor.student.VideoServerInterface;
 import eproctor.student.VideoServerInterface.ServiceSendImage;
 import java.awt.Desktop;
@@ -13,8 +11,6 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
@@ -23,7 +19,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -40,18 +35,25 @@ public class SettingFormController implements Initializable {
 
     @FXML
     private VBox settingVB;
+
     @FXML
     private ChoiceBox fontSizeCB;
+
     @FXML
     private ChoiceBox fontFamilyCB;
+
     @FXML
     private ToggleButton nightModeTB;
+
     @FXML
     private Button backgroundMusicButton;
+
     @FXML
     private ImageView cameraImageView;
+
     @FXML
     private ToggleButton testCameraTB;
+
     @FXML
     private Button goBackButton;
 
@@ -117,7 +119,7 @@ public class SettingFormController implements Initializable {
     private void goBack() {
         frameFormController.openStudentForm();
     }
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
