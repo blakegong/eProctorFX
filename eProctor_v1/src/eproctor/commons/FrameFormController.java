@@ -11,6 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -185,16 +186,16 @@ public class FrameFormController implements Initializable {
     }
 
     public void setToolTips() {
-//        this.settingLabel.setTooltip(new Tooltip("Open setting view"));
-//        this.aboutLabel.setTooltip(new Tooltip("Open about view"));
-//        this.logoutLabel.setTooltip(new Tooltip("Log out"));
+        this.settingLabel.setTooltip(new Tooltip("Open setting view"));
+        this.aboutLabel.setTooltip(new Tooltip("Open about view"));
+        this.logoutLabel.setTooltip(new Tooltip("Log out"));
     }
 
     /**
      *
      */
     public void setBackground() {
-        mainPane.setStyle("-fx-background-image: url(\"/eproctor/images/studentHome.png\");"); // not working
+        mainPane.setStyle("-fx-background-image: url(\"/eproctor/images/studentHome.png\");");
         System.out.println("mainPane style: " + mainPane.getStyle());
     }
 
