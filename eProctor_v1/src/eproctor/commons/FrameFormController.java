@@ -45,10 +45,10 @@ public class FrameFormController implements Initializable {
 
     @FXML
     private Label settingLabel;
-    
+
     @FXML
     private Label aboutLabel;
-    
+
     @FXML
     private Label logoutLabel;
 
@@ -62,6 +62,7 @@ public class FrameFormController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }
+
     /**
      *
      */
