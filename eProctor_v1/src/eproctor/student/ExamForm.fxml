@@ -14,7 +14,7 @@
 
 <HBox padding="$x1" prefHeight="-1.0" prefWidth="-1.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="eproctor.student.ExamFormController">
   <children>
-    <WebView fx:id="browser" prefHeight="600.0" prefWidth="800.0">
+    <WebView fx:id="browser" prefHeight="1500.0" prefWidth="3000.0">
       <HBox.margin>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" fx:id="x1" />
       </HBox.margin>
@@ -72,7 +72,7 @@
             </Label>
             <Button fx:id="exitButton" mnemonicParsing="false" onAction="#exitSession" prefHeight="26.0" prefWidth="200.0" text="End exm and exit">
               <VBox.margin>
-                <Insets fx:id="x2" />
+                <Insets fx:id="x3" />
               </VBox.margin>
             </Button>
           </children>

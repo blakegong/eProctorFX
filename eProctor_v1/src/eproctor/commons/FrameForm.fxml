@@ -4,6 +4,7 @@
 <?import java.net.*?>
 <?import java.util.*?>
 <?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
@@ -18,24 +19,33 @@
   <top>
     <HBox id="hboxFramePaneTitle" alignment="BOTTOM_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="710.0" spacing="5.0">
       <children>
-        <ImageView fx:id="aboutImageView" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#openAboutForm" pickOnBounds="true" preserveRatio="true">
-          <image>
-            <Image url="http://png-2.findicons.com/files/icons/2219/dot_pictograms/256/information.png" />
-          </image>
-          <HBox.margin>
-            <Insets fx:id="x1" />
-          </HBox.margin>
-        </ImageView>
-        <ImageView fx:id="settingImageView" disable="false" fitHeight="30.0" fitWidth="30.0" focusTraversable="false" onMouseClicked="#openSettingForm" opacity="1.0" pickOnBounds="true" preserveRatio="true" HBox.margin="$x1">
-          <image>
-            <Image url="http://www.clker.com/cliparts/2/5/7/f/1297719143988960365gear_red.png" backgroundLoading="false" />
-          </image>
-        </ImageView>
-        <ImageView fx:id="logoutImageView" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#logout" pickOnBounds="true" preserveRatio="true">
-          <image>
-            <Image url="http://icons.iconarchive.com/icons/visualpharm/icons8-metro-style/128/System-Logout-icon.png" />
-          </image>
-        </ImageView>
+        <Label fx:id="aboutLabel" onMouseClicked="#openAboutForm" text="">
+          <graphic>
+            <ImageView fx:id="aboutImageView" fitHeight="28.0" fitWidth="41.0" onMouseClicked="#openAboutForm" pickOnBounds="true" preserveRatio="true">
+              <image>
+                <Image url="@../images/iconHelp.png" />
+              </image>
+            </ImageView>
+          </graphic>
+        </Label>
+        <Label fx:id="settingLabel" onMouseClicked="#openSettingForm" text="">
+          <graphic>
+            <ImageView fx:id="settingImageView" disable="false" fitHeight="35.0" fitWidth="30.0" focusTraversable="false" onMouseClicked="#openSettingForm" opacity="1.0" pickOnBounds="true" preserveRatio="true">
+              <image>
+                <Image url="@../images/iconSetting.png" />
+              </image>
+            </ImageView>
+          </graphic>
+        </Label>
+        <Label fx:id="logoutLabel" onMouseClicked="#logout" text="">
+          <graphic>
+            <ImageView fx:id="logoutImageView" fitHeight="30.0" fitWidth="40.999900000002526" onMouseClicked="#logout" pickOnBounds="true" preserveRatio="true">
+              <image>
+                <Image url="@../images/iconLogout.png" />
+              </image>
+            </ImageView>
+          </graphic>
+        </Label>
       </children>
       <padding>
         <Insets fx:id="x2" />

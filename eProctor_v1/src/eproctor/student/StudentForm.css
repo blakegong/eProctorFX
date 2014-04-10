@@ -1,6 +1,5 @@
 .root {
-    -fx-background-color: #212f3a;
-    /*-fx-background-image: url("images/studentHome.png");*/
+
 }
 
 .mainFxmlClass {
@@ -10,9 +9,11 @@
 .default-button {
     
 }
+
 #vbox {
     -fx-padding: 0;
 }
+
 #hbox {
     -fx-alignment: center-left;
     -fx-padding: 15;
@@ -20,6 +21,7 @@
     /*-fx-background-insets: 15;*/
     -fx-background-color: #3FC087;
 }
+
 #courseCode {
     -fx-text-fill: white;
     -fx-font-family: Impact;
@@ -27,16 +29,19 @@
     -fx-font-weight: lighter;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
 }
+
 #courseName {
     -fx-text-fill: white;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
     -fx-font-size: 18;
 }
+
 #info {
     -fx-text-fill: white;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
     -fx-font-size: 12;
 }
+
 #button {
     -fx-background-color: white;
     -fx-border-radius: 4px;
@@ -46,6 +51,7 @@
     -fx-font-size: 16;
     -fx-font-weight: bolder;
 }
+
 #button:hover {
     -fx-background-color: white;
     -fx-border-radius: 4px;
@@ -55,9 +61,11 @@
     -fx-font-size: 16;
     -fx-font-weight: bolder;
 }
+
 #indicator {
     -fx-accent: white;
 }
+
 #choiceBox {
     -fx-background-color: white;
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );

@@ -23,6 +23,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -396,6 +397,8 @@ public class StudentFormController implements Initializable {
         ExamFormController controller = (ExamFormController) loader.getController();
 
         Stage stage = new Stage();
+        stage.setFullScreen(true);
+        stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         stage.setTitle("Examing");
         stage.setScene(examScene);
         stage.show();

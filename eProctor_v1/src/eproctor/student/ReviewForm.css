@@ -9,3 +9,11 @@
 .label {
     -fx-font-size: 14;
 }
+
+#leftLabel {
+    -fx-text-fill: #3FC087;
+}
+
+#rightLabel {
+    -fx-text-fill: white;
+}

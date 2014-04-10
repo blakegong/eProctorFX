@@ -32,13 +32,6 @@ public class AboutFormController implements Initializable {
     }
 
     /**
-     * This method is to set background
-     */
-    public void setBackground() {
-        backgroundPane.setStyle("-fx-background-size: no-repeat; -fx-background-image: url(\"http://files.softicons.com/download/internet-icons/social-sketches-icons-by-an-phan-van/png/256/google.png\")");
-    }
-
-    /**
      * This method is to set frame form by passing in Frame form Controller in
      * class FrameFormController
      *

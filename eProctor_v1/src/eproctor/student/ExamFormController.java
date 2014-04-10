@@ -123,7 +123,7 @@ public class ExamFormController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         WebEngine webEngine = browser.getEngine();
-        webEngine.load("https://www.google.com.sg/#q=nanshen+memeda");
+        webEngine.load("https://docs.google.com/forms/d/1rY8Ic7LRMJFYSHLSN7luMuIv78iC6mywRgstBwd9lgs/viewform");
     }
 
     /**

@@ -1,20 +1,32 @@
-/*
- * Empty Stylesheet file.
- */
-
 .mainFxmlClass {
 
 }
 
-/*#mainPane > .viewport {
-    -fx-background-image: url("images/studentHome.png");
-    -fx-background-repeat: stretch;
-}*/
-
-.BorderPane {
+#BorderPane {
     /*-fx-background-image: url("/eproctor/images/studentHome.png");*/
+    -fx-background-color: #212F3A;
 }
 
 #hboxFramePaneTitle {
     -fx-background-image: url("/eproctor/images/framePaneTitle.png");
+}
+
+#goBackButton {
+    -fx-background-color: white;
+    -fx-border-radius: 4px;
+    -fx-text-fill: rgba(0, 109, 79, 0.8);
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+    -fx-padding: 3;
+    -fx-font-size: 16;
+    -fx-font-weight: bolder;
+}
+
+#goBackButton:hover {
+    -fx-background-color: white;
+    -fx-border-radius: 4px;
+    -fx-text-fill: rgba(0, 109, 79, 1);
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+    -fx-padding: 3;
+    -fx-font-size: 16;
+    -fx-font-weight: bolder;
 }
