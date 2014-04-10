@@ -405,7 +405,7 @@ public class StudentFormController implements Initializable {
         controller.setStage(stage);
 
         controller.startTimer(start, end);
-        controller.startServiceSendImage(DatabaseInterface.username, courseRow.getCode(), sessionRow.getCode(), "localhost", 6001, controller.videoImageView);
+        controller.startServiceSendImage(DatabaseInterface.username, courseRow.getCode(), sessionRow.getCode(), "172.22.81.200", 6001, controller.videoImageView);
         controller.startServiceFetchMsg(courseRow, sessionRow);
     }
 

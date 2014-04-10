@@ -7,4 +7,4 @@ ip=localhost
 port=6002
 nightMode=0
 fontSize=14
-backgroundMusic=
+backgroundMusic=none

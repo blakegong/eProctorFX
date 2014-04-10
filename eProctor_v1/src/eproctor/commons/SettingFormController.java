@@ -129,10 +129,12 @@ public class SettingFormController implements Initializable {
 //        this.cameraImageView.setImage(webcam_icon);
     }
 
-    public void update(String option, String newValue) {
-        String path = "eProctor.configuration";
-        if ("a" != "b")
-            return ;
+    public static void update(String option, String newValue) {
+        String workingDir = System.getProperty("user.dir");
+        String a = System.getProperty("file.separator");
+        String b = workingDir + a + "src" + a + "eproctor" + a + "commons" + a;
+        String path  = b + "eProctor.configuration";
+        System.out.println(path);
         
         File config = new File(path);
         Scanner sc = null;
@@ -153,7 +155,7 @@ public class SettingFormController implements Initializable {
                 String op[] = temp.split("=");
                 if (op[0].equals(option)) {
                     op[1] = newValue;
-                    temp = op[0] + op[1] + "\n";
+                    temp = op[0] + "=" + op[1] + "\n";
                 }
                 s += temp;
             }
@@ -169,8 +171,58 @@ public class SettingFormController implements Initializable {
         if (pw != null) {
             pw.print(comment + s);
         }
+        pw.flush();
+        pw.close();
     }
 
+    public static String getSetting(String option) {
+        String workingDir = System.getProperty("user.dir");
+        String a = System.getProperty("file.separator");
+        String b = workingDir + a + "src" + a + "eproctor" + a + "commons" + a;
+        String path  = b + "eProctor.configuration";
+        System.out.println(path);
+        
+        File config = new File(path);
+        Scanner sc = null;
+        try {
+            sc = new Scanner(config);
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        }
+
+        String s = "";
+        String comment = "";
+        String result = "";
+        while (sc != null && sc.hasNext()) {
+            String temp = sc.nextLine();
+            if (temp.charAt(0) == '#') {
+                comment += temp + "\n";
+            } else {
+                String op[] = temp.split("=");
+                if (op[0].equals(option)) {
+                    result = op[1];
+                    temp = op[0] + "=" + op[1] + "\n";
+                }
+                s += temp;
+            }
+        }
+        System.out.println(s);
+        sc.close();
+        PrintWriter pw = null;
+        try {
+            pw = new PrintWriter(config);
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        }
+        if (pw != null) {
+            pw.print(comment + s);
+        }
+        pw.flush();
+        pw.close();
+        
+        return result;
+    }
+    
     public void setStage(Stage stage) {
         selfStage = stage;
     }

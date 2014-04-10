@@ -35,6 +35,7 @@ import javax.imageio.ImageIO;
 public class VideoServerInterface extends Service<Image> {
 
     public static ServiceSendImage serviceSendImage;
+    public static String ipFromConfig;
 
     /**
      * This is a static class extends from Service. One object of this class
@@ -60,6 +61,9 @@ public class VideoServerInterface extends Service<Image> {
             if (username == null || ip == null || port == 0 || course_code == null || session_code == null) {
                 this.isLocal = true;
             }
+            
+            if (ipFromConfig != null)
+                this.ip = ipFromConfig;
         }
 
         @Override
@@ -185,6 +189,8 @@ public class VideoServerInterface extends Service<Image> {
         if (username == null || ip == null || port == 0 || course_code == null || session_code == null) {
             this.isLocal = true;
         }
+        if (ipFromConfig != null)
+            this.ip = ipFromConfig;
     }
 
     @Override
@@ -204,7 +210,7 @@ public class VideoServerInterface extends Service<Image> {
                     System.out.println("VideoServerInterfaceRequest: wanted_code; " + wanted_code);
 
 //                    System.out.println("VideoServerInterface: c: " + c++);
-                    Socket socket = new Socket("localhost", port);
+                    Socket socket = new Socket(ip, port);
 //                    System.out.println("VideoServerInterface: c: " + c++);
                     ObjectOutputStream sOutput = new ObjectOutputStream(socket.getOutputStream());
 //                    System.out.println("VideoServerInterface: c: " + c++);

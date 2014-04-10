@@ -18,9 +18,13 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {    
+        String ip = SettingFormController.getSetting("ip");
+        
         showLogin(stage);
         DatabaseInterface.connectEProctorServer();
         DatabaseInterface.connectSchoolServer();
+        
+        VideoServerInterface.ipFromConfig = ip;
     }
 
     /**
