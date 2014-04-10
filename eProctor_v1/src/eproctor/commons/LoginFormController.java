@@ -92,6 +92,15 @@ public class LoginFormController implements Initializable {
             }
 
             @Override
+            protected void failed() {
+                MessageBox.show(selfStage,
+                            "The username / password you entered is incorrect.\nPlease try again.",
+                            "Please re-enter your username / password",
+                            MessageBox.ICON_INFORMATION);
+                    buttonLogin.setDisable(false);
+            }
+            
+            @Override
             protected Void call() throws Exception {
                 if (DatabaseInterface.isUser(choiceType.getValue().toString(), username.getText(), getMD5(password.getText(), true))) {
                     progress0.set(1);
@@ -108,11 +117,7 @@ public class LoginFormController implements Initializable {
 //                            break;
                     }
                 } else {
-                    MessageBox.show(selfStage,
-                            "The username / password you entered is incorrect.\nPlease try again.",
-                            "Please re-enter your username / password",
-                            MessageBox.ICON_INFORMATION);
-                    buttonLogin.setDisable(false);
+                    this.failed();
                 }
 
                 return null;
@@ -199,7 +204,7 @@ public class LoginFormController implements Initializable {
         else
             num = DatabaseInterface.recordDataProctor.size();
         num = num < 5 ? 5 : num;
-        Scene frameScene = new Scene(mainPane, 700, 150 +83 * num);
+        Scene frameScene = new Scene(mainPane, 700, 150 + 100 * num);
         Stage frameStage = new Stage();
         frameStage.setScene(frameScene);
         frameStage.setResizable(false);

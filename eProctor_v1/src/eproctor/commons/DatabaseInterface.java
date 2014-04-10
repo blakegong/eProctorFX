@@ -303,6 +303,14 @@ public class DatabaseInterface {
     public static void updateLocalDataProctor() {
         updateLocalRecordDataProctor();
     }
+    
+    public static void updateRemarkProctor(String student_code, String course_code, String session_code, String remarks) {
+        QueryBuilder qbStudent = new QueryBuilder ();
+        qbStudent.put("student_code").is(student_code).put("course_code").is(course_code).put("session_code").is(session_code);
+        BasicDBObject newDocument = new BasicDBObject();
+	newDocument.append("$set", new BasicDBObject().append("remarks", remarks));
+	record.update(qbStudent.get(), newDocument);
+    }
 
     /**
      * This method is to get the message (course info) and displaying on the

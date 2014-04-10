@@ -17,7 +17,7 @@
             <Font name="System Bold" size="14.0" fx:id="x1" />
           </font>
         </Button>
-        <Label font="$x1" layoutX="165.0" layoutY="52.0" text="Developed by: &#9;&#9;NTU CE2006 BCE2 &#10;&#9;&#9;&#9;&#9;&#9;rel_like_doc team&#10;&#10;Team leader:&#9;&#9;&#9;Lu Shengliang&#10;&#10;Team members:&#9;&#9;Chen Desheng, &#10;&#9;&#9;&#9;&#9;&#9;Chen Liyang, &#10;&#9;&#9;&#9;&#9;&#9;Gong Yue, &#10;&#9;&#9;&#9;&#9;&#9;Li Zixuan, &#10;&#9;&#9;&#9;&#9;&#9;Peng Lunan, &#10;&#9;&#9;&#9;&#9;&#9;Yuan Zijie" textAlignment="LEFT" textFill="WHITE" wrapText="true" />
+        <Label font="$x1" layoutX="165.0" layoutY="52.0" text="Developed by: &#9;&#9;NTU CE2006 BCE2 &#10;&#9;&#9;&#9;&#9;&#9;rel_like_doc team&#10;&#10;Team leader:&#9;&#9;&#9;Lu Shengliang&#10;&#10;Team members:&#9;&#9;Chen Desheng, &#10;&#9;&#9;&#9;&#9;&#9;Chen Liyang, &#10;&#9;&#9;&#9;&#9;&#9;Gong Yue, &#10;&#9;&#9;&#9;&#9;&#9;Li Zixuan, &#10;&#9;&#9;&#9;&#9;&#9;Peng Lunan, &#10;&#9;&#9;&#9;&#9;&#9;Wang Dingcheng, &#10;&#9;&#9;&#9;&#9;&#9;Yuan Zijie" textAlignment="LEFT" textFill="WHITE" wrapText="true" />
       </children>
     </Pane>
   </children>

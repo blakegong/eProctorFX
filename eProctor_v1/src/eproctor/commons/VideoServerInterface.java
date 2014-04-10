@@ -220,6 +220,7 @@ public class VideoServerInterface extends Service<Image> {
                     socket.close();
                     if (recordObject.getUserId() == null || recordObject.getCameraBytes() == null) {
                         System.out.println("received an empty recordObject");
+                        Thread.sleep(1000);
                         continue;
                     }
 //                    System.out.println("VideoServerInterface: c: " + c++);

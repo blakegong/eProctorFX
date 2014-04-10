@@ -115,25 +115,32 @@ public class SettingFormController implements Initializable {
 
     @FXML
     private void goBack() {
-        frameFormController.openStudentForm();
+        if (DatabaseInterface.domain.equals("Student"))
+            frameFormController.openStudentForm();
+        else
+            frameFormController.openProctorForm();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         this.initChoiceBox();
+        update("Gong Yue", "hahaha");
 //        this.cameraImageView.setImage(webcam_icon);
     }
 
     public void update(String option, String newValue) {
-        String path = "/eproctor/commons/eProctor.configuration";
-
+        String path = "eProctor.configuration";
+        if ("a" != "b")
+            return ;
+        
         File config = new File(path);
         Scanner sc = null;
         try {
             sc = new Scanner(config);
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
+            return ;
         }
 
         String s = "";
@@ -151,6 +158,7 @@ public class SettingFormController implements Initializable {
                 s += temp;
             }
         }
+        System.out.println(s);
         sc.close();
         PrintWriter pw = null;
         try {

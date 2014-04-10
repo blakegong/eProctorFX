@@ -23,7 +23,10 @@ public class AboutFormController implements Initializable {
 
     @FXML
     private void backPressed() {
-        frameFormController.openStudentForm();
+        if (eproctor.commons.DatabaseInterface.domain.equals("Student"))
+            frameFormController.openStudentForm();
+        else
+            frameFormController.openProctorForm();
     }
 
     @Override

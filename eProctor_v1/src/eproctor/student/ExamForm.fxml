@@ -51,7 +51,7 @@
                 <Insets fx:id="x2" />
               </VBox.margin>
             </Label>
-            <Label fx:id="statusLabel" text="Exam Status:">
+            <Label fx:id="statusLabel" contentDisplay="CENTER" prefHeight="30.0" prefWidth="116.0" text="Exam Status" textAlignment="CENTER">
               <effect>
                 <ColorAdjust>
                   <input>
@@ -64,7 +64,7 @@
                 </ColorAdjust>
               </effect>
               <font>
-                <Font size="15.0" />
+                <Font name="System Bold" size="15.0" />
               </font>
               <VBox.margin>
                 <Insets bottom="10.0" />
