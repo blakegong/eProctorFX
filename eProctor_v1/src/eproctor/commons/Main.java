@@ -8,6 +8,12 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+/**
+ * Main class of Application initiate from login Action
+ * 
+ * @author chenliyang
+ * @author gongyue
+ */
 public class Main extends Application {
 
     @Override
@@ -17,10 +23,18 @@ public class Main extends Application {
         DatabaseInterface.connectSchoolServer();
     }
 
+    /**
+     *This launches main class
+     * @param args
+     */
     public static void main(String[] args) {
         launch(args);
     }
-
+    /**
+    * This method is to show login UI interface for user to login
+    * @param stage
+    * @throws IOException 
+    */
     private void showLogin(Stage stage) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginForm.fxml"));
         Parent root = (Parent) loader.load();
