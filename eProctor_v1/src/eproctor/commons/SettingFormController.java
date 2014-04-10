@@ -1,6 +1,9 @@
-package eproctor.student;
+package eproctor.commons;
 
+import eproctor.commons.FrameFormController;
 import com.googlecode.javacv.FrameGrabber;
+import eproctor.student.VideoServerInterface;
+import eproctor.student.VideoServerInterface;
 import eproctor.student.VideoServerInterface.ServiceSendImage;
 import java.awt.Desktop;
 import java.io.File;
@@ -123,7 +126,7 @@ public class SettingFormController implements Initializable {
     }
 
     public void update(String option, String newValue) {
-        String path = "/eProctor/eProctor.configuration";
+        String path = "/eproctor/commons/eProctor.configuration";
 
         File config = new File(path);
         Scanner sc = null;

@@ -1,7 +1,5 @@
-package eproctor;
+package eproctor.commons;
 
-import eproctor.student.DatabaseInterface;
-import eproctor.student.SettingFormController;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -43,7 +41,7 @@ public class Main extends Application {
     }
 
     private void showLogin(Stage stage) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/eproctor/LoginForm.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/eproctor/commons/LoginForm.fxml"));
         Parent root = (Parent) loader.load();
         LoginFormController controller = (LoginFormController) loader.getController();
         controller.setStage(stage);

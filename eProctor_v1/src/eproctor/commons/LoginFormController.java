@@ -1,7 +1,5 @@
-package eproctor;
+package eproctor.commons;
 
-import eproctor.student.DatabaseInterface;
-import eproctor.student.FrameFormController;
 import eproctor.student.StudentFormController;
 import java.io.IOException;
 import java.net.URL;
@@ -95,8 +93,8 @@ public class LoginFormController implements Initializable {
             protected Void call() throws Exception {
                 if (DatabaseInterface.isUser(choiceType.getValue().toString(), username.getText(), getMD5(password.getText(), true))) {
                     progress0.set(1);
-                    DatabaseInterface.updateLocalRecordData(progress1);
-                    DatabaseInterface.updateLocalCourseData(progress2);
+                    DatabaseInterface.updateLocalRecordDataStudent(progress1);
+                    DatabaseInterface.updateLocalCourseDataStudent(progress2);
                 } else {
                     MessageBox.show(selfStage,
                             "The username / password you entered is incorrect.\nPlease try again.",
@@ -205,10 +203,9 @@ public class LoginFormController implements Initializable {
     }
 
     private void openFrameForm() throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("student/FrameForm.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/eproctor/commons/FrameForm.fxml"));
         BorderPane mainPane = loader.load();
-        mainPane.setStyle("-fx-background-size: stretch; -fx-background-repeat: stretch; -fx-background-image: url(\"http://ppcdn.500px.org/66423453/2539c590235e52a9d8fb880f370ddea0f25b9e36/2048.jpg\");");
-//        mainPane.setStyle("-fx-background-size: stretch; -fx-background-repeat: stretch; -fx-background-image: url(\"images/loginScreen.png\");");
+        mainPane.setStyle("-fx-background-size: stretch; -fx-background-repeat: stretch; -fx-background-image: url(\"/eproctor/images/loginScreen.png\");");
         FrameFormController controller = (FrameFormController) loader.getController();
 
 //        Scene frameScene = new Scene(mainPane);
@@ -219,8 +216,6 @@ public class LoginFormController implements Initializable {
         frameStage.setResizable(false);
         frameStage.show();
         controller.setSelfStage(frameStage);
-//        controller.setToolTips();
-//        controller.openStudentForm();
 
         selfStage.close();
     }

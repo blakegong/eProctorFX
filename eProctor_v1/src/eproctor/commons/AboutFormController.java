@@ -1,6 +1,5 @@
-package eproctor.student;
+package eproctor.commons;
 
-import eproctor.student.FrameFormController;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;

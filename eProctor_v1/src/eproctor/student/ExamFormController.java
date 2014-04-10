@@ -1,8 +1,9 @@
 package eproctor.student;
 
-import eproctor.student.DatabaseInterface;
+import eproctor.commons.Timer;
+import eproctor.commons.DatabaseInterface;
 import com.googlecode.javacv.FrameGrabber;
-import static eproctor.student.Timer.intSecToReadableSecond;
+import static eproctor.commons.Timer.intSecToReadableSecond;
 import java.net.URL;
 import java.util.Date;
 import java.util.ResourceBundle;

@@ -1,5 +1,5 @@
 .root {
-    -fx-background-image: url("images/loginScreen.png");
+    -fx-background-image: url("/eproctor/images/loginScreen.png");
 }
 
 .default-input {

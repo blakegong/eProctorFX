@@ -1,8 +1,9 @@
-package eproctor.student;
+package eproctor.commons;
 
-import eproctor.LoginFormController;
-import eproctor.student.AboutFormController;
-import eproctor.student.SettingFormController;
+import eproctor.commons.LoginFormController;
+import eproctor.commons.AboutFormController;
+import eproctor.student.ReviewFormController;
+import eproctor.student.StudentFormController;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -58,7 +59,7 @@ public class FrameFormController implements Initializable {
     @FXML
     public void openStudentForm() {
         if (studentView == null) {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("StudentForm.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/eproctor/student/StudentForm.fxml"));
             try {
                 studentView = loader.load();
             } catch (IOException ex) {
@@ -73,7 +74,7 @@ public class FrameFormController implements Initializable {
     @FXML
     private void openSettingForm() throws Exception {
         if (settingView == null) {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("SettingForm.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/eproctor/commons/SettingForm.fxml"));
             try {
                 settingView = loader.load();
             } catch (IOException ex) {
@@ -89,7 +90,7 @@ public class FrameFormController implements Initializable {
     @FXML
     private void openAboutForm() {
         if (aboutView == null) {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("AboutForm.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/eproctor/commons/AboutForm.fxml"));
             try {
                 aboutView = loader.load();
             } catch (IOException ex) {
@@ -108,7 +109,7 @@ public class FrameFormController implements Initializable {
         selfStage.close();
 
         Stage stage = new Stage();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../LoginForm.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/eproctor/commons/LoginForm.fxml"));
         Parent root = (Parent) loader.load();
         LoginFormController controller = (LoginFormController) loader.getController();
         controller.setStage(stage);
@@ -121,8 +122,8 @@ public class FrameFormController implements Initializable {
         stage.show();
     }
 
-    public void openReviewView(DatabaseInterface.RecordRow recordRow, DatabaseInterface.CourseRow courseRow) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("ReviewForm.fxml"));
+    public void openReviewView(DatabaseInterface.RecordRowStudent recordRow, DatabaseInterface.CourseRow courseRow) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/eproctor/student/ReviewForm.fxml"));
         try {
             reviewView = loader.load();
         } catch (IOException ex) {
@@ -149,7 +150,7 @@ public class FrameFormController implements Initializable {
     }
 
     public void setBackground() {
-        mainPane.setStyle("-fx-background-image: url(\"/images/studentHome.png\");"); // not working
+        mainPane.setStyle("-fx-background-image: url(\"/eproctor/images/studentHome.png\");"); // not working
         System.out.println("mainPane style: " + mainPane.getStyle());
     }
 
