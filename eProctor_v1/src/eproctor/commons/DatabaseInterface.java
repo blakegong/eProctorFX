@@ -31,9 +31,6 @@ public class DatabaseInterface {
     private static DBCollection user, record, course, session, student, proctor, message;
     public static String domain,
 
-    /**
-     *
-     */
     username,
 
     /**
@@ -940,16 +937,16 @@ public class DatabaseInterface {
     }
 
     /**
-     *
+     * This is to set student info including username and password
      */
     public static class StudentRow {
         private String username;
         private String name;
 
         /**
-         *
-         * @param username
-         * @param name
+         *Set username and name
+         * @param username a String user use to login 
+         * @param name a String which is name of user
          */
         public StudentRow(String username, String name) {
             this.username = username;
@@ -957,16 +954,16 @@ public class DatabaseInterface {
         }
 
         /**
-         *
-         * @return
+         *actuator for username
+         * @return user's username
          */
         public String getUsername() {
             return username;
         }
 
         /**
-         *
-         * @return
+         *actuator for name
+         * @return name of User
          */
         public String getName() {
             return name;

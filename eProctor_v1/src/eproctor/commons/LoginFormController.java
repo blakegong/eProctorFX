@@ -24,7 +24,8 @@ import javafx.stage.Stage;
 import jfx.messagebox.MessageBox;
 
 /**
- * This class is FXML Controller class. It consists exclusively of methods that
+ * This class is login Controller class. Control the whole login process
+ * It consists exclusively of methods that
  * operate on LoginUI or return java.lang.Object. It contains polymorphic
  * algorithm that operate on collections.
  * <p>
@@ -230,7 +231,7 @@ public class LoginFormController implements Initializable {
     }
 
     /**
-     *
+     *This is to reformate passing-in bytes
      * @param bytes desired bytes
      * @return hexChars the re-formated bytes as a String
      */
