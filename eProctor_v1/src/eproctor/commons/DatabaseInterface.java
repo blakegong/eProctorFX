@@ -11,7 +11,6 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.QueryBuilder;
 import com.mongodb.WriteResult;
-//import eproctor.coordinator.CoordinatorFormController;
 import eproctor.proctor.ProctorFormController;
 import eproctor.student.StudentFormController;
 import java.net.UnknownHostException;
@@ -35,7 +34,7 @@ import org.bson.types.ObjectId;
  */
 public class DatabaseInterface {
 
-    private static DBCollection user, record, course, session, student, proctor, coordinator, message;
+    private static DBCollection user, record, course, session, student, proctor, message;
     public static String domain, username, password, userCode;
     private static List<RecordRowStudent> recordDataStudent;
     private static List<RecordRowProctor> recordDataProctor;
@@ -103,7 +102,6 @@ public class DatabaseInterface {
         session = db.getCollection("Session");
         student = db.getCollection("Student");
         proctor = db.getCollection("Proctor");
-        coordinator = db.getCollection("Coordinator");
     }
 
     /**
@@ -125,9 +123,6 @@ public class DatabaseInterface {
                 break;
             case "Proctor":
                 obj = proctor.findOne(qb.get());
-                break;
-            case "Coordinator":
-                obj = coordinator.findOne(qb.get());
                 break;
             default://search in a non exist db, so can return null
                 obj = record.findOne(qb.get());
