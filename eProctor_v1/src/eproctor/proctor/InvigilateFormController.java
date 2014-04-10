@@ -47,6 +47,9 @@ public class InvigilateFormController implements Initializable {
     private Stage selfStage;
     private ArrayList<DatabaseInterface.StudentRow> students;
     private String courseCode, sessionCode;
+    @FXML
+    private TextArea notificationSent;
+    
 
     public void setCourseCode(String courseCode) {
         System.out.println("xxxxxxx: " + courseCode);
@@ -138,6 +141,7 @@ public class InvigilateFormController implements Initializable {
                 ms.start();
             });
             mp = new MessagePull(DatabaseInterface.username, courseCode, sessionCode);
+            msgReceived.textProperty().bind(mp.messageProperty());
             mp.start();
             
             msgReceived = new TextArea();
