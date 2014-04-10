@@ -10,11 +10,19 @@ import javafx.scene.control.Label;
 import javafx.util.Duration;
 
 /**
- *
+ *This class is to dealing with time issue, including the timing of action event and concurrent processing issue
  * @author CLY
  */
 public class Timer {
 
+    /**
+     *
+     * @param count
+     * @param heading
+     * @param lbl
+     * @param eh
+     * @return
+     */
     public static Timeline produceATimer(Integer count, String heading, Label lbl, EventHandler<ActionEvent> eh) {
         return null;
         
@@ -32,6 +40,12 @@ public class Timer {
 //        return timer;
     }
 
+    /**
+     *This method is to transform formation of time into second that can be read by user
+     * @param t passing-in time
+     * @param level integer stands for sec, min, hour, day
+     * @return return readable string
+     */
     public static String intSecToReadableSecond(int t, int level) {
         int sec = t % 60;
         int min = (t / 60) % 60;

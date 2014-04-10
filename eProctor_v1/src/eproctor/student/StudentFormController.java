@@ -10,8 +10,13 @@
 package eproctor.student;
 
 import eproctor.commons.DatabaseInterface;
+//<<<<<<< HEAD
 import eproctor.commons.FrameFormController;
 import static eproctor.commons.Timer.intSecToReadableSecond;
+//=======
+//import static eproctor.commons.Timer.intSecToReadableSecond;
+//import java.io.IOException;
+//>>>>>>> 0afa6450b8606b1fe257fbb847646e730d0bfe8c
 import java.net.URL;
 import java.util.Date;
 import java.util.ResourceBundle;
@@ -286,7 +291,7 @@ public class StudentFormController implements Initializable {
 
                 @Override
                 public void handle(ActionEvent arg0) {
-                    setStateBookedReady();
+                    setState();
                 }
             });
             timer.play();
@@ -322,7 +327,11 @@ public class StudentFormController implements Initializable {
 
                 @Override
                 public void handle(ActionEvent arg0) {
-                    setStateTesting();
+//<<<<<<< HEAD
+//                    setStateTesting();
+//=======
+                    setState();
+//>>>>>>> 0afa6450b8606b1fe257fbb847646e730d0bfe8c
                 }
             });
             timer.play();
@@ -408,7 +417,11 @@ public class StudentFormController implements Initializable {
         }
     }
 
+//<<<<<<< HEAD
     private void openReviewPane(DatabaseInterface.RecordRowStudent recordRow, DatabaseInterface.CourseRow courseRow) throws Exception {
+//=======
+//    private void openReviewPane(DatabaseInterface.RecordRowStudent recordRow, DatabaseInterface.CourseRow courseRow) throws Exception {
+//>>>>>>> 0afa6450b8606b1fe257fbb847646e730d0bfe8c
 //        System.out.println("inside");
 //        AnchorPane pane = new AnchorPane();
 //        FXMLLoader loader = new FXMLLoader(getClass().getResource("ReviewForm.fxml"));

@@ -1,5 +1,9 @@
 package eproctor.commons;
 
+//<<<<<<< HEAD:eProctor_v1/src/eproctor/commons/AboutFormController.java
+//=======
+import eproctor.commons.FrameFormController;
+//>>>>>>> 0afa6450b8606b1fe257fbb847646e730d0bfe8c:eProctor_v1/src/eproctor/commons/AboutFormController.java
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -8,7 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 
 /**
- * FXML Controller class
+ * Application Form Controller class contains the method to set background
  *
  * @author CLY
  */
@@ -30,10 +34,17 @@ public class AboutFormController implements Initializable {
         // TODO
     }
     
+    /**
+     * This method is to set background
+     */
     public void setBackground() {
         backgroundPane.setStyle("-fx-background-size: no-repeat; -fx-background-image: url(\"http://files.softicons.com/download/internet-icons/social-sketches-icons-by-an-phan-van/png/256/google.png\")");
     }
 
+    /**
+     * This method is to set frame form by passing in Frame form Controller in class FrameFormController
+     * @param frameFormController
+     */
     public void setFrameFormController(FrameFormController frameFormController) {
         this.frameFormController = frameFormController;
     }

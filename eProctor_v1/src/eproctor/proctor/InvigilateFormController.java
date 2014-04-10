@@ -20,6 +20,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -28,6 +29,8 @@ import javafx.scene.layout.VBox;
  */
 public class InvigilateFormController implements Initializable {
 
+    private Stage selfStage;
+    
     @FXML
     FlowPane flowPane;
     
@@ -36,6 +39,10 @@ public class InvigilateFormController implements Initializable {
         // TODO
         InfoPane temp = new InfoPane();
         flowPane.getChildren().add(temp);
+    }
+
+    void setStage(Stage stage) {
+        selfStage = stage;
     }
     
     public class InfoPane extends TitledPane {
@@ -65,14 +72,14 @@ public class InvigilateFormController implements Initializable {
             bottom.setAlignment(Pos.CENTER);
             bottom.setMinSize(400, 100);
             bottom.getChildren().addAll(btnTerminate, chatBox);
-            Image image1 = new Image("../images/studentHome.png");
+            Image image1 = new Image("/eproctor/images/studentHome.png");
             imgWebcam = new ImageView();
             imgWebcam.setImage(image1);
             imgWebcam.setFitWidth(400);
             imgWebcam.setFitHeight(300);
-//            Image image2 = new Image(getClass().getResourceAsStream("../images/loginScreen.png"));
+            Image image2 = new Image("/eproctor/images/loginScreen.png");
             imgDesktop = new ImageView();
-//            imgDesktop.setImage(image2);
+            imgDesktop.setImage(image2);
             imgDesktop.setFitWidth(400);
             imgDesktop.setFitHeight(300);
             VBox pane = new VBox();

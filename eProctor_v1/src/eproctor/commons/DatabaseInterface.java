@@ -6,6 +6,10 @@
 package eproctor.commons;
 
 import com.mongodb.*;
+//<<<<<<< HEAD:eProctor_v1/src/eproctor/commons/DatabaseInterface.java
+//=======
+import eproctor.proctor.ProctorFormController;
+//>>>>>>> 0afa6450b8606b1fe257fbb847646e730d0bfe8c:eProctor_v1/src/eproctor/commons/DatabaseInterface.java
 import eproctor.student.StudentFormController;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
@@ -27,12 +31,36 @@ import org.bson.types.ObjectId;
 public class DatabaseInterface {
 
     private static DBCollection user, record, course, session, student, proctor, message;
-    public static String domain, username, password, userCode;
+    public static String domain,
+
+    username,
+
+    /**
+     *
+     */
+    password,
+
+    /**
+     *
+     */
+    userCode;
 //    private static String examCourseCode, examSessionCode, examProctor, examStudent;
     private static List<RecordRowStudent> recordDataStudent;
     private static List<RecordRowProctor> recordDataProctor;
     private static List<CourseRow> courseData;
+//<<<<<<< HEAD:eProctor_v1/src/eproctor/commons/DatabaseInterface.java
+//    public static ServiceSendMsg serviceSendMsg;
+//=======
+
+    /**
+     *
+     */
     public static ServiceSendMsg serviceSendMsg;
+
+    /**
+     *
+     */
+//>>>>>>> 0afa6450b8606b1fe257fbb847646e730d0bfe8c:eProctor_v1/src/eproctor/commons/DatabaseInterface.java
     public static ServiceFetchMsg serviceFetchMsg;
 
     /**
@@ -63,6 +91,18 @@ public class DatabaseInterface {
         }
     }
 
+    /**
+     *
+     * @param controller
+     * @param infoData
+     */
+    public static void getInfoDataProctor(ProctorFormController controller, ObservableList<Node> infoData) {
+        for (RecordRowProctor tempRecord : recordDataProctor) {
+            ProctorFormController.InfoRow infoRow = controller.new InfoRow(tempRecord);
+            infoData.add(infoRow);
+        }
+    }
+    
     /**
      * This method is to connect EProctor application to mongodb Server
      *
@@ -106,10 +146,16 @@ public class DatabaseInterface {
         QueryBuilder qb = new QueryBuilder();
         qb.put("username").is(username).put("password").is(password);
         DBObject obj;
-        if (domain.equals("Student")) {
-            obj = student.findOne(qb.get());
-        } else {
-            obj = proctor.findOne(qb.get());
+        switch (domain) {
+            case "Student":
+                obj = student.findOne(qb.get());
+                break;
+            case "Proctor":
+                obj = proctor.findOne(qb.get());
+                break;
+            default://search in a non exist db
+                obj = record.findOne(qb.get());
+                break;
         }
         if (obj == null) {
             System.out.println("login failed");
@@ -208,7 +254,16 @@ public class DatabaseInterface {
             DBObject sessionObj = session.findOne(sessionQb.get());
             SessionRow sessionRow = new SessionRow(((ObjectId) sessionObj.get("_id")).toString(), (String) sessionObj.get("code"), (Date) sessionObj.get("start"), (Date) sessionObj.get("end"), (String) sessionObj.get("location"));
 
-            recordDataProctor.add(new RecordRowProctor(((ObjectId) recordObj.get("_id")).toString(), courseRow, sessionRow, (String) recordObj.get("proctor_code")));
+            ArrayList<StudentRow> studentList = new ArrayList();
+            QueryBuilder studentQb = new QueryBuilder();
+            studentQb.put("course_code").is(recordObj.get("course_code")).put("session_code").is(recordObj.get("session_code"));
+            DBCursor studentCursor = record.find(studentQb.get());
+            while (studentCursor.hasNext()) {
+                DBObject studentObj = studentCursor.next();
+                StudentRow temp = new StudentRow((String) studentObj.get("username"), (String) studentObj.get("name"));
+                studentList.add(temp);
+            }
+            recordDataProctor.add(new RecordRowProctor(((ObjectId) recordObj.get("_id")).toString(), courseRow, sessionRow, (String) recordObj.get("proctor_code"), studentList));
         }
     }
 
@@ -270,14 +325,26 @@ public class DatabaseInterface {
      * data contains student info, course info and proctor info
      */
     public static void updateLocalDataStudent() {
-        if (domain.equals("Student")) {
-            updateLocalRecordDataStudent(null);
-            updateLocalCourseDataStudent(null);
-        } else {
-            updateLocalRecordDataProctor();
-        }
+//<<<<<<< HEAD:eProctor_v1/src/eproctor/commons/DatabaseInterface.java
+//        if (domain.equals("Student")) {
+//            updateLocalRecordDataStudent(null);
+//            updateLocalCourseDataStudent(null);
+//        } else {
+//            updateLocalRecordDataProctor();
+//        }
+//=======
+        updateLocalRecordDataStudent(null);
+        updateLocalCourseDataStudent(null);
+//>>>>>>> 0afa6450b8606b1fe257fbb847646e730d0bfe8c:eProctor_v1/src/eproctor/commons/DatabaseInterface.java
     }
 
+    /**
+     *
+     */
+    public static void updateLocalDataProctor() {
+        updateLocalRecordDataProctor();
+    }
+    
     /**
      * This method is to get the message (course info) and displaying on the
      * screen
@@ -459,7 +526,17 @@ public class DatabaseInterface {
         private String me;
         private String course_code;
         private String session_code;
+//<<<<<<< HEAD:eProctor_v1/src/eproctor/commons/DatabaseInterface.java
 
+//=======
+        
+        /**
+         *
+         * @param me
+         * @param course_code
+         * @param session_code
+         */
+//>>>>>>> 0afa6450b8606b1fe257fbb847646e730d0bfe8c:eProctor_v1/src/eproctor/commons/DatabaseInterface.java
         public ServiceFetchMsg(String me, String course_code, String session_code) {
             this.setMe(me);
             this.setCourse_code(course_code);
@@ -499,6 +576,11 @@ public class DatabaseInterface {
             };
         }
 
+        /**
+         *
+         * @param status
+         * @return
+         */
         public String statusIntToStatusString(int status) {
             if (status == 0) {
                 return "green";
@@ -648,6 +730,10 @@ public class DatabaseInterface {
             return id;
         }
 
+        /**
+         *
+         * @return
+         */
         public CourseRow getCourse() {
             return course;
         }
@@ -666,6 +752,7 @@ public class DatabaseInterface {
         private final CourseRow course;
         private final SessionRow session;
         private final String proctor_code;
+        private final ArrayList<StudentRow> studentList;
 
         /**
          * This is constructor for RecordRowProctor
@@ -674,12 +761,14 @@ public class DatabaseInterface {
          * @param course
          * @param session
          * @param proctor_code
+         * @param studentList
          */
-        public RecordRowProctor(String id, CourseRow course, SessionRow session, String proctor_code) {
+        public RecordRowProctor(String id, CourseRow course, SessionRow session, String proctor_code, ArrayList<StudentRow> studentList) {
             this.id = id;
             this.course = course;
             this.session = session;
             this.proctor_code = proctor_code;
+            this.studentList = studentList;
         }
 
         /**
@@ -690,6 +779,39 @@ public class DatabaseInterface {
         public SessionRow getSession() {
             return session;
         }
+
+        /**
+         *
+         * @return
+         */
+        public String getId() {
+            return id;
+        }
+
+        /**
+         *
+         * @return
+         */
+        public CourseRow getCourse() {
+            return course;
+        }
+
+        /**
+         *
+         * @return
+         */
+        public String getProctor_code() {
+            return proctor_code;
+        }
+
+        /**
+         *
+         * @return
+         */
+        public ArrayList<StudentRow> getStudentList() {
+            return studentList;
+        }
+        
     }
 
     /**
@@ -827,4 +949,38 @@ public class DatabaseInterface {
         }
     }
 
+    /**
+     * This is to set student info including username and password
+     */
+    public static class StudentRow {
+        private String username;
+        private String name;
+
+        /**
+         *Set username and name
+         * @param username a String user use to login 
+         * @param name a String which is name of user
+         */
+        public StudentRow(String username, String name) {
+            this.username = username;
+            this.name = name;
+        }
+
+        /**
+         *actuator for username
+         * @return user's username
+         */
+        public String getUsername() {
+            return username;
+        }
+
+        /**
+         *actuator for name
+         * @return name of User
+         */
+        public String getName() {
+            return name;
+        }
+        
+    }
 }

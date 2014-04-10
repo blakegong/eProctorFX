@@ -1,7 +1,10 @@
 package eproctor.commons;
 
+//<<<<<<< HEAD:eProctor_v1/src/eproctor/commons/Main.java
 import java.io.File;
 import java.io.FileNotFoundException;
+//=======
+//>>>>>>> 0afa6450b8606b1fe257fbb847646e730d0bfe8c:eProctor_v1/src/eproctor/commons/Main.java
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -13,6 +16,12 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+/**
+ * Main class of Application initiate from login Action
+ * 
+ * @author chenliyang
+ * @author gongyue
+ */
 public class Main extends Application {
 
     @Override
@@ -36,12 +45,24 @@ public class Main extends Application {
         DatabaseInterface.connectSchoolServer();
     }
 
+    /**
+     *This launches main class
+     * @param args
+     */
     public static void main(String[] args) {
         launch(args);
     }
-
+    /**
+    * This method is to show login UI interface for user to login
+    * @param stage
+    * @throws IOException 
+    */
     private void showLogin(Stage stage) throws IOException {
+//<<<<<<< HEAD:eProctor_v1/src/eproctor/commons/Main.java
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/eproctor/commons/LoginForm.fxml"));
+//=======
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginForm.fxml"));
+//>>>>>>> 0afa6450b8606b1fe257fbb847646e730d0bfe8c:eProctor_v1/src/eproctor/commons/Main.java
         Parent root = (Parent) loader.load();
         LoginFormController controller = (LoginFormController) loader.getController();
         controller.setStage(stage);

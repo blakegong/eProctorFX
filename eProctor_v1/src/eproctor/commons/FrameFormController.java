@@ -1,9 +1,13 @@
 package eproctor.commons;
 
+//<<<<<<< HEAD:eProctor_v1/src/eproctor/commons/FrameFormController.java
 import eproctor.commons.LoginFormController;
 import eproctor.commons.AboutFormController;
 import eproctor.student.ReviewFormController;
 import eproctor.student.StudentFormController;
+//=======
+//import eproctor.student.SettingFormController;
+//>>>>>>> 0afa6450b8606b1fe257fbb847646e730d0bfe8c:eProctor_v1/src/eproctor/commons/FrameFormController.java
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -22,20 +26,28 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 /**
- * FXML Controller class
+ * Frame form Controller class
  *
  * @author CLY
  */
 public class FrameFormController implements Initializable {
 
+    private Stage selfStage;
+    private AnchorPane studentView, proctorView, settingView, reviewView;
+    private StackPane aboutView;
+    
     @FXML
     private BorderPane mainPane;
+    
     @FXML
     private ImageView settingImageView;
+    
     @FXML
     private ImageView aboutImageView;
+    
     @FXML
     private ImageView logoutImageView;
+    
     @FXML
     private Label settingLabel;
     @FXML
@@ -43,11 +55,19 @@ public class FrameFormController implements Initializable {
     @FXML
     private Label logoutLabel;
 
-    private Stage selfStage;
-    private AnchorPane studentView, reviewView, settingView;
-    private StackPane aboutView;
+//<<<<<<< HEAD:eProctor_v1/src/eproctor/commons/FrameFormController.java
+//    private Stage selfStage;
+//    private AnchorPane studentView, reviewView, settingView;
+//    private StackPane aboutView;
 
     
+//=======
+    /**
+     * Initializes the controller class.
+     * @param url
+     * @param rb
+     */
+//>>>>>>> 0afa6450b8606b1fe257fbb847646e730d0bfe8c:eProctor_v1/src/eproctor/commons/FrameFormController.java
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -56,6 +76,9 @@ public class FrameFormController implements Initializable {
         
     }
 
+    /**
+     *
+     */
     @FXML
     public void openStudentForm() {
         if (studentView == null) {
@@ -71,6 +94,23 @@ public class FrameFormController implements Initializable {
         mainPane.setCenter(studentView);
     }
 
+    /**
+     *
+     */
+    @FXML
+    public void openProctorForm() {
+        if (proctorView == null) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/eproctor/proctor/ProctorForm.fxml"));
+            try {
+                proctorView = loader.load();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        mainPane.setCenter(proctorView);
+//        contentPane.getChildren().setAll(proctorView);
+    }
+    
     @FXML
     private void openSettingForm() throws Exception {
         if (settingView == null) {
@@ -122,6 +162,7 @@ public class FrameFormController implements Initializable {
         stage.show();
     }
 
+//<<<<<<< HEAD:eProctor_v1/src/eproctor/commons/FrameFormController.java
     public void openReviewView(DatabaseInterface.RecordRowStudent recordRow, DatabaseInterface.CourseRow courseRow) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/eproctor/student/ReviewForm.fxml"));
         try {
@@ -144,16 +185,25 @@ public class FrameFormController implements Initializable {
     }
 
     public void setToolTips() {
-        this.settingLabel.setTooltip(new Tooltip("Open setting view"));
-        this.aboutLabel.setTooltip(new Tooltip("Open about view"));
-        this.logoutLabel.setTooltip(new Tooltip("Log out"));
+//        this.settingLabel.setTooltip(new Tooltip("Open setting view"));
+//        this.aboutLabel.setTooltip(new Tooltip("Open about view"));
+//        this.logoutLabel.setTooltip(new Tooltip("Log out"));
     }
 
+//=======
+    /**
+     *
+     */
+//>>>>>>> 0afa6450b8606b1fe257fbb847646e730d0bfe8c:eProctor_v1/src/eproctor/commons/FrameFormController.java
     public void setBackground() {
         mainPane.setStyle("-fx-background-image: url(\"/eproctor/images/studentHome.png\");"); // not working
         System.out.println("mainPane style: " + mainPane.getStyle());
     }
 
+    /**
+     *
+     * @param selfStage
+     */
     public void setSelfStage(Stage selfStage) {
         this.selfStage = selfStage;
     }

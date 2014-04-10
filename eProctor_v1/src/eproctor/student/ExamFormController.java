@@ -1,6 +1,9 @@
 package eproctor.student;
 
+//<<<<<<< HEAD
 import eproctor.commons.Timer;
+//=======
+//>>>>>>> 0afa6450b8606b1fe257fbb847646e730d0bfe8c
 import eproctor.commons.DatabaseInterface;
 import com.googlecode.javacv.FrameGrabber;
 import static eproctor.commons.Timer.intSecToReadableSecond;
