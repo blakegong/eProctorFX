@@ -5,7 +5,8 @@
  */
 package eproctor.student;
 
-import static eproctor.student.Timer.intSecToReadableSecond;
+import eproctor.commons.DatabaseInterface;
+import static eproctor.commons.Timer.intSecToReadableSecond;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -64,7 +65,7 @@ public class StudentFormController implements Initializable {
         // TODO
         infoData = FXCollections.observableArrayList();
         Bindings.bindContentBidirectional(infoData, vbox.getChildren());
-        DatabaseInterface.getInfoData(this, infoData);
+        DatabaseInterface.getInfoDataStudent(this, infoData);
     }
 
     /**
@@ -80,7 +81,7 @@ public class StudentFormController implements Initializable {
         private Button button;
         private ProgressIndicator indicator;
         private DatabaseInterface.CourseRow courseRow;
-        private DatabaseInterface.RecordRow recordRow;
+        private DatabaseInterface.RecordRowStudent recordRow;
         private Date start;
         private Date end;
         private int state;
@@ -95,7 +96,7 @@ public class StudentFormController implements Initializable {
          * @param recordRow
          *
          */
-        public InfoRow(DatabaseInterface.CourseRow courseRow, DatabaseInterface.RecordRow recordRow) {
+        public InfoRow(DatabaseInterface.CourseRow courseRow, DatabaseInterface.RecordRowStudent recordRow) {
             setId("hbox");
             lblCourseCode = new Label(courseRow.getCode());
             lblCourseCode.setMinWidth(200);
@@ -168,7 +169,7 @@ public class StudentFormController implements Initializable {
         }
 
         private void setStateNotBooked() {
-            DatabaseInterface.getListSessions(choiceBox.getItems(), courseRow);
+            DatabaseInterface.getListSessionsStudent(choiceBox.getItems(), courseRow);
             choiceBox.getSelectionModel().selectFirst();
             VBox tempVbox = new VBox();
             tempVbox.getChildren().addAll(lblCourseName, choiceBox);
@@ -203,7 +204,7 @@ public class StudentFormController implements Initializable {
                     @Override
                     protected Void call() throws Exception {
                         int sessionIndex = choiceBox.getSelectionModel().getSelectedIndex();
-                        recordRow = DatabaseInterface.addBooking(courseRow, courseRow.getSessions().get(sessionIndex));
+                        recordRow = DatabaseInterface.addBookingStudent(courseRow, courseRow.getSessions().get(sessionIndex));
                         System.out.println(recordRow);
                         return null;
                     }
@@ -247,7 +248,7 @@ public class StudentFormController implements Initializable {
 
                     @Override
                     protected Void call() throws Exception {
-                        DatabaseInterface.deleteBooking(recordRow.getId());
+                        DatabaseInterface.deleteBookingStudent(recordRow.getId());
                         return null;
                     }
                 };
@@ -282,7 +283,7 @@ public class StudentFormController implements Initializable {
 
                 @Override
                 public void handle(ActionEvent arg0) {
-                    setStateBookedReady();
+                    setState();
                 }
             });
             timer.play();
@@ -320,7 +321,7 @@ public class StudentFormController implements Initializable {
 
                 @Override
                 public void handle(ActionEvent arg0) {
-                    setStateBookedReady();
+                    setState();
                 }
             });
             timer.play();
@@ -394,7 +395,7 @@ public class StudentFormController implements Initializable {
         }
     }
 
-//    private void openReviewPane(DatabaseInterface.RecordRow recordRow, DatabaseInterface.CourseRow courseRow) throws Exception {
+//    private void openReviewPane(DatabaseInterface.RecordRowStudent recordRow, DatabaseInterface.CourseRow courseRow) throws Exception {
 //        System.out.println("inside");
 //        AnchorPane pane = new AnchorPane();
 //        FXMLLoader loader = new FXMLLoader(getClass().getResource("ReviewForm.fxml"));

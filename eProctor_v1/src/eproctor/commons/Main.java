@@ -1,6 +1,5 @@
-package eproctor;
+package eproctor.commons;
 
-import eproctor.student.DatabaseInterface;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -23,7 +22,7 @@ public class Main extends Application {
     }
 
     private void showLogin(Stage stage) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/eproctor/LoginForm.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginForm.fxml"));
         Parent root = (Parent) loader.load();
         LoginFormController controller = (LoginFormController) loader.getController();
         controller.setStage(stage);

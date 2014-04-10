@@ -20,6 +20,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -28,6 +29,8 @@ import javafx.scene.layout.VBox;
  */
 public class InvigilateFormController implements Initializable {
 
+    private Stage selfStage;
+    
     @FXML
     FlowPane flowPane;
     
@@ -36,6 +39,10 @@ public class InvigilateFormController implements Initializable {
         // TODO
         InfoPane temp = new InfoPane();
         flowPane.getChildren().add(temp);
+    }
+
+    void setStage(Stage stage) {
+        selfStage = stage;
     }
     
     public class InfoPane extends TitledPane {

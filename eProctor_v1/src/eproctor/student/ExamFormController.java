@@ -1,7 +1,7 @@
 
 package eproctor.student;
 
-import eproctor.student.DatabaseInterface;
+import eproctor.commons.DatabaseInterface;
 import com.googlecode.javacv.FrameGrabber;
 import java.net.URL;
 import java.util.Date;

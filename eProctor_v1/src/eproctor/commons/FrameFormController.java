@@ -1,7 +1,5 @@
-package eproctor.student;
+package eproctor.commons;
 
-import eproctor.LoginFormController;
-import eproctor.student.AboutFormController;
 import eproctor.student.SettingFormController;
 import java.io.IOException;
 import java.net.URL;
@@ -26,20 +24,24 @@ import javafx.stage.StageStyle;
  */
 public class FrameFormController implements Initializable {
 
+    private Stage selfStage;
+    private AnchorPane studentView, proctorView, settingView;
+    private StackPane aboutView;
+    
     @FXML
     private BorderPane mainPane;
+    
     @FXML
     private ImageView settingImageView;
+    
     @FXML
     private ImageView aboutImageView;
+    
     @FXML
     private ImageView logoutImageView;
+    
     @FXML
     private Pane contentPane;
-
-    private Stage selfStage;
-    private AnchorPane studentView, settingView;
-    private StackPane aboutView;
 
     /**
      * Initializes the controller class.
@@ -52,7 +54,7 @@ public class FrameFormController implements Initializable {
     @FXML
     public void openStudentForm() {
         if (studentView == null) {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("StudentForm.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/eproctor/student/StudentForm.fxml"));
             try {
                 studentView = loader.load();
             } catch (IOException ex) {
@@ -62,6 +64,19 @@ public class FrameFormController implements Initializable {
         contentPane.getChildren().setAll(studentView);
     }
 
+    @FXML
+    public void openProctorForm() {
+        if (proctorView == null) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/eproctor/proctor/ProctorForm.fxml"));
+            try {
+                proctorView = loader.load();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        contentPane.getChildren().setAll(proctorView);
+    }
+    
     @FXML
     private void openSettingForm() throws Exception {
         if (settingView == null) {

@@ -1,9 +1,5 @@
-package eproctor;
+package eproctor.commons;
 
-import eproctor.student.DatabaseInterface;
-import eproctor.student.FrameFormController;
-import eproctor.student.StudentFormController;
-import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -15,7 +11,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -45,14 +40,19 @@ public class LoginFormController implements Initializable {
 
     @FXML
     TextField username;
+    
     @FXML
     TextField password;
+    
     @FXML
     ChoiceBox choiceType;
+    
     @FXML
     private Button buttonLogin;
+    
     @FXML
     private Font x1;
+    
     @FXML
     private Button buttonExit;
 
@@ -73,7 +73,7 @@ public class LoginFormController implements Initializable {
     @FXML
     private void login(ActionEvent event) throws Exception {
         buttonLogin.setDisable(true);
-        
+
         SimpleDoubleProperty progress0 = new SimpleDoubleProperty(0);
         SimpleDoubleProperty progress1 = new SimpleDoubleProperty(0);
         SimpleDoubleProperty progress2 = new SimpleDoubleProperty(0);
@@ -92,10 +92,17 @@ public class LoginFormController implements Initializable {
 
             @Override
             protected Void call() throws Exception {
-                if (DatabaseInterface.isUser(choiceType.getValue().toString(), username.getText(), getMD5(password.getText(), true))) { 
+                if (DatabaseInterface.isUser(choiceType.getValue().toString(), username.getText(), getMD5(password.getText(), true))) {
                     progress0.set(1);
-                    DatabaseInterface.updateLocalRecordData(progress1);
-                    DatabaseInterface.updateLocalCourseData(progress2);
+                    switch (DatabaseInterface.domain) {
+                        case "Student":
+                            DatabaseInterface.updateLocalRecordDataStudent(progress1);
+                            DatabaseInterface.updateLocalCourseDataStudent(progress2);
+                            break;
+                        case "Proctor":
+                            DatabaseInterface.updateLocalRecordDataProctor();
+                            break;
+                    }
                 } else {
                     MessageBox.show(selfStage,
                             "The username / password you entered is incorrect.\nPlease try again.",
@@ -177,50 +184,30 @@ public class LoginFormController implements Initializable {
         selfStage = stage;
     }
 
-    /**
-     * This method open StudentForm by initializing a Stage and
-     * StudentFormController.
-     * <p>
-     * Show student home UI after initialization finished.</p>
-     *
-     *
-     * @throws IOException
-     */
-    private void openStudentForm() throws Exception {
-        selfStage.close();
-        
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("student/StudentForm.fxml"));
-        Parent root = (Parent) loader.load();
-        StudentFormController controller = (StudentFormController) loader.getController();
-        Scene scene = new Scene(root);
-
-        Stage stage = new Stage();
-        stage.setTitle("eProctor Student Client");
-        stage.setResizable(false);
-        stage.setScene(scene);
-        stage.show();
-        
-        controller.setStage(stage);
-    }
-
-
     private void openFrameForm() throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("student/FrameForm.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("FrameForm.fxml"));
         BorderPane mainPane = loader.load();
         FrameFormController controller = (FrameFormController) loader.getController();
-        
+
         Scene frameScene = new Scene(mainPane, 715, 560);
         Stage frameStage = new Stage();
         frameStage.setScene(frameScene);
-        frameStage.setTitle("eProctor Student Client");
         frameStage.setResizable(false);
         frameStage.show();
         controller.setSelfStage(frameStage);
-        controller.openStudentForm();
-        
+        switch (DatabaseInterface.domain) {
+            case "Student":
+                frameStage.setTitle("eProctor Student Client");
+                controller.openStudentForm();
+                break;
+            case "Proctor":
+                frameStage.setTitle("eProctor Proctor Client");
+                controller.openProctorForm();
+                break;
+        }
         selfStage.close();
     }
-    
+
     /**
      * This method implements MD5 generating algorithm.
      *

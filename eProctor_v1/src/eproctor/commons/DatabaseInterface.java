@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package eproctor.student;
+package eproctor.commons;
 
 import com.mongodb.*;
+import eproctor.proctor.ProctorFormController;
+import eproctor.student.StudentFormController;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -29,11 +31,11 @@ public class DatabaseInterface {
     private static DBCollection user, record, course, session, student, proctor, message;
     public static String domain, username, password, userCode;
 //    private static String examCourseCode, examSessionCode, examProctor, examStudent;
-    private static List<RecordRow> recordDataStudent;
+    private static List<RecordRowStudent> recordDataStudent;
     private static List<RecordRowProctor> recordDataProctor;
     private static List<CourseRow> courseData;
-    protected static ServiceSendMsg serviceSendMsg;
-    protected static ServiceFetchMsg serviceFetchMsg;
+    public static ServiceSendMsg serviceSendMsg;
+    public static ServiceFetchMsg serviceFetchMsg;
 
     /**
      * This is the Constructor of DatabaseInterface class Suppresses default
@@ -49,10 +51,10 @@ public class DatabaseInterface {
      * @param controller Controller for Student form
      * @param infoData Observablelist of student information
      */
-    public static void getInfoData(StudentFormController controller, ObservableList<Node> infoData) {
+    public static void getInfoDataStudent(StudentFormController controller, ObservableList<Node> infoData) {
         for (CourseRow courseRow : courseData) {
-            RecordRow recordRow = null;
-            for (RecordRow tempRecord : recordDataStudent) {
+            RecordRowStudent recordRow = null;
+            for (RecordRowStudent tempRecord : recordDataStudent) {
                 if (courseRow.code.equals(tempRecord.course.code)) {
                     recordRow = tempRecord;
                 }
@@ -62,6 +64,13 @@ public class DatabaseInterface {
         }
     }
 
+    public static void getInfoDataProctor(ProctorFormController controller, ObservableList<Node> infoData) {
+        for (RecordRowProctor tempRecord : recordDataProctor) {
+            ProctorFormController.InfoRow infoRow = controller.new InfoRow(tempRecord);
+            infoData.add(infoRow);
+        }
+    }
+    
     /**
      * This method is to connect EProctor application to mongodb Server
      *
@@ -105,10 +114,16 @@ public class DatabaseInterface {
         QueryBuilder qb = new QueryBuilder();
         qb.put("username").is(username).put("password").is(password);
         DBObject obj;
-        if (domain.equals("Student")) {
-            obj = student.findOne(qb.get());
-        } else {
-            obj = proctor.findOne(qb.get());
+        switch (domain) {
+            case "Student":
+                obj = student.findOne(qb.get());
+                break;
+            case "Proctor":
+                obj = proctor.findOne(qb.get());
+                break;
+            default://search in a non exist db
+                obj = record.findOne(qb.get());
+                break;
         }
         if (obj == null) {
             System.out.println("login failed");
@@ -130,7 +145,7 @@ public class DatabaseInterface {
      *
      * @param progress
      */
-    public static void updateLocalRecordData(SimpleDoubleProperty progress) {
+    public static void updateLocalRecordDataStudent(SimpleDoubleProperty progress) {
         if (progress != null) // update progress bar...
         {
             progress.set(0);
@@ -168,7 +183,7 @@ public class DatabaseInterface {
             DBObject sessionObj = session.findOne(sessionQb.get());
             SessionRow sessionRow = new SessionRow(((ObjectId) sessionObj.get("_id")).toString(), (String) sessionObj.get("code"), (Date) sessionObj.get("start"), (Date) sessionObj.get("end"), (String) sessionObj.get("location"));
 
-            recordDataStudent.add(new RecordRow(((ObjectId) recordObj.get("_id")).toString(), courseRow, sessionRow, (String) recordObj.get("student_code"), (String) recordObj.get("grade"), (String) recordObj.get("remark")));
+            recordDataStudent.add(new RecordRowStudent(((ObjectId) recordObj.get("_id")).toString(), courseRow, sessionRow, (String) recordObj.get("student_code"), (String) recordObj.get("grade"), (String) recordObj.get("remark")));
 
             if (progress != null) { // update progress bar...
                 progress.set(progress.add(0.8 / recordCursor.size()).get());
@@ -205,7 +220,16 @@ public class DatabaseInterface {
             DBObject sessionObj = session.findOne(sessionQb.get());
             SessionRow sessionRow = new SessionRow(((ObjectId) sessionObj.get("_id")).toString(), (String) sessionObj.get("code"), (Date) sessionObj.get("start"), (Date) sessionObj.get("end"), (String) sessionObj.get("location"));
 
-            recordDataProctor.add(new RecordRowProctor(((ObjectId) recordObj.get("_id")).toString(), courseRow, sessionRow, (String) recordObj.get("proctor_code")));
+            ArrayList<StudentRow> studentList = new ArrayList();
+            QueryBuilder studentQb = new QueryBuilder();
+            studentQb.put("course_code").is(recordObj.get("course_code")).put("session_code").is(recordObj.get("session_code"));
+            DBCursor studentCursor = record.find(studentQb.get());
+            while (studentCursor.hasNext()) {
+                DBObject studentObj = studentCursor.next();
+                StudentRow temp = new StudentRow((String) studentObj.get("username"), (String) studentObj.get("name"));
+                studentList.add(temp);
+            }
+            recordDataProctor.add(new RecordRowProctor(((ObjectId) recordObj.get("_id")).toString(), courseRow, sessionRow, (String) recordObj.get("proctor_code"), studentList));
         }
     }
 
@@ -216,7 +240,7 @@ public class DatabaseInterface {
      *
      * @param progress
      */
-    public static void updateLocalCourseData(SimpleDoubleProperty progress) {
+    public static void updateLocalCourseDataStudent(SimpleDoubleProperty progress) {
         if (progress != null) // update progress bar...
         {
             progress.set(0);
@@ -266,15 +290,15 @@ public class DatabaseInterface {
      * <p>
      * data contains student info, course info and proctor info
      */
-    public static void updateLocalData() {
-        if (domain.equals("Student")) {
-            updateLocalRecordData(null);
-            updateLocalCourseData(null);
-        } else {
-            updateLocalRecordDataProctor();
-        }
+    public static void updateLocalDataStudent() {
+        updateLocalRecordDataStudent(null);
+        updateLocalCourseDataStudent(null);
     }
 
+    public static void updateLocalDataProctor() {
+        updateLocalRecordDataProctor();
+    }
+    
     /**
      * This method is to get the message (course info) and displaying on the
      * screen
@@ -296,7 +320,7 @@ public class DatabaseInterface {
      * @param sessionRow exam information
      * @return recordRow if the exam session can be found else return null
      */
-    public static RecordRow addBooking(CourseRow courseRow, SessionRow sessionRow) {
+    public static RecordRowStudent addBookingStudent(CourseRow courseRow, SessionRow sessionRow) {
         BasicDBObjectBuilder document = new BasicDBObjectBuilder();
         document.add("course_code", courseRow.code)
                 .add("session_code", sessionRow.getCode());
@@ -306,8 +330,8 @@ public class DatabaseInterface {
             document.add("proctor_code", userCode);
         }
         record.insert(document.get());
-        updateLocalData();
-        for (RecordRow recordRow : recordDataStudent) {
+        updateLocalDataStudent();
+        for (RecordRowStudent recordRow : recordDataStudent) {
             if (recordRow.course.code.equals(courseRow.code) && recordRow.session.getCode().equals(sessionRow.getCode()) && recordRow.student_code.equals(userCode)) {
                 return recordRow;
             }
@@ -320,11 +344,11 @@ public class DatabaseInterface {
      *
      * @param id exam record id
      */
-    public static void deleteBooking(String id) {
+    public static void deleteBookingStudent(String id) {
         QueryBuilder qb = new QueryBuilder();
         qb.put("_id").is(new ObjectId(id));
         record.remove(qb.get());
-        updateLocalData();
+        updateLocalDataStudent();
     }
 
     /**
@@ -333,7 +357,7 @@ public class DatabaseInterface {
      * @param list ObservableList String list of formated exam session
      * @param courseRow course info
      */
-    public static void getListSessions(ObservableList<String> list, CourseRow courseRow) {
+    public static void getListSessionsStudent(ObservableList<String> list, CourseRow courseRow) {
         while (!list.isEmpty()) {
             list.remove(0);
         }
@@ -417,7 +441,7 @@ public class DatabaseInterface {
         private String course_code;
         private String session_code;
         
-        protected ServiceFetchMsg(String me, String course_code, String session_code) {
+        public ServiceFetchMsg(String me, String course_code, String session_code) {
             this.setMe(me);
             this.setCourse_code(course_code);
             this.setSession_code(session_code);
@@ -587,10 +611,10 @@ public class DatabaseInterface {
     /**
      * This class is the data container of student review UI table row.
      * <p>
-     * one RecordRow object contains record id, course code, session code,
-     * student id, student grade and exam remark.</p>
+ one RecordRowStudent object contains record id, course code, session code,
+ student id, student grade and exam remark.</p>
      */
-    public static class RecordRow {
+    public static class RecordRowStudent {
 
         private final String id;
         private final CourseRow course;
@@ -609,7 +633,7 @@ public class DatabaseInterface {
          * @param grade
          * @param remark
          */
-        public RecordRow(String id, CourseRow course, SessionRow session, String student_code, String grade, String remark) {
+        public RecordRowStudent(String id, CourseRow course, SessionRow session, String student_code, String grade, String remark) {
             this.id = id;
             this.course = course;
             this.session = session;
@@ -663,8 +687,8 @@ public class DatabaseInterface {
     /**
      * This class is the data container of proctor review UI table row.
      * <p>
-     * one RecordRow object contains record id, course code, session code and
-     * proctor id.</p>
+ one RecordRowStudent object contains record id, course code, session code and
+ proctor id.</p>
      */
     public static class RecordRowProctor {
 
@@ -672,6 +696,7 @@ public class DatabaseInterface {
         private final CourseRow course;
         private final SessionRow session;
         private final String proctor_code;
+        private final ArrayList<StudentRow> studentList;
 
         /**
          * This is constructor for RecordRowProctor
@@ -681,11 +706,12 @@ public class DatabaseInterface {
          * @param session
          * @param proctor_code
          */
-        public RecordRowProctor(String id, CourseRow course, SessionRow session, String proctor_code) {
+        public RecordRowProctor(String id, CourseRow course, SessionRow session, String proctor_code, ArrayList<StudentRow> studentList) {
             this.id = id;
             this.course = course;
             this.session = session;
             this.proctor_code = proctor_code;
+            this.studentList = studentList;
         }
 
         /**
@@ -696,13 +722,30 @@ public class DatabaseInterface {
         public SessionRow getSession() {
             return session;
         }
+
+        public String getId() {
+            return id;
+        }
+
+        public CourseRow getCourse() {
+            return course;
+        }
+
+        public String getProctor_code() {
+            return proctor_code;
+        }
+
+        public ArrayList<StudentRow> getStudentList() {
+            return studentList;
+        }
+        
     }
 
     /**
      * This class is the data container of student booking UI course table row.
      * <p>
-     * one RecordRow object contains object id, course code, course name and an
-     * arrayList of exam sessions.</p>
+ one RecordRowStudent object contains object id, course code, course name and an
+ arrayList of exam sessions.</p>
      */
     public static class CourseRow {
 
@@ -759,8 +802,8 @@ public class DatabaseInterface {
      * This class is the data container of student booking UI exam session table
      * row.
      * <p>
-     * one RecordRow object contains object id, course code, start time, end
-     * time and exam location</p>
+ one RecordRowStudent object contains object id, course code, start time, end
+ time and exam location</p>
      */
     public static class SessionRow {
 
@@ -833,4 +876,22 @@ public class DatabaseInterface {
         }
     }
 
+    public static class StudentRow {
+        private String username;
+        private String name;
+
+        public StudentRow(String username, String name) {
+            this.username = username;
+            this.name = name;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
+        public String getName() {
+            return name;
+        }
+        
+    }
 }

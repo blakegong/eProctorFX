@@ -1,4 +1,4 @@
-package eproctor.student;
+package eproctor.commons;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;

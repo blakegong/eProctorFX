@@ -5,6 +5,7 @@
  */
 package eproctor.student;
 
+import eproctor.commons.DatabaseInterface;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -18,7 +19,7 @@ import javafx.scene.control.Label;
  */
 public class ReviewFormController implements Initializable {
 
-    private DatabaseInterface.RecordRow recordRow;
+    private DatabaseInterface.RecordRowStudent recordRow;
     private DatabaseInterface.CourseRow courseRow;
 
     @FXML
@@ -69,7 +70,7 @@ public class ReviewFormController implements Initializable {
         lblRemark.setText(recordRow.getRemark());
     }
 
-    public void setRecordRow(DatabaseInterface.RecordRow recordRow) {
+    public void setRecordRow(DatabaseInterface.RecordRowStudent recordRow) {
         this.recordRow = recordRow;
     }
 
