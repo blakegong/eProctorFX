@@ -116,37 +116,38 @@ public class ProctorFormController implements Initializable {
             end = recordRow.getSession().getEnd();
             Date current = new Date();
             if (start.after(current)) {
-                setStateBookedReady();
+                setStateCanNotEnter();
             } else if (end.before(current)) {
-                System.out.println("haha");
+                System.out.println("haha exam ended haha");
 //                setStateReview();
             } else {
-                setStateTesting();
+                setStateCanEnter();
             }
         }
 
-        private void setStateBookedReady() {
+        private void setStateCanNotEnter() {
             VBox tempVbox = new VBox();
             tempVbox.getChildren().addAll(lblCourseName, lblInfo);
             this.getChildren().remove(0, this.getChildren().size());
             this.getChildren().addAll(lblCourseCode, tempVbox, button, indicator);
-            //set timer to count down
-            lblInfo.setText("15:08:32 to the exam.");
-            button.setText("Invigilate");
-            button.setOnAction((ActionEvent e) -> {
-                //open exam
-            });
-
+            button.setText("Haven't Started");
+            button.setDisable(true);
+            
             // = = = = = = =
             // start a countDOWN timer
-//            count = (int) ((start.getTime() - new Date().getTime()) / 1000);
-            count = 30 * 60 + 15; // for testing
+            count = (int) ((start.getTime() - new Date().getTime()) / 1000);
             timer = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
+                    if (count < 30 * 60) {
+                        timer.stop();
+                    }
                     count--;
-//                    System.out.println("count: " + count);
-                    lblInfo.setText("time to exam: " + intSecToReadableSecond(count, 4));
+                    int level = 3;
+                    if (count > 60 * 60) {
+                        level = 2;
+                    }
+                    lblInfo.setText("time to exam: " + intSecToReadableSecond(count, level));
                 }
             }));
             timer.setCycleCount(count);
@@ -161,15 +162,16 @@ public class ProctorFormController implements Initializable {
             // = = = = = = =
         }
 
-        private void setStateTesting() {
+        private void setStateCanEnter() {
             VBox tempVbox = new VBox();
             tempVbox.getChildren().addAll(lblCourseName, lblInfo);
             this.getChildren().remove(0, this.getChildren().size());
             this.getChildren().addAll(lblCourseCode, tempVbox, button, indicator);
-            lblInfo.setText("00:43:54 until the exam ends");
             button.setText("Invigilate");
+            button.setDisable(false);
             button.setOnAction((ActionEvent e) -> {
                 try {
+                    timer.stop();
                     openInvigilateForm(recordRow);
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -177,32 +179,23 @@ public class ProctorFormController implements Initializable {
             });
 
             // = = = = = = =
-            // start a countUP timer
-//            count = (int) ((new Date().getTime() - start.getTime() ) / 1000);
-            count = 60 * 14 + 40; // for testing
+            // start a count timer
+            count = (int) ((new Date().getTime() - start.getTime() ) / 1000);
             timer = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
                     count++;
-//                    System.out.println("count: " + count);
-                    lblInfo.setText("exam has started for " + intSecToReadableSecond(count, 4));
-
-                    if (count >= 60 * 15) {
-                        lblInfo.setText("Exam extrance has closed. (15 mins passed)");
-                        System.out.println("timer should stop.");
+                    if (count < 0) {
+                        lblInfo.setText("time to exam: " + intSecToReadableSecond(-count, 4));
+                    } else if (count > 0) {
+                        lblInfo.setText("exam has started for " + intSecToReadableSecond(count, 4));
+                    } else {
                         timer.stop();
+                        setState();
                     }
                 }
             }));
             timer.setCycleCount(Timeline.INDEFINITE);
-            timer.setOnFinished(new EventHandler<ActionEvent>() {
-
-                @Override
-                public void handle(ActionEvent arg0) {
-                    System.out.println("timer stopped. Entrance closed.");
-//                    button.setDisable(true);
-                }
-            });
             timer.play();
             // = = = = = = =
         }

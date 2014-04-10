@@ -6,15 +6,19 @@
 package eproctor.proctor;
 
 import eproctor.commons.DatabaseInterface;
+import eproctor.commons.MessagePull;
+import eproctor.commons.MessageSend;
 import eproctor.commons.VideoServerInterface;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
 import javafx.concurrent.WorkerStateEvent;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -91,6 +95,7 @@ public class InvigilateFormController implements Initializable {
         private Button btnSend;
         private VideoServerInterface serviceReceiveImage;
         private ChoiceBox msgType;
+        private MessagePull mp;
 
         public InfoPane() {
             initializeUI();
@@ -98,6 +103,43 @@ public class InvigilateFormController implements Initializable {
 
         private void initializeUI() {
             btnSend = new Button("Send");
+            btnSend.setOnAction((ActionEvent e) -> {
+                btnSend.setDisable(true);
+                String typeTemp = (String) msgType.getValue();
+                int type;
+                if (typeTemp.equals("message")) {
+                    type = 0;
+                } else if (typeTemp.equals("warning")) {
+                    type = 1;
+                } else {
+                    type = 2;
+                }
+
+                MessageSend ms = new MessageSend(DatabaseInterface.username, student.getUsername(), courseCode, sessionCode, msgToSend.getText(), new Date(), type);
+                ms.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+
+                    @Override
+                    public void handle(WorkerStateEvent t) {
+                        System.out.println("message sent.");
+                        msgToSend.setText("");
+//                        msgProgressIndicator.setProgress(100);
+                        btnSend.setDisable(false);
+                    }
+                });
+                ms.setOnFailed(new EventHandler<WorkerStateEvent>() {
+
+                    @Override
+                    public void handle(WorkerStateEvent t) {
+                        System.out.println("message failed.");
+//                        msgProgressIndicator.setProgress(100);
+                        btnSend.setDisable(false);
+                    }
+                });
+                ms.start();
+            });
+            mp = new MessagePull(DatabaseInterface.username, courseCode, sessionCode);
+            mp.start();
+            
             msgReceived = new TextArea();
             msgReceived.setMinWidth(170);
             msgToSend = new TextField();
@@ -107,7 +149,7 @@ public class InvigilateFormController implements Initializable {
             chatBox.setMaxSize(180, 80);
             Separator separator = new Separator();
             separator.setOrientation(Orientation.VERTICAL);
-            msgType = new ChoiceBox(FXCollections.observableArrayList("First", "Second", "Third"));
+            msgType = new ChoiceBox(FXCollections.observableArrayList("message", "warning", "expelling"));
             msgType.setMinWidth(100);
             HBox sendLine = new HBox(20);
             sendLine.getChildren().addAll(msgType, btnSend);
@@ -135,7 +177,7 @@ public class InvigilateFormController implements Initializable {
 //            pane.getChildren().addAll(imgWebcam, imgDesktop, bottom);
             pane.getChildren().addAll(imgWebcam, bottom);
             this.setContent(pane);
-            this.setText("gong0025");
+            this.setText(student.getUsername());
         }
 
         public void setStudent(DatabaseInterface.StudentRow student) {
@@ -170,7 +212,6 @@ public class InvigilateFormController implements Initializable {
             });
             serviceReceiveImage.start();
         }
-    
-        
+
     }
 }

@@ -1,9 +1,11 @@
 package eproctor.student;
 
-import eproctor.commons.VideoServerInterface;
-import eproctor.commons.Timer;
-import eproctor.commons.DatabaseInterface;
 import com.googlecode.javacv.FrameGrabber;
+import eproctor.commons.DatabaseInterface;
+import eproctor.commons.MessagePull;
+import eproctor.commons.MessageSend;
+import eproctor.commons.Timer;
+import eproctor.commons.VideoServerInterface;
 import java.net.URL;
 import java.util.Date;
 import java.util.ResourceBundle;
@@ -76,10 +78,14 @@ public class ExamFormController implements Initializable {
     @FXML
     private void sendMsg() {
         msgSendButton.setDisable(true);
+        
+        ////////////////////////////////////////////////////////////
         // random a proctor
-        String receiver_code = "NTUP3891093T";
-        DatabaseInterface.serviceSendMsg = new DatabaseInterface.ServiceSendMsg(DatabaseInterface.userCode, receiver_code, courseRow.getCode(), sessionRow.getCode(), msgToSend.getText(), new Date(), 0);
-        DatabaseInterface.serviceSendMsg.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+        String receiverName = "chen0818";
+        ////////////////////////////////////////////////////////////
+        
+        MessageSend serviceSendMsg = new MessageSend(DatabaseInterface.username, receiverName, courseRow.getCode(), sessionRow.getCode(), msgToSend.getText(), new Date(), 0);
+        serviceSendMsg.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 
             @Override
             public void handle(WorkerStateEvent t) {
@@ -89,7 +95,7 @@ public class ExamFormController implements Initializable {
                 msgSendButton.setDisable(false);
             }
         });
-        DatabaseInterface.serviceSendMsg.setOnFailed(new EventHandler<WorkerStateEvent>() {
+        serviceSendMsg.setOnFailed(new EventHandler<WorkerStateEvent>() {
 
             @Override
             public void handle(WorkerStateEvent t) {
@@ -99,7 +105,7 @@ public class ExamFormController implements Initializable {
             }
         });
         msgProgressIndicator.setProgress(-1);
-        DatabaseInterface.serviceSendMsg.start();
+        serviceSendMsg.start();
     }
 
     @FXML
@@ -161,8 +167,8 @@ public class ExamFormController implements Initializable {
         this.courseRow = courseRow;
         this.sessionRow = sessionRow;
 
-        DatabaseInterface.serviceFetchMsg = new DatabaseInterface.ServiceFetchMsg(DatabaseInterface.userCode, courseRow.getCode(), sessionRow.getCode());
-        DatabaseInterface.serviceFetchMsg.setOnFailed(new EventHandler<WorkerStateEvent>() {
+        MessagePull serviceFetchMsg = new MessagePull(DatabaseInterface.username, courseRow.getCode(), sessionRow.getCode());
+        serviceFetchMsg.setOnFailed(new EventHandler<WorkerStateEvent>() {
 
             @Override
             public void handle(WorkerStateEvent t) {
@@ -170,11 +176,11 @@ public class ExamFormController implements Initializable {
                 startServiceFetchMsg(courseRow, sessionRow);
             }
         });
-        DatabaseInterface.serviceFetchMsg.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+        serviceFetchMsg.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 
             @Override
             public void handle(WorkerStateEvent t) {
-                if (DatabaseInterface.serviceFetchMsg.getValue().compareTo("ending") == 0) { // if he is kicked out.
+                if (serviceFetchMsg.getValue().compareTo("ending") == 0) { // if he is kicked out.
                     System.out.println("Your are disqualified from current exam session. Your exam session will end in 5 seconds.");
                     VideoServerInterface.serviceSendImage.cancel();
                     try {
@@ -215,10 +221,9 @@ public class ExamFormController implements Initializable {
             }
         });
         msgReceived.setWrapText(true);
-        msgReceived.textProperty().bind(DatabaseInterface.serviceFetchMsg.messageProperty());
-        statusLabel.styleProperty().bind(DatabaseInterface.serviceFetchMsg.titleProperty());
-
-        DatabaseInterface.serviceFetchMsg.start();
+        msgReceived.textProperty().bind(serviceFetchMsg.messageProperty());
+        statusLabel.styleProperty().bind(serviceFetchMsg.titleProperty());
+        serviceFetchMsg.start();
     }
 
     /**
