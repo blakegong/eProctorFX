@@ -5,6 +5,11 @@ import com.googlecode.javacv.cpp.opencv_core.IplImage;
 import static com.googlecode.javacv.cpp.opencv_core.cvFlip;
 import eproctor.videoServer.RecordObject;
 import eproctor.videoServer.RequestObject;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.Robot;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -82,6 +87,11 @@ public class VideoServerInterface extends Service<Image> {
                         img = grabber.grab();
                         cvFlip(img, img, 1);// l-r = 90_degrees_steps_anti_clockwise
                         buf = img.getBufferedImage();
+
+                        Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+                        BufferedImage bufScreen = new Robot().createScreenCapture(screenRect);
+                        BufferedImage combined = joinBufferedImage(buf, bufScreen);
+
                         this.updateValue(SwingFXUtils.toFXImage(buf, null));
 
                         if (isLocal) {
@@ -89,7 +99,7 @@ public class VideoServerInterface extends Service<Image> {
                         }
 
                         ByteArrayOutputStream baos = new ByteArrayOutputStream(); // use baos.reset() ?
-                        ImageIO.write(buf, "jpg", baos);
+                        ImageIO.write(combined, "jpg", baos);
                         baos.flush();
                         byte[] imageBytes = baos.toByteArray();
                         baos.close();
@@ -114,6 +124,32 @@ public class VideoServerInterface extends Service<Image> {
             ObjectOutputStream sOutput = new ObjectOutputStream(socket.getOutputStream());
             sOutput.writeObject(recordObject);
             socket.close();
+        }
+
+        public static BufferedImage joinBufferedImage(BufferedImage img1, BufferedImage img2) {
+
+            int type = img2.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : img2.getType();
+            BufferedImage resizedImage = new BufferedImage(img1.getWidth(), img1.getHeight(), type);
+            Graphics2D g = resizedImage.createGraphics();
+            g.drawImage(img2, 0, 0, img1.getWidth(), img1.getHeight(), null);
+            g.dispose();
+
+            int wid = img1.getWidth();
+            int height = img1.getHeight() + img2.getHeight();
+
+            //create a new buffer and draw two image into the new image
+            BufferedImage newImage = new BufferedImage(wid, height, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2 = newImage.createGraphics();
+            Color oldColor = g2.getColor();
+            //fill background
+            g2.setPaint(Color.WHITE);
+            g2.fillRect(0, 0, wid, height);
+            //draw image
+            g2.setColor(oldColor);
+            g2.drawImage(img1, null, 0, 0);
+            g2.drawImage(img2, null, 0, img1.getHeight());
+            g2.dispose();
+            return newImage;
         }
 
         public void initGrabber() {
@@ -164,7 +200,7 @@ public class VideoServerInterface extends Service<Image> {
                     }
 //                    System.out.println("VideoServerInterface: c: " + c++);
                     RequestObject requestObject = new RequestObject(username, wanted_code);
-                    
+
                     System.out.println("VideoServerInterfaceRequest: wanted_code; " + wanted_code);
 
 //                    System.out.println("VideoServerInterface: c: " + c++);

@@ -80,7 +80,7 @@ public class InvigilateFormController implements Initializable {
         private DatabaseInterface.StudentRow student;
 
         private ImageView imgWebcam;
-        private ImageView imgDesktop;
+//        private ImageView imgDesktop;
         private Button btnTerminate;
         private TextArea msgReceived;
         private TextField msgToSend;
@@ -110,15 +110,17 @@ public class InvigilateFormController implements Initializable {
             imgWebcam = new ImageView();
             imgWebcam.setImage(image1);
             imgWebcam.setFitWidth(400);
-            imgWebcam.setFitHeight(300);
-            Image image2 = new Image("/eproctor/images/loginScreen.png");
-            imgDesktop = new ImageView();
-            imgDesktop.setImage(image2);
-            imgDesktop.setFitWidth(400);
-            imgDesktop.setFitHeight(300);
+//            imgWebcam.setFitHeight(300);
+            imgWebcam.setFitHeight(600);
+//            Image image2 = new Image("/eproctor/images/loginScreen.png");
+//            imgDesktop = new ImageView();
+//            imgDesktop.setImage(image2);
+//            imgDesktop.setFitWidth(400);
+//            imgDesktop.setFitHeight(300);
             VBox pane = new VBox();
             pane.setMinSize(400, 700);
-            pane.getChildren().addAll(imgWebcam, imgDesktop, bottom);
+//            pane.getChildren().addAll(imgWebcam, imgDesktop, bottom);
+            pane.getChildren().addAll(imgWebcam, bottom);
             this.setContent(pane);
             this.setText("gong0025");
         }
