@@ -36,7 +36,7 @@
         <TextField fx:id="msgToSend" minHeight="25.0" prefWidth="200.0" />
         <HBox alignment="CENTER_RIGHT" prefHeight="-1.0" prefWidth="-1.0">
           <children>
-            <ProgressIndicator fx:id="msgProgressIndicator" progress="0.0" />
+            <ProgressIndicator fx:id="msgProgressIndicator" prefHeight="30.0" prefWidth="30.0" progress="0.0" />
             <Button fx:id="msgSendButton" alignment="CENTER" mnemonicParsing="false" onAction="#sendMsg" prefWidth="57.0" rotate="0.0" text="send" textAlignment="LEFT">
               <HBox.margin>
                 <Insets left="20.0" />

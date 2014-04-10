@@ -12,19 +12,19 @@ import javafx.concurrent.Task;
  */
 public class MessageSend extends Service<Void> {
 
-    private String me;
+    private String myUsername;
     private String course_code;
     private String session_code;
-    private String receiver_code;
+    private String receiverName;
     private String text;
     private Date time;
     private int type;
 
-    public MessageSend(String me, String receiver_code, String course_code, String session_code, String text, Date time, int type) {
-        this.me = me;
+    public MessageSend(String myUsername, String receiverName, String course_code, String session_code, String text, Date time, int type) {
+        this.myUsername = myUsername;
+        this.receiverName = receiverName;
         this.course_code = course_code;
         this.session_code = session_code;
-        this.receiver_code = receiver_code;
         this.text = text;
         this.time = time;
         this.type = type;
@@ -35,7 +35,7 @@ public class MessageSend extends Service<Void> {
         return new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-                boolean result = sendMessage(me, receiver_code, course_code, session_code, text, time, type);
+                boolean result = sendMessage(myUsername, receiverName, course_code, session_code, text, time, type);
                 return null;
             }
         };

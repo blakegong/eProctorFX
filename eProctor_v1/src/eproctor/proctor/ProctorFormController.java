@@ -172,7 +172,7 @@ public class ProctorFormController implements Initializable {
             button.setOnAction((ActionEvent e) -> {
                 try {
                     timer.stop();
-                    openInvigilateForm(recordRow);
+                    openInvigilateForm(recordRow, start, end);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -201,7 +201,7 @@ public class ProctorFormController implements Initializable {
         }
     }
 
-    private void openInvigilateForm(DatabaseInterface.RecordRowProctor recordRow) throws Exception {
+    private void openInvigilateForm(DatabaseInterface.RecordRowProctor recordRow, Date start, Date end) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("InvigilateForm.fxml"));
         Scene invigilateScene = new Scene(loader.load());
         InvigilateFormController controller = (InvigilateFormController) loader.getController();
@@ -215,6 +215,7 @@ public class ProctorFormController implements Initializable {
         controller.setSessionCode(recordRow.getSession().getCode());
         controller.setStudents(recordRow.getStudentList());
         controller.showStudents();
+        controller.startTimer(start, end);
     }
 
     /**

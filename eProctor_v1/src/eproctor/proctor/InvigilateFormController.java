@@ -8,12 +8,16 @@ package eproctor.proctor;
 import eproctor.commons.DatabaseInterface;
 import eproctor.commons.MessagePull;
 import eproctor.commons.MessageSend;
+import static eproctor.commons.Timer.intSecToReadableSecond;
 import eproctor.commons.VideoServerInterface;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.ResourceBundle;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
@@ -24,8 +28,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -36,6 +42,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  * FXML Controller class
@@ -47,9 +54,115 @@ public class InvigilateFormController implements Initializable {
     private Stage selfStage;
     private ArrayList<DatabaseInterface.StudentRow> students;
     private String courseCode, sessionCode;
+    private int serviceLeft;
+    private Timeline timer;
+    private int count;
     @FXML
     private TextArea notificationSent;
-    
+    @FXML
+    private TextField notificationToSend;
+    @FXML
+    private Button notificationSendButton;
+    @FXML
+    private Button exitButton;
+    @FXML
+    private Label timeLeftLabel;
+
+    @FXML
+    private void sendNotification() {
+        notificationSendButton.setDisable(true);
+        notificationToSend.setDisable(true);
+        Date t = new Date();
+        notificationSent.setText(notificationSent.getText() + "\n\n" + notificationToSend.getText() + "\n" + t.toString());
+
+        serviceLeft = students.size();
+        for (DatabaseInterface.StudentRow sr : students) {
+            MessageSend ms = new MessageSend("", sr.getUsername(), courseCode, sessionCode, notificationToSend.getText(), t, 0);
+            ms.setOnFailed(new EventHandler<WorkerStateEvent>() {
+
+                @Override
+                public void handle(WorkerStateEvent t) {
+                    if (serviceLeft > 0) {
+                        serviceLeft--;
+                    } else {
+                        notificationSendButton.setDisable(false);
+                        notificationToSend.setDisable(false);
+                    }
+
+                    notificationSent.setText(notificationSent.getText() + "\nSending to " + sr.getUsername() + " failed. Please send individually.");
+                }
+            });
+            ms.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+
+                @Override
+                public void handle(WorkerStateEvent t) {
+                    if (serviceLeft > 0) {
+                        serviceLeft--;
+                    } else {
+                        notificationSendButton.setDisable(false);
+                        notificationToSend.setDisable(false);
+                    }
+                    notificationSent.setText(notificationSent.getText() + "\nSending to " + sr.getUsername() + " failed. Please send individually.");
+                }
+            });
+            ms.start();
+        }
+    }
+
+    @FXML
+    private void exit() {
+        ObservableList<Node> list = flowPane.getChildren();
+        for (Node n : list) {
+            InfoPane temp = (InfoPane) n;
+            temp.getMp().cancel();
+            temp.getServiceReceiveImage().cancel();
+        }
+        selfStage.close();
+    }
+
+    public void startTimer(Date start, Date end) {
+//        exitButton.setDisable(true);
+        if (new Date().before(start)) {
+            count = (int) ((new Date().getTime() - start.getTime()) / 1000);
+            timer = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    count--;
+                    int level = 3;
+                    timeLeftLabel.setText("time to exam:\n\t" + intSecToReadableSecond(count, level));
+                }
+            }));
+            timer.setCycleCount(count);
+            timer.setOnFinished(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent arg0) {
+                    startTimer(start, end);
+                }
+            });
+            timer.play();
+        } else {
+            count = (int) ((end.getTime() - new Date().getTime()) / 1000);
+            timer = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    count--;
+                    int level = 3;
+                    timeLeftLabel.setText("time left:\n\t" + intSecToReadableSecond(count, level));
+                }
+            }));
+            timer.setCycleCount(count);
+            timer.setOnFinished(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent arg0) {
+                    timeLeftLabel.setText("Exam ended. Thank you Doctor. Leedham *^_^*");
+//                    exitButton.setDisable(false);
+                }
+            });
+            timer.play();
+        }
+    }
 
     public void setCourseCode(String courseCode) {
         System.out.println("xxxxxxx: " + courseCode);
@@ -140,12 +253,27 @@ public class InvigilateFormController implements Initializable {
                 });
                 ms.start();
             });
-            mp = new MessagePull(DatabaseInterface.username, courseCode, sessionCode);
-            msgReceived.textProperty().bind(mp.messageProperty());
-            mp.start();
-            
+
             msgReceived = new TextArea();
             msgReceived.setMinWidth(170);
+            mp = new MessagePull(DatabaseInterface.username, courseCode, sessionCode);
+            msgReceived.textProperty().bind(mp.messageProperty());
+            mp.setOnCancelled(new EventHandler<WorkerStateEvent>() {
+
+                @Override
+                public void handle(WorkerStateEvent t) {
+                    System.out.println("MessagePull cancelled.");
+                }
+            });
+            mp.setOnFailed(new EventHandler<WorkerStateEvent>() {
+
+                @Override
+                public void handle(WorkerStateEvent t) {
+                    System.out.println("MessagePull failed.");
+                }
+            });
+            mp.start();
+
             msgToSend = new TextField();
             msgToSend.setMinWidth(180);
             VBox chatBox = new VBox(5);
@@ -181,7 +309,7 @@ public class InvigilateFormController implements Initializable {
 //            pane.getChildren().addAll(imgWebcam, imgDesktop, bottom);
             pane.getChildren().addAll(imgWebcam, bottom);
             this.setContent(pane);
-            
+
         }
 
         public void setStudent(DatabaseInterface.StudentRow student) {
@@ -218,5 +346,12 @@ public class InvigilateFormController implements Initializable {
             serviceReceiveImage.start();
         }
 
+        public VideoServerInterface getServiceReceiveImage() {
+            return serviceReceiveImage;
+        }
+
+        public MessagePull getMp() {
+            return mp;
+        }
     }
 }

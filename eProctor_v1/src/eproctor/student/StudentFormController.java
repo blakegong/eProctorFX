@@ -319,7 +319,7 @@ public class StudentFormController implements Initializable {
 
                 try {
 //                    button.setDisable(true); // only can enter once
-                    openExamForm(courseRow, recordRow.getSession(), (int) ((end.getTime() - start.getTime()) / 1000));
+                    openExamForm(courseRow, recordRow.getSession(), start, end);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -390,7 +390,7 @@ public class StudentFormController implements Initializable {
         frameFormController.openReviewView(recordRow, courseRow);
     }
 
-    private void openExamForm(DatabaseInterface.CourseRow courseRow, DatabaseInterface.SessionRow sessionRow, int examDuration) throws Exception {
+    private void openExamForm(DatabaseInterface.CourseRow courseRow, DatabaseInterface.SessionRow sessionRow, Date start, Date end) throws Exception {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("ExamForm.fxml"));
         Scene examScene = new Scene(loader.load());
@@ -404,7 +404,7 @@ public class StudentFormController implements Initializable {
         stage.show();
         controller.setStage(stage);
 
-        controller.startTimer(examDuration);
+        controller.startTimer(start, end);
         controller.startServiceSendImage(DatabaseInterface.username, courseRow.getCode(), sessionRow.getCode(), "localhost", 6001, controller.videoImageView);
         controller.startServiceFetchMsg(courseRow, sessionRow);
     }

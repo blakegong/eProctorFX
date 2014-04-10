@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
@@ -381,6 +382,28 @@ public class DatabaseInterface {
         return (String) result.get("name");
     }
 
+    public static String randomProctor(String courseCode, String sessionCode) {
+        BasicDBObject query = new BasicDBObject("course_code", courseCode)
+                                                .append("session_code", sessionCode)
+                                                .append("proctor_code", new BasicDBObject("$exists", true));
+        System.out.println("randomProctor: query:\n" + query);
+        DBCursor cur = record.find(query);
+        int no = 0;
+        System.out.println("cur.size(): " + cur.size() + ", no: " + no);
+        Random rd = new Random();
+        no = rd.nextInt(cur.size());
+        System.out.println("cur.size(): " + cur.size() + ", no: " + no);
+        for (int i = 0; i < no; i++) {
+            cur.next();
+        }
+        String temp = (String)cur.next().get("proctor_code");
+        System.out.println("temp: " + temp);
+        BasicDBObject query2 = new BasicDBObject("user_code", temp);
+        String temp2 = (String) proctor.findOne(query2).get("username");
+        System.out.println("temp2: " + temp2);
+        return temp2;
+    }
+    
     /**
      * This is the Constructor of DatabaseInterface class Suppresses default
      * constructor, ensuring non-instantiation.
@@ -717,4 +740,5 @@ public class DatabaseInterface {
         }
 
     }
+
 }

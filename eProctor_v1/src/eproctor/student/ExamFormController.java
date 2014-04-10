@@ -5,6 +5,7 @@ import eproctor.commons.DatabaseInterface;
 import eproctor.commons.MessagePull;
 import eproctor.commons.MessageSend;
 import eproctor.commons.Timer;
+import static eproctor.commons.Timer.intSecToReadableSecond;
 import eproctor.commons.VideoServerInterface;
 import java.net.URL;
 import java.util.Date;
@@ -44,6 +45,7 @@ public class ExamFormController implements Initializable {
     private DatabaseInterface.CourseRow courseRow;
     private Timeline timer;
     private int count;
+    private String proctorRandomed;
 
     private Stage selfStage;
     private Scene selfScene;
@@ -81,10 +83,11 @@ public class ExamFormController implements Initializable {
         
         ////////////////////////////////////////////////////////////
         // random a proctor
-        String receiverName = "chen0818";
+        if (proctorRandomed == null)
+            proctorRandomed = DatabaseInterface.randomProctor(courseRow.getCode(), sessionRow.getCode());
         ////////////////////////////////////////////////////////////
         
-        MessageSend serviceSendMsg = new MessageSend(DatabaseInterface.username, receiverName, courseRow.getCode(), sessionRow.getCode(), msgToSend.getText(), new Date(), 0);
+        MessageSend serviceSendMsg = new MessageSend(DatabaseInterface.username, proctorRandomed, courseRow.getCode(), sessionRow.getCode(), msgToSend.getText(), new Date(), 0);
         serviceSendMsg.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 
             @Override
@@ -115,6 +118,7 @@ public class ExamFormController implements Initializable {
         } catch (FrameGrabber.Exception ex) {
             ex.printStackTrace();
         }
+        proctorRandomed = null;
         selfStage.close();
     }
 
@@ -264,57 +268,50 @@ public class ExamFormController implements Initializable {
         VideoServerInterface.serviceSendImage.start();
     }
 
-    public void startTimer(int examDuration) {
-
-        // = = = = = = =
-        // start a countDOWN timer
-        count = examDuration;
-        timer = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                count--;
-                timeLabel.setWrapText(true);
-                timeLabel.setText("Time left: " + Timer.intSecToReadableSecond(count, 4));
-            }
-        }));
-        timer.setCycleCount(count);
-        timer.setOnFinished(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent arg0) {
-                try {
-                    VideoServerInterface.serviceSendImage.getGrabber().stop();
-                } catch (FrameGrabber.Exception ex) {
-                    ex.printStackTrace();
+    public void startTimer(Date start, Date end) {
+//        exitButton.setDisable(true);
+        browser.setVisible(false);
+        if (new Date().before(start)) {
+            count = (int)((new Date().getTime() - start.getTime()) / 1000);
+            timer = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    count--;
+                    int level = 3;
+                    timeLabel.setText("time to exam:\n\t" + intSecToReadableSecond(count, level));
                 }
-                exitButton.setDisable(true);
-                msgSendButton.setDisable(true);
-                browser.setDisable(true);
-                timeLabel.setText("Exam ended. Your this window will close in 5 seconds.");
+            }));
+            timer.setCycleCount(count);
+            timer.setOnFinished(new EventHandler<ActionEvent>() {
 
-                // = = = = = = =
-                // start a countDOWN timer
-                count = 5; // give 5 seconds for a last look
-                timer = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        count--;
-                        timeLabel.setText("Exam ended. Your this window will close in " + count + " seconds.");
-                    }
-                }));
-                timer.setCycleCount(count);
-                timer.setOnFinished(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent arg0) {
+                    startTimer(start, end);
+                }
+            });
+            timer.play();
+        } else {
+            browser.setVisible(true);
+            count = (int)((end.getTime() - new Date().getTime()) / 1000);
+            timer = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    count--;
+                    int level = 3;
+                    timeLabel.setText("time left:\n\t" + intSecToReadableSecond(count, level));
+                }
+            }));
+            timer.setCycleCount(count);
+            timer.setOnFinished(new EventHandler<ActionEvent>() {
 
-                    @Override
-                    public void handle(ActionEvent arg0) {
-                        selfStage.close(); // 5 seconds passed. close exam window
-                    }
-                });
-                timer.play();
-                // = = = = = = =
-            }
-        });
-        timer.play();
-        // = = = = = = =
+                @Override
+                public void handle(ActionEvent arg0) {
+                    timeLabel.setText("Exam ended. Thank you Doctor. Leedham *^_^*");
+//                    exitButton.setDisable(false);
+                }
+            });
+            timer.play();
+        }
     }
+
 }

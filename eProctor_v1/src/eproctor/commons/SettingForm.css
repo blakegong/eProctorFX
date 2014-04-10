@@ -8,4 +8,6 @@
 
 .label {
     -fx-font-size: 14;
+    -fx-font-weight: bold;
+    -fx-font-color: white;
 }
