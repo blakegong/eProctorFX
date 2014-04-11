@@ -387,6 +387,8 @@ public class DatabaseInterface {
         if (result == null) {
             result = DatabaseInterface.proctor.findOne(new BasicDBObject("username", username));
         }
+        if (result == null)
+            return " -Notification- ";
         return (String) result.get("name");
     }
 

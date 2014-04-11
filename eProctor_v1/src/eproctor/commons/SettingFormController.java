@@ -195,6 +195,8 @@ public class SettingFormController implements Initializable {
         String result = "";
         while (sc != null && sc.hasNext()) {
             String temp = sc.nextLine();
+            if (temp.length() <= 1)
+                continue;
             if (temp.charAt(0) == '#') {
                 comment += temp + "\n";
             } else {

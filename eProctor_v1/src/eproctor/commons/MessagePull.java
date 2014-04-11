@@ -37,23 +37,15 @@ public class MessagePull extends Service<String> {
                 while (status != 2) {
                     String msg = pullMessage(myUsername, course_code, session_code);
                     this.updateMessage(msg);
-//                        this.updateMessage(test++ + " test wrapping test wrapping test wrapping test wrapping test wrapping\n test scrolling\n test scrolling\n test scrolling\n test scrolling\n test scrolling\n test scrolling\n test scrolling\n");
 
                     status = Integer.parseInt(msg.split("#")[1]);
-//                        System.out.println("ServiceFetchMsg: status: " + status);
-//                        status = test % 2;
-//                        if (test == 5)
-//                            status = 2;
-
                     this.updateTitle("-fx-background-color: " + statusIntToStatusString(status));
-
                     Thread.sleep(3000);
                 }
 
                 if (status == 2) {
                     return "ending";
                 }
-
                 return "ServiceFetchMsg Ended Unexpected.";
             }
         };
@@ -106,15 +98,15 @@ public class MessagePull extends Service<String> {
     /**
      * This method is to get message from server (database)
      *
-     * @param me id of myself(user_id)
+     * @param username id of myself(user_id)
      * @param course_code id of course
      * @param session_code id of exam session
      * @return string of message
      */
-    public static String pullMessage(String me, String course_code, String session_code) {
+    public static String pullMessage(String username, String course_code, String session_code) {
         BasicDBObject orArray[] = new BasicDBObject[2];
-        orArray[0] = new BasicDBObject("receiver_code", me);
-        orArray[1] = new BasicDBObject("sender_code", me);
+        orArray[0] = new BasicDBObject("receiver_code", username);
+        orArray[1] = new BasicDBObject("sender_code", username);
         BasicDBObject query = new BasicDBObject("course_code", course_code)
                 .append("session_code", session_code)
                 .append("$or", orArray);
