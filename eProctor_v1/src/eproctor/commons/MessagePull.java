@@ -138,6 +138,7 @@ public class MessagePull extends Service<String> {
             }
             if ((int) temp.get("type") == 2) {
                 msgTemp += "\n(you are expelled!)";
+                DatabaseInterface.record.update(new BasicDBObject("student_code", DatabaseInterface.getUser_code(username)), new BasicDBObject("$set", new BasicDBObject("remark", "expelled")));
             }
 
             msgAll += msgTemp + "\n\n\n";

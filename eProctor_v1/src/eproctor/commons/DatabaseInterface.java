@@ -397,6 +397,12 @@ public class DatabaseInterface {
         return temp;
     }
     
+    public static String getUser_code(String username) {
+        String temp = (String)student.findOne(new BasicDBObject("username", username)).get("user_code");
+        if (temp.equals("null"))
+            temp = (String)proctor.findOne(new BasicDBObject("username", username)).get("user_code");
+        return temp;
+    }
     public static String randomProctor(String courseCode, String sessionCode) {
         BasicDBObject query = new BasicDBObject("course_code", courseCode)
                                                 .append("session_code", sessionCode)

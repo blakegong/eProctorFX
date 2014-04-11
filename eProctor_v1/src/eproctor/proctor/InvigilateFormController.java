@@ -102,6 +102,7 @@ public class InvigilateFormController implements Initializable {
                         System.out.println("sendNotification: serviceLeft: " + serviceLeft);
                     } else {
                         notificationSendButton.setDisable(false);
+                        notificationToSend.setText("");
                         notificationToSend.setDisable(false);
                     }
                 }

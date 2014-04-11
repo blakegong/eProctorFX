@@ -243,8 +243,8 @@ public class StudentFormController implements Initializable {
 
             // = = = = = = =
             // start a countDOWN timer
-//            count = (int) ((start.getTime() - new Date().getTime()) / 1000);
-            count = 30 * 60 + 15; // for testing
+            count = (int) ((start.getTime() - new Date().getTime()) / 1000);
+//            count = 30 * 60 + 15; // for testing
             timer = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
@@ -286,8 +286,8 @@ public class StudentFormController implements Initializable {
 
             // = = = = = = =
             // start a countDOWN timer
-//            count = (int) ((start.getTime() - new Date().getTime()) / 1000);
-            count = 30 * 60 + 15; // for testing
+            count = (int) ((start.getTime() - new Date().getTime()) / 1000);
+//            count = 30 * 60 + 15; // for testing
             timer = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
@@ -327,19 +327,20 @@ public class StudentFormController implements Initializable {
 
             // = = = = = = =
             // start a countUP timer
-//            count = (int) ((new Date().getTime() - start.getTime() ) / 1000);
-            count = 60 * 14 + 40; // for testing
+            count = (int) ((new Date().getTime() - start.getTime() ) / 1000);
+//            count = 60 * 14 + 40; // for testing
             timer = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
                     count++;
                     lblInfo.setText("exam has started for\n\t" + intSecToReadableSecond(count, 4));
 
-//                    if (count >= 60 * 15) {
-//                        lblInfo.setText("Exam extrance has closed. (15 mins passed)");
-//                        System.out.println("timer should stop.");
-//                        timer.stop();
-//                    }
+                    if (count >= 60 * 15) {
+                        lblInfo.setText("Exam extrance has closed. (15 mins passed)");
+                        System.out.println("timer should stop.");
+                        button.setDisable(true);
+                        timer.stop();
+                    }
                 }
             }));
             timer.setCycleCount(Timeline.INDEFINITE);

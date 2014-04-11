@@ -5,7 +5,3 @@
 #font_size default 14
 ip=localhost
 
-port=6002
-nightMode=0
-fontSize=14
-backgroundMusic=none
