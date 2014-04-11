@@ -10,7 +10,7 @@ import javafx.concurrent.Task;
  *
  * @author CLY
  */
-public class MessageSend extends Service<Void> {
+public class MessageSend extends Service<Boolean> {
 
     private String myUsername;
     private String course_code;
@@ -31,12 +31,16 @@ public class MessageSend extends Service<Void> {
     }
 
     @Override
-    protected Task<Void> createTask() {
-        return new Task<Void>() {
+    protected Task<Boolean> createTask() {
+        return new Task<Boolean>() {
             @Override
-            protected Void call() throws Exception {
+            protected Boolean call() throws Exception {
                 boolean result = sendMessage(myUsername, receiverName, course_code, session_code, text, time, type);
-                return null;
+                if (result)
+                    super.succeeded();
+                else
+                    super.failed();
+                return result;
             }
         };
     }
@@ -63,6 +67,7 @@ public class MessageSend extends Service<Void> {
                 .append("time", date)
                 .append("type", type)
                 .append("isRead", false));
+        System.out.println("sendMessage: " + wr);
         if (wr.getError() != null) {
             System.out.println("sendMessage failed. \n" + wr.getError());
             return false;
@@ -70,5 +75,4 @@ public class MessageSend extends Service<Void> {
         System.out.println("sendMessage succeeded.");
         return true;
     }
-
 }

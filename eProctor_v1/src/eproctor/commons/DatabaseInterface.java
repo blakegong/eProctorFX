@@ -390,6 +390,11 @@ public class DatabaseInterface {
         return (String) result.get("name");
     }
 
+    public static String getCourseTitle(String course_code) {
+        String temp = (String)course.findOne(new BasicDBObject("code", course_code)).get("name");
+        return temp;
+    }
+    
     public static String randomProctor(String courseCode, String sessionCode) {
         BasicDBObject query = new BasicDBObject("course_code", courseCode)
                                                 .append("session_code", sessionCode)

@@ -64,6 +64,8 @@ public class InvigilateFormController implements Initializable {
     private Button exitButton;
     @FXML
     private Label timeLeftLabel;
+    @FXML
+    private Label sessionTitle;
 
     @FXML
     private void sendNotification() {
@@ -73,33 +75,35 @@ public class InvigilateFormController implements Initializable {
         notificationSent.setText(notificationSent.getText() + "\n\n" + notificationToSend.getText() + "\n" + t.toString());
 
         serviceLeft = students.size();
+        System.out.println("sendNotification: serviceLeft: " + serviceLeft);
         for (DatabaseInterface.StudentRow sr : students) {
             MessageSend ms = new MessageSend("", sr.getUsername(), courseCode, sessionCode, notificationToSend.getText(), t, 0);
             ms.setOnFailed(new EventHandler<WorkerStateEvent>() {
 
                 @Override
                 public void handle(WorkerStateEvent t) {
+                    serviceLeft--;
                     if (serviceLeft > 0) {
-                        serviceLeft--;
+                        System.out.println("sendNotification: serviceLeft: " + serviceLeft);
                     } else {
                         notificationSendButton.setDisable(false);
                         notificationToSend.setDisable(false);
                     }
 
-                    notificationSent.setText(notificationSent.getText() + "\nSending to " + sr.getUsername() + " failed. Please send individually.");
+                    notificationSent.setText(notificationSent.getText() + "\n\nSending to " + sr.getUsername() + " failed. Please send individually.");
                 }
             });
             ms.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 
                 @Override
                 public void handle(WorkerStateEvent t) {
+                    serviceLeft--;
                     if (serviceLeft > 0) {
-                        serviceLeft--;
+                        System.out.println("sendNotification: serviceLeft: " + serviceLeft);
                     } else {
                         notificationSendButton.setDisable(false);
                         notificationToSend.setDisable(false);
                     }
-                    notificationSent.setText(notificationSent.getText() + "\nSending to " + sr.getUsername() + " failed. Please send individually.");
                 }
             });
             ms.start();
@@ -164,10 +168,12 @@ public class InvigilateFormController implements Initializable {
     public void setCourseCode(String courseCode) {
         System.out.println("xxxxxxx: " + courseCode);
         this.courseCode = courseCode;
+        sessionTitle.setText(sessionTitle.getText() + "\n" + courseCode + "\n" + DatabaseInterface.getCourseTitle(courseCode));
     }
 
     public void setSessionCode(String sessionCode) {
         this.sessionCode = sessionCode;
+        sessionTitle.setText(sessionTitle.getText() + "\nSession: " + sessionCode);
     }
 
     public void setStudents(ArrayList<DatabaseInterface.StudentRow> students) {
@@ -279,6 +285,7 @@ public class InvigilateFormController implements Initializable {
             Separator separator = new Separator();
             separator.setOrientation(Orientation.VERTICAL);
             msgType = new ChoiceBox(FXCollections.observableArrayList("message", "warning", "expelling"));
+            msgType.getSelectionModel().selectFirst();
             msgType.setMinWidth(100);
             HBox sendLine = new HBox(20);
             sendLine.getChildren().addAll(msgType, btnSend);

@@ -4,7 +4,4 @@
 #night_mode default 0/false
 #font_size default 14
 ip=localhost
-port=6002
-nightMode=0
-fontSize=14
-backgroundMusic=none
+port=6002nightMode=0fontSize=14backgroundMusic=none
