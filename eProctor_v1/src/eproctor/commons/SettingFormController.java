@@ -203,7 +203,7 @@ public class SettingFormController implements Initializable {
                     result = op[1];
                     temp = op[0] + "=" + op[1] + "\n";
                 }
-                s += temp;
+                s += temp + "\n";
             }
         }
         System.out.println(s);
