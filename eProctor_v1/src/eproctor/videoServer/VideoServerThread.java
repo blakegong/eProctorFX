@@ -30,8 +30,8 @@ public class VideoServerThread implements Runnable {
     public void run() {
         try {
             serverSocket = new ServerSocket(port);
-
-            System.out.println("start receiveImg...");
+            System.out.println("VideoServerThread_ip: " + serverSocket.getInetAddress());
+            System.out.println("Start receiveImg...");
 //            int i = 0;
             while (true) {
                 socket = serverSocket.accept();

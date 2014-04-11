@@ -24,6 +24,7 @@ public class DisplayServerThread implements Runnable {
     public void run() {
         try {
             serverSocket = new ServerSocket(port);
+            System.out.println("DisplayServerThread_ip: " + serverSocket.getInetAddress());
             System.out.println("Start dispatching image...");
 
             while (true) {
