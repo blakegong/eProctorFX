@@ -62,9 +62,10 @@ public class DatabaseInterface {
     }
 
     /**
-     *
-     * @param controller
-     * @param infoData
+     *This method is the interface between Proctor infomation and application
+     *<p> This method reads in Proctor info data from database
+     * @param controller Proctor Form controller
+     * @param infoData ObervableList contain the Proctor info
      */
     public static void getInfoDataProctor(ProctorFormController controller, ObservableList<Node> infoData) {
         for (RecordRowProctor tempRecord : recordDataProctor) {
@@ -298,12 +299,14 @@ public class DatabaseInterface {
     }
 
     /**
-     *
+     *This method works as an interface to update user (Proctor) data onto database
      */
     public static void updateLocalDataProctor() {
         updateLocalRecordDataProctor();
     }
-    
+    /**
+     *
+     */
     public static void updateRemarkProctor(String student_code, String course_code, String session_code, String remarks) {
         QueryBuilder qbStudent = new QueryBuilder ();
         qbStudent.put("student_code").is(student_code).put("course_code").is(course_code).put("session_code").is(session_code);
