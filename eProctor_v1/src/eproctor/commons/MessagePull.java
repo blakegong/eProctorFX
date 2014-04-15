@@ -20,6 +20,12 @@ public class MessagePull extends Service<String> {
     private String course_code;
     private String session_code;
 
+    /**
+     *
+     * @param myUsername
+     * @param course_code
+     * @param session_code
+     */
     public MessagePull(String myUsername, String course_code, String session_code) {
         this.myUsername = myUsername;
         this.course_code = course_code;
@@ -71,6 +77,7 @@ public class MessagePull extends Service<String> {
     /**
      * This is to set me
      *
+     * @param myUsername
      * @param me
      */
     public void setMyUsername(String myUsername) {

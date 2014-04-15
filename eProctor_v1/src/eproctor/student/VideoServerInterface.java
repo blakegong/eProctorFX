@@ -25,9 +25,17 @@ import javax.imageio.ImageIO;
  */
 public class VideoServerInterface {
 
-    public static String domain, userCode;
+    public static String domain,
+
+    /**
+     *
+     */
+    userCode;
     public static String course_code, session_code;
 
+    /**
+     *
+     */
     public static ServiceSendImage serviceSendImage;
 
     /**
@@ -43,8 +51,20 @@ public class VideoServerInterface {
         private int port;
         private String course_code;
         private String session_code;
+
+        /**
+         *
+         */
         public boolean isLocal;
 
+        /**
+         *
+         * @param me
+         * @param ip
+         * @param port
+         * @param course_code
+         * @param session_code
+         */
         public ServiceSendImage(String me, String ip, int port, String course_code, String session_code) {
             this.me = me;
             this.ip = ip;
@@ -109,6 +129,9 @@ public class VideoServerInterface {
             socket.close();
         }
 
+        /**
+         *
+         */
         public void initGrabber() {
             try {
                 grabber = FrameGrabber.createDefault(0);
@@ -117,6 +140,10 @@ public class VideoServerInterface {
             }
         }
 
+        /**
+         *
+         * @return
+         */
         public FrameGrabber getGrabber() {
             return grabber;
         }
@@ -190,8 +217,19 @@ public class VideoServerInterface {
      */
     public static class RequestObject implements Serializable {
 
+        /**
+         *
+         */
         protected static final long serialVersionUID = 1124L;
+
+        /**
+         *
+         */
         public String proctorId;
+
+        /**
+         *
+         */
         public String requestId;
 
         /**

@@ -122,6 +122,11 @@ public class InvigilateFormController implements Initializable {
         selfStage.close();
     }
 
+    /**
+     *
+     * @param start
+     * @param end
+     */
     public void startTimer(Date start, Date end) {
 //        exitButton.setDisable(true);
         if (new Date().before(start)) {
@@ -166,21 +171,36 @@ public class InvigilateFormController implements Initializable {
         }
     }
 
+    /**
+     *
+     * @param courseCode
+     */
     public void setCourseCode(String courseCode) {
         System.out.println("xxxxxxx: " + courseCode);
         this.courseCode = courseCode;
         sessionTitle.setText(sessionTitle.getText() + "\n" + courseCode + "\n" + DatabaseInterface.getCourseTitle(courseCode));
     }
 
+    /**
+     *
+     * @param sessionCode
+     */
     public void setSessionCode(String sessionCode) {
         this.sessionCode = sessionCode;
         sessionTitle.setText(sessionTitle.getText() + "\nSession: " + sessionCode);
     }
 
+    /**
+     *
+     * @param students
+     */
     public void setStudents(ArrayList<DatabaseInterface.StudentRow> students) {
         this.students = students;
     }
 
+    /**
+     *
+     */
     public void showStudents() {
         for (DatabaseInterface.StudentRow student : students) {
             InfoPane temp = new InfoPane();
@@ -203,6 +223,9 @@ public class InvigilateFormController implements Initializable {
         selfStage = stage;
     }
 
+    /**
+     *
+     */
     public class InfoPane extends TitledPane {
 
         private DatabaseInterface.StudentRow student;
@@ -217,6 +240,9 @@ public class InvigilateFormController implements Initializable {
         private ChoiceBox msgType;
         private MessagePull mp;
 
+        /**
+         *
+         */
         public InfoPane() {
             initializeUI();
         }
@@ -317,11 +343,18 @@ public class InvigilateFormController implements Initializable {
 
         }
 
+        /**
+         *
+         * @param student
+         */
         public void setStudent(DatabaseInterface.StudentRow student) {
             this.student = student;
             this.setText(student.getUsername());
         }
 
+        /**
+         *
+         */
         public void startReceive() {
             System.out.println("student's name: " + student.getName());
 //            System.out.println("InfoPane: " + DatabaseInterface.userCode + " " + student.getUsername() + " " + "localhost" + 6002 + courseCode + sessionCode);
@@ -351,10 +384,18 @@ public class InvigilateFormController implements Initializable {
             serviceReceiveImage.start();
         }
 
+        /**
+         *
+         * @return
+         */
         public VideoServerInterface getServiceReceiveImage() {
             return serviceReceiveImage;
         }
 
+        /**
+         *
+         * @return
+         */
         public MessagePull getMp() {
             return mp;
         }

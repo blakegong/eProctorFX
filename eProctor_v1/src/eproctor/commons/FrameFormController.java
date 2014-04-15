@@ -147,6 +147,11 @@ public class FrameFormController implements Initializable {
         stage.show();
     }
 
+    /**
+     *
+     * @param recordRow
+     * @param courseRow
+     */
     public void openReviewView(DatabaseInterface.RecordRowStudent recordRow, DatabaseInterface.CourseRow courseRow) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/eproctor/student/ReviewForm.fxml"));
         try {
@@ -163,11 +168,17 @@ public class FrameFormController implements Initializable {
         mainPane.setCenter(reviewView);
     }
 
+    /**
+     *
+     */
     public void closeReviewView() {
         mainPane.setBottom(null);
         this.openStudentForm();
     }
 
+    /**
+     *
+     */
     public void setToolTips() {
         this.settingLabel.setTooltip(new Tooltip("Open setting view"));
         this.aboutLabel.setTooltip(new Tooltip("Open about view"));

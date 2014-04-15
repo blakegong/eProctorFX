@@ -20,6 +20,16 @@ public class MessageSend extends Service<Boolean> {
     private Date time;
     private int type;
 
+    /**
+     *
+     * @param myUsername
+     * @param receiverName
+     * @param course_code
+     * @param session_code
+     * @param text
+     * @param time
+     * @param type
+     */
     public MessageSend(String myUsername, String receiverName, String course_code, String session_code, String text, Date time, int type) {
         this.myUsername = myUsername;
         this.receiverName = receiverName;

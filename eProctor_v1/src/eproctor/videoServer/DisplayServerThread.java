@@ -5,6 +5,10 @@ import java.util.*;
 import java.io.*;
 import java.net.*;
 
+/**
+ *
+ * @author dingchengwang
+ */
 public class DisplayServerThread implements Runnable {
 
     private HashMap<String, RecordObject> receivedList;
@@ -14,6 +18,11 @@ public class DisplayServerThread implements Runnable {
     private Socket socket;
     private ObjectInputStream sInput;
 
+    /**
+     *
+     * @param port
+     * @param receivedList
+     */
     public DisplayServerThread(int port, HashMap<String, RecordObject> receivedList) {
         this.port = port;
         this.receivedList = receivedList;

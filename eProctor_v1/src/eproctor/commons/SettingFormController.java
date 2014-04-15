@@ -23,6 +23,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+/**
+ *
+ * @author dingchengwang
+ */
 public class SettingFormController implements Initializable {
 
     private Stage selfStage;
@@ -129,6 +133,11 @@ public class SettingFormController implements Initializable {
 //        this.cameraImageView.setImage(webcam_icon);
     }
 
+    /**
+     *
+     * @param option
+     * @param newValue
+     */
     public static void update(String option, String newValue) {
         String workingDir = System.getProperty("user.dir");
         String a = System.getProperty("file.separator");
@@ -175,6 +184,11 @@ public class SettingFormController implements Initializable {
         pw.close();
     }
 
+    /**
+     *
+     * @param option
+     * @return
+     */
     public static String getSetting(String option) {
         String workingDir = System.getProperty("user.dir");
         String a = System.getProperty("file.separator");
@@ -225,14 +239,25 @@ public class SettingFormController implements Initializable {
         return result;
     }
     
+    /**
+     *
+     * @param stage
+     */
     public void setStage(Stage stage) {
         selfStage = stage;
     }
 
+    /**
+     *
+     * @param frameFormController
+     */
     public void setFrameFormController(FrameFormController frameFormController) {
         this.frameFormController = frameFormController;
     }
 
+    /**
+     *
+     */
     public void initChoiceBox() {
         fontSizeCB.setItems(FXCollections.observableArrayList(12, 14, 16, 18));
         fontSizeCB.getSelectionModel().selectFirst();

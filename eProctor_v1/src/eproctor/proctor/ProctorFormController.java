@@ -82,7 +82,6 @@ public class ProctorFormController implements Initializable {
         /**
          * Basic constructor of InfoRow, returning an object of InfoRow
          *
-         * @param courseRow
          * @param recordRow
          *
          */

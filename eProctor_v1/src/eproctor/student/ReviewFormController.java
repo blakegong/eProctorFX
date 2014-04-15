@@ -59,12 +59,17 @@ public class ReviewFormController implements Initializable {
 
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }
 
+    /**
+     *
+     */
     public void updateDetails() {
         lblId.setText(recordRow.getId());
         lblCourseCode.setText(courseRow.getCode());
@@ -76,14 +81,26 @@ public class ReviewFormController implements Initializable {
         lblRemark.setText(recordRow.getRemark());
     }
 
+    /**
+     *
+     * @param recordRow
+     */
     public void setRecordRow(DatabaseInterface.RecordRowStudent recordRow) {
         this.recordRow = recordRow;
     }
 
+    /**
+     *
+     * @param courseRow
+     */
     public void setCourseRow(DatabaseInterface.CourseRow courseRow) {
         this.courseRow = courseRow;
     }
 
+    /**
+     *
+     * @param frameFormController
+     */
     public void setFrameFormController(FrameFormController frameFormController) {
         this.frameFormController = frameFormController;
     }

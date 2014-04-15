@@ -35,10 +35,30 @@ import org.bson.types.ObjectId;
  */
 public class DatabaseInterface {
 
-    public static DBCollection user, record, course, session, student, proctor, message;
-    public static String domain, username, password, userCode;
+    public static DBCollection user,
+
+    record,
+
+    course,
+
+    session,
+
+    student,
+
+    proctor,
+
+    message;
+    public static String domain,
+
+    username,
+
+    password,
+
+    userCode;
     private static List<RecordRowStudent> recordDataStudent;
+
     public static List<RecordRowProctor> recordDataProctor;
+
     public static List<CourseRow> courseData;
 
     /**
@@ -305,7 +325,12 @@ public class DatabaseInterface {
         updateLocalRecordDataProctor();
     }
     /**
-     *
+     *This method update the field remarks in record collection.
+     * <p> For example, the student is caught cheated.
+     * @param student_code id of student
+     * @param course_code id of course
+     * @param session_code id of the exam session
+     * @param remarks the remarks the proctor specifies
      */
     public static void updateRemarkProctor(String student_code, String course_code, String session_code, String remarks) {
         QueryBuilder qbStudent = new QueryBuilder ();
@@ -385,6 +410,11 @@ public class DatabaseInterface {
         }
     }
 
+    /**
+     *return Name of user (student or proctor)
+     * @param username username of user(proctor or student)
+     * @return
+     */
     public static String getName(String username) {
         DBObject result = DatabaseInterface.student.findOne(new BasicDBObject("username", username));
         if (result == null) {
@@ -395,17 +425,35 @@ public class DatabaseInterface {
         return (String) result.get("name");
     }
 
+    /**
+     *return title (name of the course) by passing in the id of the course
+     * @param course_code id of course
+     * @return
+     */
     public static String getCourseTitle(String course_code) {
         String temp = (String)course.findOne(new BasicDBObject("code", course_code)).get("name");
         return temp;
     }
     
+    /**
+     *return id by passing in username
+     * @param username
+     * @return
+     */
     public static String getUser_code(String username) {
         String temp = (String)student.findOne(new BasicDBObject("username", username)).get("user_code");
         if (temp.equals("null"))
             temp = (String)proctor.findOne(new BasicDBObject("username", username)).get("user_code");
         return temp;
     }
+
+    /**
+     *random choose proctor
+     * <p> using when student select a proctor to send message
+     * @param courseCode
+     * @param sessionCode
+     * @return
+     */
     public static String randomProctor(String courseCode, String sessionCode) {
         BasicDBObject query = new BasicDBObject("course_code", courseCode)
                                                 .append("session_code", sessionCode)
@@ -508,7 +556,7 @@ public class DatabaseInterface {
         }
 
         /**
-         *
+         *actuator of course
          * @return
          */
         public CourseRow getCourse() {
@@ -534,8 +582,8 @@ public class DatabaseInterface {
         /**
          * This is constructor for RecordRowProctor
          *
-         * @param id
-         * @param course
+         * @param id id of proctor
+         * @param course    
          * @param session
          * @param proctor_code
          * @param studentList
@@ -558,7 +606,7 @@ public class DatabaseInterface {
         }
 
         /**
-         *
+         *return id of user
          * @return
          */
         public String getId() {
@@ -566,7 +614,7 @@ public class DatabaseInterface {
         }
 
         /**
-         *
+         *return course
          * @return
          */
         public CourseRow getCourse() {
@@ -574,7 +622,7 @@ public class DatabaseInterface {
         }
 
         /**
-         *
+         *return id of proctor
          * @return
          */
         public String getProctor_code() {
@@ -582,7 +630,7 @@ public class DatabaseInterface {
         }
 
         /**
-         *
+         *actuator of student list
          * @return
          */
         public ArrayList<StudentRow> getStudentList() {
