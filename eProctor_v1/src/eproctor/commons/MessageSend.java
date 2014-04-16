@@ -7,7 +7,8 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
 /**
- *
+ *This class inherited from Service 
+ * <p> in charge of message sending
  * @author CLY
  */
 public class MessageSend extends Service<Boolean> {
@@ -21,14 +22,15 @@ public class MessageSend extends Service<Boolean> {
     private int type;
 
     /**
-     *
-     * @param myUsername
-     * @param receiverName
-     * @param course_code
-     * @param session_code
-     * @param text
-     * @param time
-     * @param type
+     * Constructor of MessgeSend
+     * <p> by passing in the variable below
+     * @param myUsername user's username
+     * @param receiverName name of the one received the message
+     * @param course_code id of the course
+     * @param session_code id of the exam session undergoing
+     * @param text content of message
+     * @param time message sending time
+     * @param type different type of message (normal message,warning message)
      */
     public MessageSend(String myUsername, String receiverName, String course_code, String session_code, String text, Date time, int type) {
         this.myUsername = myUsername;

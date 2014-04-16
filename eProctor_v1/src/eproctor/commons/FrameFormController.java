@@ -133,7 +133,8 @@ public class FrameFormController implements Initializable {
         mainPane.setCenter(aboutView);
     }
     /**
-     * 
+     * Conducting the action after the user logout from eProctor
+     * <p> reset the stage, control the logout process
      * @throws Exception 
      */
     @FXML
@@ -156,7 +157,8 @@ public class FrameFormController implements Initializable {
     }
 
     /**
-     *
+     *This method display the result of the exam student took
+     * <p> 
      * @param recordRow
      * @param courseRow
      */
@@ -177,7 +179,7 @@ public class FrameFormController implements Initializable {
     }
 
     /**
-     *
+     *Perform the action of close the review page of user (Student , Proctor)
      */
     public void closeReviewView() {
         mainPane.setBottom(null);
@@ -185,7 +187,7 @@ public class FrameFormController implements Initializable {
     }
 
     /**
-     *
+     *Set tool like "Open setting view", "Open about view" and "log out"
      */
     public void setToolTips() {
         this.settingLabel.setTooltip(new Tooltip("Open setting view"));
@@ -194,13 +196,13 @@ public class FrameFormController implements Initializable {
     }
 
     /**
-     *
+     *Set background
      */
     public void setBackground() {
     }
 
     /**
-     *
+     *Set selfStage by assign selfStage
      * @param selfStage
      */
     public void setSelfStage(Stage selfStage) {
