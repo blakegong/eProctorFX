@@ -44,7 +44,10 @@ import javafx.util.Duration;
 /**
  * Proctor side invigilate API Controller class
  *<p> configuration invigilate API on Proctor side contains all the function eProctor needs to show 
- * @author Yue
+ * @author Gong Yue
+ * @author Lu ShengLiang
+ * @author Yuan Zijie
+ * @author Li Zixuan
  */
 public class InvigilateFormController implements Initializable {
 
@@ -132,9 +135,12 @@ public class InvigilateFormController implements Initializable {
     }
 
     /**
-     *
-     * @param start
-     * @param end
+     * this method starts the timer
+     * <p> if the current time is before start time,display "time to exam: " on the computer.
+     * <p> display the time that exam has been last for if the current time is in between start time and end time
+     *  
+     * @param start start time
+     * @param end end time
      */
     public void startTimer(Date start, Date end) {
 //        exitButton.setDisable(true);
@@ -181,7 +187,8 @@ public class InvigilateFormController implements Initializable {
     }
 
     /**
-     *
+     *initiate the   course code
+     * <p> print the course id  passing in
      * @param courseCode
      */
     public void setCourseCode(String courseCode) {
@@ -191,7 +198,8 @@ public class InvigilateFormController implements Initializable {
     }
 
     /**
-     *
+     *initiate the session id
+     * <p> sessionCode is assigned by passing in sessioncode
      * @param sessionCode
      */
     public void setSessionCode(String sessionCode) {
@@ -200,15 +208,16 @@ public class InvigilateFormController implements Initializable {
     }
 
     /**
-     *
-     * @param students
+     *initiate students from the passing in studentRow
+     * @param students StudentRow object
      */
     public void setStudents(ArrayList<DatabaseInterface.StudentRow> students) {
         this.students = students;
     }
 
     /**
-     *
+     * list all the students
+     * <p> by doing so ,the proctor can add the student on the screen to show the recording of the student
      */
     public void showStudents() {
         for (DatabaseInterface.StudentRow student : students) {
@@ -233,7 +242,8 @@ public class InvigilateFormController implements Initializable {
     }
 
     /**
-     *
+     *Configurate the API on proctor's computer when invigilating the exam
+     * <p> infoPane contains all the students' video and message sending box
      */
     public class InfoPane extends TitledPane {
 
@@ -250,12 +260,15 @@ public class InvigilateFormController implements Initializable {
         private MessagePull mp;
 
         /**
-         *
+         *Constructor of infoPane
          */
         public InfoPane() {
             initializeUI();
         }
 
+        /**
+         * initialize all the invigilate UI
+         */
         private void initializeUI() {
             btnSend = new Button("Send");
             btnSend.setOnAction((ActionEvent e) -> {
@@ -353,7 +366,8 @@ public class InvigilateFormController implements Initializable {
         }
 
         /**
-         *
+         *choose certain student to operate
+         * <p> after choosing student, proctor is able to send message
          * @param student
          */
         public void setStudent(DatabaseInterface.StudentRow student) {
@@ -362,7 +376,8 @@ public class InvigilateFormController implements Initializable {
         }
 
         /**
-         *
+         *this method receives the message from student
+         * <p> keep polling the message from the server to fetch the message
          */
         public void startReceive() {
             System.out.println("student's name: " + student.getName());
@@ -394,7 +409,7 @@ public class InvigilateFormController implements Initializable {
         }
 
         /**
-         *
+         *initiate image receiving
          * @return
          */
         public VideoServerInterface getServiceReceiveImage() {
@@ -402,7 +417,7 @@ public class InvigilateFormController implements Initializable {
         }
 
         /**
-         *
+         *initiate message pulling
          * @return
          */
         public MessagePull getMp() {

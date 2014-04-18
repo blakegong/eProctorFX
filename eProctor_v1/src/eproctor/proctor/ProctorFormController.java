@@ -32,10 +32,14 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 /**
- * FXML Controller class
+ * The Proctor form Controller class control the whole proctor interface
+ * <p> contains all the functions
  *
  * @author Gong Yue
  * @author Chen Liyang
+ * @author Lu ShengLiang
+ * @author Yuan Zijie
+ * @author Li Zixuan
  */
 public class ProctorFormController implements Initializable {
 
@@ -124,6 +128,10 @@ public class ProctorFormController implements Initializable {
             }
         }
 
+        /**
+         * set the state of the whole exam
+         * <p> set the state in stateCanNotEnter if the start time is after the current time
+         */
         private void setStateCanNotEnter() {
             VBox tempVbox = new VBox();
             tempVbox.getChildren().addAll(lblCourseName, lblInfo);
@@ -161,6 +169,10 @@ public class ProctorFormController implements Initializable {
             // = = = = = = =
         }
 
+        /**
+         * set the state of the whole exam
+         * <p> set the state in setStateCanEnter if the start time is after the current time
+         */
         private void setStateCanEnter() {
             VBox tempVbox = new VBox();
             tempVbox.getChildren().addAll(lblCourseName, lblInfo);
@@ -200,6 +212,13 @@ public class ProctorFormController implements Initializable {
         }
     }
 
+    /**
+     * trigger the invigilate interface to start the exam
+     * @param recordRow the exam object
+     * @param start start time
+     * @param end end time
+     * @throws Exception 
+     */
     private void openInvigilateForm(DatabaseInterface.RecordRowProctor recordRow, Date start, Date end) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("InvigilateForm.fxml"));
         Scene invigilateScene = new Scene(loader.load());
@@ -218,8 +237,8 @@ public class ProctorFormController implements Initializable {
     }
 
     /**
-     *
-     * @param stage
+     *set the window 
+     * @param stage 
      */
     public void setStage(Stage stage) {
         selfStage = stage;

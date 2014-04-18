@@ -11,13 +11,14 @@ import javafx.util.Duration;
 
 /**
  *This class is to dealing with time issue, including the timing of action event and concurrent processing issue
- * @author CLY
+ * @author Chenliyang
  */
 public class Timer {
 
     /**
-     *
-     * @param count
+     *initiate a timer
+     * <p> this will returns the a timer object
+     * @param count 
      * @param heading
      * @param lbl
      * @param eh

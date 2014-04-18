@@ -34,6 +34,8 @@ import jfx.messagebox.MessageBox;
  *
  * @author Gong Yue
  * @author Chen Liyang
+ * @author Wang Dingcheng
+ * @author Li Zixuan
  */
 public class LoginFormController implements Initializable {
 

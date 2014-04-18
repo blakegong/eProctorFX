@@ -6,13 +6,12 @@ import com.mongodb.DBObject;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
-/**
- *
- * @author CLY
- */
+
 /**
  * This class will handle the fetching message services extending from Service
  * by using polling message from server/database.
+ * @author chenliyang
+ * @author wangdingcheng
  */
 public class MessagePull extends Service<String> {
 

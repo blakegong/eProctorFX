@@ -9,7 +9,9 @@ import javafx.concurrent.Task;
 /**
  *This class inherited from Service 
  * <p> in charge of message sending
- * @author CLY
+ * @author Chenliyang
+ * @author wangdingcheng
+ * @author lushengliang
  */
 public class MessageSend extends Service<Boolean> {
 

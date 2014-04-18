@@ -34,14 +34,8 @@ import javax.imageio.ImageIO;
  */
 public class VideoServerInterface extends Service<Image> {
 
-    /**
-     *
-     */
     public static ServiceSendImage serviceSendImage;
 
-    /**
-     *
-     */
     public static String ipFromConfig;
 
     /**
@@ -60,12 +54,13 @@ public class VideoServerInterface extends Service<Image> {
         private boolean isLocal;
 
         /**
-         *
-         * @param username
-         * @param ip
-         * @param port
-         * @param course_code
-         * @param session_code
+         *send image of the recording and screen capturing
+         * <p> image was sent to synthesis video to display on the Proctor side and store in database (server)
+         * @param username username of the very student
+         * @param ip IP address of the proctor to who the images are sent 
+         * @param port 
+         * @param course_code course id of the undergoing exam
+         * @param session_code exam session id 
          */
         public ServiceSendImage(String username, String ip, int port, String course_code, String session_code) {
             this.username = username;
@@ -146,10 +141,11 @@ public class VideoServerInterface extends Service<Image> {
         }
 
         /**
-         *
-         * @param img1
-         * @param img2
-         * @return
+         *Join the image in the buffer to combine the camera recording and the screen capturing 
+         * <p> the reason why do so is to display the both recording coming from student together on proctor's computer
+         * @param img1 image of video recording
+         * @param img2 image of screen capture
+         * @return returns the combined image
          */
         public static BufferedImage joinBufferedImage(BufferedImage img1, BufferedImage img2) {
 
@@ -178,7 +174,7 @@ public class VideoServerInterface extends Service<Image> {
         }
 
         /**
-         *
+         *initiate the Grabber to Grabber show
          */
         public void initGrabber() {
             try {
@@ -189,8 +185,8 @@ public class VideoServerInterface extends Service<Image> {
         }
 
         /**
-         *
-         * @return
+         *actuator of Grabber
+         * @return grabber object
          */
         public FrameGrabber getGrabber() {
             return grabber;
@@ -205,19 +201,16 @@ public class VideoServerInterface extends Service<Image> {
     private String course_code;
     private String session_code;
 
-    /**
-     *
-     */
     public boolean isLocal;
 
     /**
-     *
-     * @param username
+     *Receive the video and store in the database
+     * @param username username of the user whose video is received
      * @param wanted_code
-     * @param ip
+     * @param ip  IP address 
      * @param port
-     * @param course_code
-     * @param session_code
+     * @param course_code course id of the very exam undergoing
+     * @param session_code exam session id undergoing
      */
     public VideoServerInterface(String username, String wanted_code, String ip, int port, String course_code, String session_code) {
         this.username = username;

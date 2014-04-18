@@ -12,7 +12,7 @@ import javafx.stage.StageStyle;
  * Main class of Application initiate from login Action
  * 
  * @author chenliyang
- * @author gongyue
+ * @author chenDesheng
  */
 public class Main extends Application {
 
@@ -29,7 +29,7 @@ public class Main extends Application {
 
     /**
      *This launches main class
-     * @param args
+     * @param args convention of String[]
      */
     public static void main(String[] args) {
         launch(args);

@@ -27,7 +27,9 @@ import javafx.stage.Stage;
  *Setting form class contains the whole interface concerning setting
  * <p> 
  * @author dingchengwang(javadoc haha)
- * @author liyang
+ * @author chenliyang
+ * @author yuanzijie
+ * @author lizixuan
  */
 public class SettingFormController implements Initializable {
 

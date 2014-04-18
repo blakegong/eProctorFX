@@ -31,7 +31,7 @@ import javafx.util.Duration;
 import jfx.messagebox.MessageBox;
 
 /**
- * This class is an FXML Controller class. It consists exclusively of methods
+ * This class is an exam form Controller class. It consists exclusively of methods
  * that operate on ExamFromUI or return java.lang.Object. It contains
  * communication with ServerInterface.
  * <p>
@@ -39,6 +39,9 @@ import jfx.messagebox.MessageBox;
  *
  * @author Gong Yue
  * @author Chen Liyang
+ * @author Lu ShengLiang
+ * @author Yuan Zijie
+ * @author Li Zixuan
  */
 public class ExamFormController implements Initializable {
 
@@ -66,9 +69,6 @@ public class ExamFormController implements Initializable {
     @FXML
     private Button msgSendButton;
 
-    /**
-     *
-     */
     @FXML
     protected ImageView videoImageView;
 
@@ -143,24 +143,24 @@ public class ExamFormController implements Initializable {
     }
 
     /**
-     *
-     * @param stage
+     *initiate set stage
+     * @param stage window setting
      */
     public void setStage(Stage stage) {
         selfStage = stage;
     }
 
     /**
-     *
-     * @param sessionRow
+     *initiate set sessionRow
+     * @param sessionRow session object
      */
     public void setSessionRow(DatabaseInterface.SessionRow sessionRow) {
         this.sessionRow = sessionRow;
     }
 
     /**
-     *
-     * @param courseRow
+     *initiate set courseRow
+     * @param courseRow course object
      */
     public void setCourseRow(DatabaseInterface.CourseRow courseRow) {
         this.courseRow = courseRow;
@@ -281,9 +281,12 @@ public class ExamFormController implements Initializable {
     }
 
     /**
-     *
-     * @param start
-     * @param end
+     * this method starts the timer
+     * <p> if the current time is before start time,display "time to exam: " on the computer.
+     * <p> display the time that exam has been last for if the current time is in between start time and end time
+     *  
+     * @param start start time
+     * @param end end time
      */
     public void startTimer(Date start, Date end) {
 //        exitButton.setDisable(true);

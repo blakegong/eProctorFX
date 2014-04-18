@@ -31,10 +31,14 @@ import javafx.util.Duration;
 import jfx.messagebox.MessageBox;
 
 /**
- * FXML Controller class
+ * The Student form Controller class control the whole student interface
+ * <p> contains all the functions
  *
  * @author Gong Yue
  * @author Chen Liyang
+ * @author Lu ShengLiang
+ * @author Yuan Zijie
+ * @author Li Zixuan
  */
 public class StudentFormController implements Initializable {
 
@@ -86,8 +90,8 @@ public class StudentFormController implements Initializable {
         /**
          * Basic constructor of InfoRow, returning an object of InfoRow
          *
-         * @param courseRow
-         * @param recordRow
+         * @param courseRow course object
+         * @param recordRow record object
          *
          */
         public InfoRow(DatabaseInterface.CourseRow courseRow, DatabaseInterface.RecordRowStudent recordRow) {
@@ -151,7 +155,11 @@ public class StudentFormController implements Initializable {
                 setStateTesting();
             }
         }
-
+        /**
+         * fetch all the courses from database and display and mark all the course
+         * <p> if the fetched course is not booked by me(currently student user) and the timing of exam is after current time
+         * <p> mark the course as "Book" which means the course can be booked by the student
+         */
         private void setStateNotBooked() {
             DatabaseInterface.getListSessionsStudent(choiceBox.getItems(), courseRow);
             choiceBox.getSelectionModel().selectFirst();
@@ -199,7 +207,11 @@ public class StudentFormController implements Initializable {
                 new Thread(bookTask).start();
             });
         }
-
+        /**
+         * fetch the booked course exam session from database
+         * <p> if the exam timing if after current time,display "Change session" on the screen
+         * <p> if Change session is clicked, state of the course exam session changes back to "book";
+         */
         private void setStateBookedNotReady() {
             VBox tempVbox = new VBox();
             tempVbox.getChildren().addAll(lblCourseName, lblInfo);
@@ -271,7 +283,11 @@ public class StudentFormController implements Initializable {
             timer.play();
             // = = = = = = =
         }
-
+        /**
+         * set the course exam session on the screen to "Exam"
+         * <p> if the current time is before exam timing 15 mins, mark the course exam session as "Exam"
+         * <p> so that the user can click into the exam page
+         */
         private void setStateBookedReady() {
             VBox tempVbox = new VBox();
             tempVbox.getChildren().addAll(lblCourseName, lblInfo);
@@ -308,6 +324,11 @@ public class StudentFormController implements Initializable {
             // = = = = = = =
         }
 
+        /**
+         * darken the course exam session icon on the screen "Exam"
+         * <p> if the current time is after exam timing 15 mins, Darken the course exam session icon as "Exam"
+         * <p> so that the user can not click into the exam page anymore, since the user is disqualified by being late for 15 mins.
+         */
         private void setStateTesting() {
             VBox tempVbox = new VBox();
             tempVbox.getChildren().addAll(lblCourseName, lblInfo);
@@ -356,7 +377,11 @@ public class StudentFormController implements Initializable {
             timer.play();
             // = = = = = = =
         }
-
+        /**
+         * set the course exam session on the screen to "Review"
+         * <p> if the current time is after exam end timing , mark the course exam session as "Review"
+         * <p> so that the user can click into the review page
+         */
         private void setStateReview() {
 
             VBox tempVbox = new VBox();
@@ -388,6 +413,13 @@ public class StudentFormController implements Initializable {
         }
     }
 
+    /**
+     * This method open the interface of the review pane
+     * <p> show the result and course information on the pane
+     * @param recordRow record object
+     * @param courseRow course object
+     * @throws Exception 
+     */
     private void openReviewPane(DatabaseInterface.RecordRowStudent recordRow, DatabaseInterface.CourseRow courseRow) throws Exception {
         frameFormController.openReviewView(recordRow, courseRow);
     }
@@ -412,15 +444,15 @@ public class StudentFormController implements Initializable {
     }
 
     /**
-     *
-     * @param stage
+     *set the window 
+     * @param stage 
      */
     public void setStage(Stage stage) {
         selfStage = stage;
     }
 
     /**
-     *
+     *set the frame form controller
      * @param frameFormController
      */
     public void setFrameFormController(FrameFormController frameFormController) {

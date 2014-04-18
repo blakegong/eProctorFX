@@ -32,6 +32,8 @@ import org.bson.types.ObjectId;
  *
  * @author Gong Yue
  * @author Chen Liyang
+ * @author Lu ShengLiang
+ * @author Yuan Zijie
  */
 public class DatabaseInterface {
 

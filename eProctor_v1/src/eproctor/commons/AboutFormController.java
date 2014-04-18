@@ -10,7 +10,10 @@ import javafx.scene.layout.Pane;
 /**
  * About Form Controller class contains the method to set background
  *<p>This method initialates the essential elements like the frame of application, background color.
- * @author CLY
+ * @author Chen Liyang
+ * @author GongYue
+ * @author Li Zixuan
+ * @author Lu Shengliang
  */
 public class AboutFormController implements Initializable {
 

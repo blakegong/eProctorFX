@@ -23,7 +23,9 @@ import javafx.stage.StageStyle;
 /**
  * Frame form Controller class
  *<p> this method initiate the whole frame of the application after user login the eProctor
- * @author CLY
+ * @author Chen Liyang
+ * @author Gong Yue
+ * @author Lu ShengLiang
  */
 public class FrameFormController implements Initializable {
 

@@ -22,20 +22,17 @@ import javax.imageio.ImageIO;
  *
  * @author Chen Liyang
  * @author Gong Yue
+ * @author Wang Dingcheng
+ * @author Chen Desheng
+ * @author Peng Lunan
  */
 public class VideoServerInterface {
 
     public static String domain,
 
-    /**
-     *
-     */
     userCode;
     public static String course_code, session_code;
 
-    /**
-     *
-     */
     public static ServiceSendImage serviceSendImage;
 
     /**
@@ -52,18 +49,15 @@ public class VideoServerInterface {
         private String course_code;
         private String session_code;
 
-        /**
-         *
-         */
         public boolean isLocal;
 
         /**
-         *
-         * @param me
-         * @param ip
+         *This method send the image to Proctor
+         * @param me id of me(user)
+         * @param ip IP address which the image sent to 
          * @param port
-         * @param course_code
-         * @param session_code
+         * @param course_code id of course
+         * @param session_code id of session
          */
         public ServiceSendImage(String me, String ip, int port, String course_code, String session_code) {
             this.me = me;
@@ -130,7 +124,7 @@ public class VideoServerInterface {
         }
 
         /**
-         *
+         *initiate the Grabber
          */
         public void initGrabber() {
             try {
@@ -141,7 +135,7 @@ public class VideoServerInterface {
         }
 
         /**
-         *
+         *Actuator of Grabber
          * @return
          */
         public FrameGrabber getGrabber() {
@@ -157,33 +151,18 @@ public class VideoServerInterface {
      */
     public static class RecordObject implements Serializable {
 
-        /**
-         *
-         */
         protected static final long serialVersionUID = 1123L;
 
-        /**
-         *
-         */
         public String userId;
 
-        /**
-         *
-         */
         public String course_code;
 
-        /**
-         *
-         */
         public String session_code;
 
-        /**
-         *
-         */
         public byte[] imageBytes;
 
         /**
-         *
+         *constructor of RecordObject
          * @param userId
          * @param imageBytes
          */
@@ -193,7 +172,7 @@ public class VideoServerInterface {
         }
 
         /**
-         *
+         *Actuator of UserId
          * @return
          */
         public String getUserId() {
@@ -201,7 +180,7 @@ public class VideoServerInterface {
         }
 
         /**
-         *
+         *Actuator of image bytes
          * @return
          */
         public byte[] getImageBytes() {
@@ -217,19 +196,10 @@ public class VideoServerInterface {
      */
     public static class RequestObject implements Serializable {
 
-        /**
-         *
-         */
         protected static final long serialVersionUID = 1124L;
 
-        /**
-         *
-         */
         public String proctorId;
 
-        /**
-         *
-         */
         public String requestId;
 
         /**

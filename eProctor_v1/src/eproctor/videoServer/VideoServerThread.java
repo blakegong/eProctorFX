@@ -11,7 +11,8 @@ import com.googlecode.javacv.CanvasFrame;
 import com.googlecode.javacv.cpp.opencv_core.IplImage;
 
 /**
- *
+ *Construct VideoServerThread thread
+ * @author Chen Liyang
  * @author dingchengwang
  */
 public class VideoServerThread implements Runnable {
@@ -24,10 +25,10 @@ public class VideoServerThread implements Runnable {
     private Socket socket;
     private ObjectInputStream sInput;
 
-    /**
-     *
-     * @param port
-     * @param receivedList
+  /**
+     *Constructor of thread VideoServerThread
+     * @param port 
+     * @param receivedList a hashmap which maps string to RecordObject
      */
     public VideoServerThread(int port, HashMap<String, RecordObject> receivedList) {
         this.port = port;
@@ -35,7 +36,12 @@ public class VideoServerThread implements Runnable {
 //        passHashMap = new HashMap<String, PassImg>();
         new Thread(this, "videoserver").start();
     }
-
+     /**
+     *
+     *Setup the serverSocker and connect the sender and receiver of the image
+     * <p> images are used to display as video
+     * 
+     */
     public void run() {
         try {
             serverSocket = new ServerSocket(port);

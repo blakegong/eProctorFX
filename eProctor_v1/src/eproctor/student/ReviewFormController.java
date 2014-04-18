@@ -15,9 +15,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 /**
- * FXML Controller class
+ * Review Form Controller class
+ * <p> control contains all the reviewed items 
  *
- * @author Yue
+ * @author Gong Yue
+ * @author Li Zixuan
+ * @author Chen Liyang
+ * @author Wang Dingcheng
  */
 public class ReviewFormController implements Initializable {
 
@@ -59,7 +63,7 @@ public class ReviewFormController implements Initializable {
 
     /**
      * Initializes the controller class.
-     * @param url
+     * @param url 
      * @param rb
      */
     @Override
@@ -68,7 +72,8 @@ public class ReviewFormController implements Initializable {
     }
 
     /**
-     *
+     *fetch all the items need to be displayed on the review pane
+     * <p> update all the text views
      */
     public void updateDetails() {
         lblId.setText(recordRow.getId());
@@ -82,23 +87,23 @@ public class ReviewFormController implements Initializable {
     }
 
     /**
-     *
-     * @param recordRow
+     *initiate recordRow
+     * @param recordRow record object
      */
     public void setRecordRow(DatabaseInterface.RecordRowStudent recordRow) {
         this.recordRow = recordRow;
     }
 
     /**
-     *
-     * @param courseRow
+     *initiate courseRow
+     * @param courseRow course object
      */
     public void setCourseRow(DatabaseInterface.CourseRow courseRow) {
         this.courseRow = courseRow;
     }
 
     /**
-     *
+     *initiate courseRow
      * @param frameFormController
      */
     public void setFrameFormController(FrameFormController frameFormController) {

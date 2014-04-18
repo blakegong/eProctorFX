@@ -6,8 +6,12 @@ import java.io.*;
 import java.net.*;
 
 /**
- *
- * @author dingchengwang
+ *DisplayServerThread create the thread to display the image 
+ * <p> thread are woke period to display the image as form of video 
+ * @author Chen Liyang
+ * @author Gong Yue
+ * @author Chen Desheng
+ * @author Peng Lunan
  */
 public class DisplayServerThread implements Runnable {
 
@@ -19,9 +23,10 @@ public class DisplayServerThread implements Runnable {
     private ObjectInputStream sInput;
 
     /**
-     *
-     * @param port
-     * @param receivedList
+     *Display the image by create thread
+     * <p> pass in port and recivedList contains the image, and display the video
+     * @param port 
+     * @param receivedList a hashmap which maps string to RecordObject
      */
     public DisplayServerThread(int port, HashMap<String, RecordObject> receivedList) {
         this.port = port;
@@ -30,6 +35,11 @@ public class DisplayServerThread implements Runnable {
     }
 
     @Override
+     /**
+     *Setup the connection between Student and Proctor
+     * <p> so that the image of Student side are sent to Proctor side
+     * 
+     */
     public void run() {
         try {
             serverSocket = new ServerSocket(port);
@@ -63,7 +73,11 @@ public class DisplayServerThread implements Runnable {
     }
 
 }
-
+/**
+ *Proctor request the video
+ * <p> VideoRequest pass in the proctorId so that the video will be sent back to Proctor
+ * 
+ */
 class VideoRequest {
 
     public String proctorId;
@@ -77,7 +91,10 @@ class VideoRequest {
     }
 
 }
-
+/**
+ *Once the video images are captured, they will be send to Proctor side
+ * <p> sendVideoThread inherits Thread so that the thread runs concurrently with the main application
+ */
 class SendVideoThread extends Thread {
 
     public RecordObject recordObject;
