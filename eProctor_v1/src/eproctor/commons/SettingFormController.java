@@ -198,8 +198,8 @@ public class SettingFormController implements Initializable {
     }
 
     /**
-     *
-     * @param option
+     *get setting returns the results by passing in option
+     * @param option String 
      * @return
      */
     public static String getSetting(String option) {
@@ -253,7 +253,8 @@ public class SettingFormController implements Initializable {
     }
     
     /**
-     *
+     *setup interface window 
+     * <p> This method passes in stage to set the interface window
      * @param stage
      */
     public void setStage(Stage stage) {
@@ -261,7 +262,8 @@ public class SettingFormController implements Initializable {
     }
 
     /**
-     *
+     *initiate setFrameFormController
+     * <p> assign the frameFormController with the passing in frameFormController
      * @param frameFormController
      */
     public void setFrameFormController(FrameFormController frameFormController) {
@@ -269,7 +271,8 @@ public class SettingFormController implements Initializable {
     }
 
     /**
-     *
+     *initiate choiceBox
+     * <p> this method initiate the choiceBox including the items inside and the size of the box
      */
     public void initChoiceBox() {
         fontSizeCB.setItems(FXCollections.observableArrayList(12, 14, 16, 18));

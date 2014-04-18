@@ -42,8 +42,8 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 /**
- * FXML Controller class
- *
+ * Proctor side invigilate API Controller class
+ *<p> configuration invigilate API on Proctor side contains all the function eProctor needs to show 
  * @author Yue
  */
 public class InvigilateFormController implements Initializable {
@@ -67,6 +67,11 @@ public class InvigilateFormController implements Initializable {
     @FXML
     private Label sessionTitle;
 
+    /**
+     * Send notification and broadcast notification to all the student in the exam session
+     * <p> this utilize the method send message written before to send the notification to all the students
+     * 
+     */
     @FXML
     private void sendNotification() {
         notificationSendButton.setDisable(true);
@@ -111,6 +116,10 @@ public class InvigilateFormController implements Initializable {
         }
     }
 
+    /**
+     * exit closes the invigilate window
+     * <p> this achieved by selfStage.close()
+     */
     @FXML
     private void exit() {
         ObservableList<Node> list = flowPane.getChildren();
