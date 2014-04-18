@@ -34,7 +34,14 @@ import javax.imageio.ImageIO;
  */
 public class VideoServerInterface extends Service<Image> {
 
+    /**
+     *
+     */
     public static ServiceSendImage serviceSendImage;
+
+    /**
+     *
+     */
     public static String ipFromConfig;
 
     /**
@@ -52,6 +59,14 @@ public class VideoServerInterface extends Service<Image> {
         private String session_code;
         private boolean isLocal;
 
+        /**
+         *
+         * @param username
+         * @param ip
+         * @param port
+         * @param course_code
+         * @param session_code
+         */
         public ServiceSendImage(String username, String ip, int port, String course_code, String session_code) {
             this.username = username;
             this.ip = ip;
@@ -130,6 +145,12 @@ public class VideoServerInterface extends Service<Image> {
             socket.close();
         }
 
+        /**
+         *
+         * @param img1
+         * @param img2
+         * @return
+         */
         public static BufferedImage joinBufferedImage(BufferedImage img1, BufferedImage img2) {
 
             int type = img2.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : img2.getType();
@@ -156,6 +177,9 @@ public class VideoServerInterface extends Service<Image> {
             return newImage;
         }
 
+        /**
+         *
+         */
         public void initGrabber() {
             try {
                 grabber = FrameGrabber.createDefault(0);
@@ -164,6 +188,10 @@ public class VideoServerInterface extends Service<Image> {
             }
         }
 
+        /**
+         *
+         * @return
+         */
         public FrameGrabber getGrabber() {
             return grabber;
         }
@@ -176,8 +204,21 @@ public class VideoServerInterface extends Service<Image> {
     private int port;
     private String course_code;
     private String session_code;
+
+    /**
+     *
+     */
     public boolean isLocal;
 
+    /**
+     *
+     * @param username
+     * @param wanted_code
+     * @param ip
+     * @param port
+     * @param course_code
+     * @param session_code
+     */
     public VideoServerInterface(String username, String wanted_code, String ip, int port, String course_code, String session_code) {
         this.username = username;
         this.wanted_code = wanted_code;

@@ -22,7 +22,7 @@ import javafx.stage.StageStyle;
 
 /**
  * Frame form Controller class
- *
+ *<p> this method initiate the whole frame of the application after user login the eProctor
  * @author CLY
  */
 public class FrameFormController implements Initializable {
@@ -55,7 +55,7 @@ public class FrameFormController implements Initializable {
     /**
      * Initializes the controller class.
      *
-     * @param url
+     * @param url an absolute URL giving the base location of the image
      * @param rb
      */
     @Override
@@ -64,7 +64,7 @@ public class FrameFormController implements Initializable {
     }
 
     /**
-     *
+     *Configure the startup page of student and display student home page
      */
     @FXML
     public void openStudentForm() {
@@ -82,7 +82,7 @@ public class FrameFormController implements Initializable {
     }
 
     /**
-     *
+     *Configure the startup page of proctor and display proctor home page
      */
     @FXML
     public void openProctorForm() {
@@ -96,7 +96,10 @@ public class FrameFormController implements Initializable {
         }
         mainPane.setCenter(proctorView);
     }
-
+    /**
+     * Open setting page and display to user
+     * @throws Exception 
+     */
     @FXML
     private void openSettingForm() throws Exception {
         if (settingView == null) {
@@ -112,7 +115,9 @@ public class FrameFormController implements Initializable {
         }
         mainPane.setCenter(settingView);
     }
-
+    /**
+     * Open about page and display to user
+     */
     @FXML
     private void openAboutForm() {
         if (aboutView == null) {
@@ -127,7 +132,11 @@ public class FrameFormController implements Initializable {
         }
         mainPane.setCenter(aboutView);
     }
-
+    /**
+     * Conducting the action after the user logout from eProctor
+     * <p> reset the stage, control the logout process
+     * @throws Exception 
+     */
     @FXML
     private void logout() throws Exception {
         System.out.println("logout");
@@ -147,6 +156,12 @@ public class FrameFormController implements Initializable {
         stage.show();
     }
 
+    /**
+     *This method display the result of the exam student took
+     * <p> 
+     * @param recordRow
+     * @param courseRow
+     */
     public void openReviewView(DatabaseInterface.RecordRowStudent recordRow, DatabaseInterface.CourseRow courseRow) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/eproctor/student/ReviewForm.fxml"));
         try {
@@ -163,11 +178,17 @@ public class FrameFormController implements Initializable {
         mainPane.setCenter(reviewView);
     }
 
+    /**
+     *Perform the action of close the review page of user (Student , Proctor)
+     */
     public void closeReviewView() {
         mainPane.setBottom(null);
         this.openStudentForm();
     }
 
+    /**
+     *Set tool like "Open setting view", "Open about view" and "log out"
+     */
     public void setToolTips() {
         this.settingLabel.setTooltip(new Tooltip("Open setting view"));
         this.aboutLabel.setTooltip(new Tooltip("Open about view"));
@@ -175,13 +196,13 @@ public class FrameFormController implements Initializable {
     }
 
     /**
-     *
+     *Set background
      */
     public void setBackground() {
     }
 
     /**
-     *
+     *Set selfStage by assign selfStage
      * @param selfStage
      */
     public void setSelfStage(Stage selfStage) {

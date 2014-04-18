@@ -66,6 +66,9 @@ public class ExamFormController implements Initializable {
     @FXML
     private Button msgSendButton;
 
+    /**
+     *
+     */
     @FXML
     protected ImageView videoImageView;
 
@@ -277,6 +280,11 @@ public class ExamFormController implements Initializable {
         VideoServerInterface.serviceSendImage.start();
     }
 
+    /**
+     *
+     * @param start
+     * @param end
+     */
     public void startTimer(Date start, Date end) {
 //        exitButton.setDisable(true);
         browser.setVisible(false);

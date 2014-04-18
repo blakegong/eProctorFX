@@ -10,6 +10,10 @@ import javax.imageio.ImageIO;
 import com.googlecode.javacv.CanvasFrame;
 import com.googlecode.javacv.cpp.opencv_core.IplImage;
 
+/**
+ *
+ * @author dingchengwang
+ */
 public class VideoServerThread implements Runnable {
 //    private HashMap<String, PassImg> passHashMap;
 
@@ -20,6 +24,11 @@ public class VideoServerThread implements Runnable {
     private Socket socket;
     private ObjectInputStream sInput;
 
+    /**
+     *
+     * @param port
+     * @param receivedList
+     */
     public VideoServerThread(int port, HashMap<String, RecordObject> receivedList) {
         this.port = port;
         this.receivedList = receivedList;

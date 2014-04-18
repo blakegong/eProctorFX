@@ -419,6 +419,10 @@ public class StudentFormController implements Initializable {
         selfStage = stage;
     }
 
+    /**
+     *
+     * @param frameFormController
+     */
     public void setFrameFormController(FrameFormController frameFormController) {
         this.frameFormController = frameFormController;
     }

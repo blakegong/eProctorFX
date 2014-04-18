@@ -23,6 +23,12 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+/**
+ *Setting form class contains the whole interface concerning setting
+ * <p> 
+ * @author dingchengwang(javadoc haha)
+ * @author liyang
+ */
 public class SettingFormController implements Initializable {
 
     private Stage selfStage;
@@ -55,7 +61,10 @@ public class SettingFormController implements Initializable {
 
     @FXML
     private Button goBackButton;
-
+    /**
+     * choose back ground music
+     * <p> user can choose the music in setting
+     */
     @FXML
     private void chooseBackgroundMusic() {
         File file = backgroundMusicFC.showOpenDialog(selfStage);
@@ -68,7 +77,11 @@ public class SettingFormController implements Initializable {
             }
         }
     }
-
+    /**
+     * the method tests the camera to check if it works
+     * <p> user click the button to trigger the action 
+     * the method shows the result of testing
+     */
     @FXML
     private void testCamera() {
         System.out.println("testCamera: pressed.");
@@ -112,7 +125,10 @@ public class SettingFormController implements Initializable {
             testCameraTB.setText("Stop");
         }
     }
-
+    /**
+     * returns back to user home page
+     * <p> return to home page by clicking on the go back button
+     */
     @FXML
     private void goBack() {
         if (DatabaseInterface.domain.equals("Student"))
@@ -129,6 +145,12 @@ public class SettingFormController implements Initializable {
 //        this.cameraImageView.setImage(webcam_icon);
     }
 
+    /**
+     *update all the change of setting to sever(database)
+     * <p> after user change the configuration of the setting 
+     * @param option option chosen by user
+     * @param newValue new configuration value set by user
+     */
     public static void update(String option, String newValue) {
         String workingDir = System.getProperty("user.dir");
         String a = System.getProperty("file.separator");
@@ -175,6 +197,11 @@ public class SettingFormController implements Initializable {
         pw.close();
     }
 
+    /**
+     *
+     * @param option
+     * @return
+     */
     public static String getSetting(String option) {
         String workingDir = System.getProperty("user.dir");
         String a = System.getProperty("file.separator");
@@ -225,14 +252,25 @@ public class SettingFormController implements Initializable {
         return result;
     }
     
+    /**
+     *
+     * @param stage
+     */
     public void setStage(Stage stage) {
         selfStage = stage;
     }
 
+    /**
+     *
+     * @param frameFormController
+     */
     public void setFrameFormController(FrameFormController frameFormController) {
         this.frameFormController = frameFormController;
     }
 
+    /**
+     *
+     */
     public void initChoiceBox() {
         fontSizeCB.setItems(FXCollections.observableArrayList(12, 14, 16, 18));
         fontSizeCB.getSelectionModel().selectFirst();
