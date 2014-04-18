@@ -28,6 +28,7 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import jfx.messagebox.MessageBox;
 
 /**
  * This class is an FXML Controller class. It consists exclusively of methods
@@ -80,13 +81,14 @@ public class ExamFormController implements Initializable {
     @FXML
     private void sendMsg() {
         msgSendButton.setDisable(true);
-        
+
         ////////////////////////////////////////////////////////////
         // random a proctor
-        if (proctorRandomed == null)
+        if (proctorRandomed == null) {
             proctorRandomed = DatabaseInterface.randomProctor(courseRow.getCode(), sessionRow.getCode());
+        }
         ////////////////////////////////////////////////////////////
-        
+
         MessageSend serviceSendMsg = new MessageSend(DatabaseInterface.username, proctorRandomed, courseRow.getCode(), sessionRow.getCode(), msgToSend.getText(), new Date(), 0);
         serviceSendMsg.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 
@@ -185,7 +187,8 @@ public class ExamFormController implements Initializable {
             @Override
             public void handle(WorkerStateEvent t) {
                 if (serviceFetchMsg.getValue().compareTo("ending") == 0) { // if he is kicked out.
-                    System.out.println("Your are disqualified from current exam session. Your exam session will end in 5 seconds.");
+
+                    System.out.println("Your are disqualified from current exam session.");
                     VideoServerInterface.serviceSendImage.cancel();
                     try {
                         VideoServerInterface.serviceSendImage.getGrabber().stop();
@@ -194,32 +197,38 @@ public class ExamFormController implements Initializable {
                     }
                     exitButton.setDisable(true);
                     msgSendButton.setDisable(true);
-                    browser.setDisable(true);
                     timeLabel.setWrapText(true);
-                    timeLabel.setText("Your are disqualified from current exam session.Your exam session will end in 5 seconds.");
+                    timeLabel.setText("Your are disqualified from current exam session.");
+                    browser.setDisable(true);
+                    browser.setVisible(false);
 
-                    // = = = = = = =
-                    // close previous timer
-                    timer.stop();
-                    // start a countDOWN timer
-                    count = 5; // give 5 seconds for a last look
-                    timer = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
-                        @Override
-                        public void handle(ActionEvent event) {
-                            count--;
-                            timeLabel.setWrapText(true);
-                            timeLabel.setText("Your are disqualified from current exam session.Your exam session will end in " + count + " seconds.");
-                        }
-                    }));
-                    timer.setCycleCount(count);
-                    timer.setOnFinished(new EventHandler<ActionEvent>() {
+                    MessageBox.show(selfStage,
+                            "Your are disqualified from current exam session. This exam window will close.",
+                            "Sorry.",
+                            MessageBox.ICON_INFORMATION);
 
-                        @Override
-                        public void handle(ActionEvent arg0) {
-                            selfStage.close(); // 5 seconds passed. close exam window
-                        }
-                    });
-                    timer.play();
+//                    // = = = = = = =
+//                    // close previous timer
+//                    timer.stop();
+//                    // start a countDOWN timer
+//                    count = 5; // give 5 seconds for a last look
+//                    timer = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+//                        @Override
+//                        public void handle(ActionEvent event) {
+//                            count--;
+//                            timeLabel.setWrapText(true);
+//                            timeLabel.setText("Your are disqualified from current exam session.Your exam session will end in " + count + " seconds.");
+//                        }
+//                    }));
+//                    timer.setCycleCount(count);
+//                    timer.setOnFinished(new EventHandler<ActionEvent>() {
+//
+//                        @Override
+//                        public void handle(ActionEvent arg0) {
+                    selfStage.close(); // 5 seconds passed. close exam window
+//                        }
+//                    });
+//                    timer.play();
                     // = = = = = = =
                 }
             }
@@ -272,7 +281,7 @@ public class ExamFormController implements Initializable {
 //        exitButton.setDisable(true);
         browser.setVisible(false);
         if (new Date().before(start)) {
-            count = (int)((new Date().getTime() - start.getTime()) / 1000);
+            count = (int) ((new Date().getTime() - start.getTime()) / 1000);
             timer = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
@@ -292,7 +301,7 @@ public class ExamFormController implements Initializable {
             timer.play();
         } else {
             browser.setVisible(true);
-            count = (int)((end.getTime() - new Date().getTime()) / 1000);
+            count = (int) ((end.getTime() - new Date().getTime()) / 1000);
             timer = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
@@ -306,7 +315,13 @@ public class ExamFormController implements Initializable {
 
                 @Override
                 public void handle(ActionEvent arg0) {
+
                     timeLabel.setText("Exam ended. Thank you Doctor. Leedham *^_^*");
+                    MessageBox.show(selfStage,
+                            "\tExam ended. Good Job.\t",
+                            "Exam ended. Thank you Dr.Leedham *^_^*",
+                            MessageBox.ICON_INFORMATION);
+
 //                    exitButton.setDisable(false);
                 }
             });

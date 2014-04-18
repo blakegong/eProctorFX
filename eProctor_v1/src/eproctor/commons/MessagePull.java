@@ -40,7 +40,7 @@ public class MessagePull extends Service<String> {
 
                     status = Integer.parseInt(msg.split("#")[1]);
                     this.updateTitle("-fx-background-color: " + statusIntToStatusString(status));
-                    Thread.sleep(3000);
+//                    Thread.sleep(1000);
                 }
 
                 if (status == 2) {

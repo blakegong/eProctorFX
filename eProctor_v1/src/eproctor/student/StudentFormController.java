@@ -144,7 +144,8 @@ public class StudentFormController implements Initializable {
                 }
             } else if (end.before(current)) {
                 state = 3;
-                setStateReview();
+//                setStateReview();
+                setStateTesting();
             } else {
                 state = 4;
                 setStateTesting();
