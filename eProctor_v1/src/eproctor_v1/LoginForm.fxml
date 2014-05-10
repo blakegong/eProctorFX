@@ -27,6 +27,7 @@
       </font>
     </Button>
     <Button id="exit" fx:id="buttonExit" font="$x1" layoutX="360.0" layoutY="326.0" mnemonicParsing="false" onAction="#exit" prefHeight="30.0" prefWidth="90.0" text="exit" textFill="WHITE" />
+    <ProgressBar fx:id="bar" layoutX="0.0" layoutY="390.0" prefWidth="600.0" progress="0.0" />
   </children>
   <stylesheets>
     <URL value="@LoginForm.css" />

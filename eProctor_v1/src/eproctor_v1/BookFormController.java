@@ -90,15 +90,14 @@ public class BookFormController implements Initializable {
     }
     
     public void restartUI() throws IOException {
-        selfStage.close();
+//        selfStage.close();
         
         FXMLLoader loader = new FXMLLoader(getClass().getResource("BookForm.fxml"));
         Parent root = (Parent)loader.load();
         BookFormController controller = (BookFormController)loader.getController();
         Scene scene = new Scene(root);
-        Stage stage = new Stage();
+        Stage stage = selfStage;
         controller.setStage(stage);
-        stage.setScene(scene);
         stage.setTitle("ePoctor Student Client");
         stage.setScene(scene);
         stage.show();

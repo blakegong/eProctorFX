@@ -14,6 +14,9 @@ import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import org.bson.types.ObjectId;
 
 public class ServerInterface {
@@ -24,6 +27,19 @@ public class ServerInterface {
     private static List<RecordRow> recordData;
     private static List<CourseRow> courseData;
     private static List<CourseRow> notBookedCoursesData;
+
+    public static void getInfoData(StudentFormController controller, ArrayList<StudentFormController.InfoRow> infoData) {
+        for (CourseRow courseRow : courseData) {
+            RecordRow recordRow = null;
+            for (RecordRow tempRecord : recordData) {
+                if (courseRow.code.equals(tempRecord.course.code)) {
+                    recordRow = tempRecord;
+                }
+            }
+            StudentFormController.InfoRow infoRow = controller.new InfoRow(courseRow, recordRow);
+            infoData.add(infoRow);
+        }
+    }
 
     public ServerInterface() {
 
@@ -139,6 +155,7 @@ public class ServerInterface {
         //return Messager.pollMsg(Main.user_id, "Student");
         return "Not done yet";
     }
+
     public static void getTableRecords(ObservableList list, boolean takenStatus) {
 //    public static ObservableList<RecordTableRow> getTableRecords(boolean takenStatus) {
 //        List<RecordTableRow> list = new ArrayList();
@@ -176,6 +193,13 @@ public class ServerInterface {
         record.remove(qb.get());
         updateLocalData();
     }
+    
+    public static void deleteBooking(RecordRow data) {
+        QueryBuilder qb = new QueryBuilder();
+        qb.put("_id").is(new ObjectId(data.id));
+        record.remove(qb.get());
+        updateLocalData();
+    }
 
     public static void getListCourses(ObservableList<String> list) {
         notBookedCoursesData = new ArrayList();
@@ -196,8 +220,9 @@ public class ServerInterface {
     }
 
     public static void getListSessions(ObservableList<String> list, int index) {
-        while (!list.isEmpty())
+        while (!list.isEmpty()) {
             list.remove(0);
+        }
         for (SessionRow sessionRow : notBookedCoursesData.get(index).sessions) {
             SimpleDateFormat startFormat = new SimpleDateFormat(
                     "dd.MM.yyyy E kk:mm");
@@ -280,7 +305,6 @@ public class ServerInterface {
 //        System.out.println("messager here: " + str);
 //        return str;
 //    }
-
     public static class RecordRow {
 
         private final String id;
@@ -303,6 +327,23 @@ public class ServerInterface {
             this.remark = remark;
         }
 
+        public SessionRow getSession() {
+            return session;
+        }
+
+        public String getProctor_code() {
+            return proctor_code;
+        }
+
+        public String getGrade() {
+            return grade;
+        }
+
+        public String getRemark() {
+            return remark;
+        }
+
+        
     }
 
     public static class CourseRow {
@@ -317,6 +358,14 @@ public class ServerInterface {
             this.code = code;
             this.name = name;
             this.sessions = sessions;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public String getName() {
+            return name;
         }
     }
 
@@ -334,6 +383,14 @@ public class ServerInterface {
             this.start = start;
             this.end = end;
             this.location = location;
+        }
+
+        public Date getStart() {
+            return start;
+        }
+
+        public Date getEnd() {
+            return end;
         }
     }
 
@@ -404,8 +461,9 @@ public class ServerInterface {
         }
 
     }
-    
+
     public static class ExamInfo {
+
         private final ArrayList<String> proctorCode;
         private final ArrayList<String> studentCode;
         private final CourseRow course;
@@ -417,6 +475,7 @@ public class ServerInterface {
             this.course = course;
             this.session = session;
         }
-        
+
     }
+
 }
